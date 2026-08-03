@@ -501,10 +501,8 @@ const UI = {
     if (fb) {
       fb.style.display = 'block';
       fb.innerHTML = `<div style="background:var(--surface-2);border-radius:12px;padding:14px;font-size:14px;color:var(--muted);font-style:italic">
-        ${q.word.example_vn}<br><span style="font-size:13px">${q.word.example_en}</span></div>`;
+        ${q.word.example_vn}<br><span style="font-size:13px">${q.word.example_en}</span></div>` + this.continueButtonHtml();
     }
-
-    setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1400);
   },
 
   renderTypeAnswer(q, el) {
@@ -551,8 +549,7 @@ const UI = {
       fb.innerHTML = `<span style="color:var(--coral);font-weight:600">✗ Answer: <strong style="color:var(--cream)">${q.answer}</strong>${q.word.north?' (N: '+q.word.north+')':''}</span>`;
     }
     fb.innerHTML += `<div style="margin-top:8px;font-size:13px;color:var(--muted);font-style:italic">${q.word.example_vn} — ${q.word.example_en}</div>`;
-
-    setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1800);
+    fb.innerHTML += this.continueButtonHtml();
   },
 
   renderFillSentence(q, el) {
@@ -592,10 +589,8 @@ const UI = {
     const fb = document.getElementById('fill-feedback');
     if (fb) {
       fb.style.display = 'block';
-      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.word.example_vn}<br>${q.word.example_en}</div>`;
+      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.word.example_vn}<br>${q.word.example_en}</div>` + this.continueButtonHtml();
     }
-
-    setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1400);
   },
 
   renderParticles(q, el) {
@@ -635,10 +630,8 @@ const UI = {
     const fb = document.getElementById('particle-feedback');
     if (fb) {
       fb.style.display = 'block';
-      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.grammar.note}</div>`;
+      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.grammar.note}</div>` + this.continueButtonHtml();
     }
-
-    setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1800);
   },
 
   renderMatchPairs(q, el) {
@@ -695,13 +688,13 @@ const UI = {
       Gamify.showPointsFloat(pts, btn);
 
       const prog = document.getElementById('match-progress');
-      if (prog) prog.textContent = `${ms.matched.size} / ${ms.q.left_items.length} matched`;
-
       if (ms.matched.size === ms.q.left_items.length) {
         Gamify.triggerConfetti();
         Gamify.showToast('All matched! 🎉', 'gold');
         Gamify.checkAchievements();
-        setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1500);
+        if (prog) prog.innerHTML = this.continueButtonHtml();
+      } else if (prog) {
+        prog.textContent = `${ms.matched.size} / ${ms.q.left_items.length} matched`;
       }
     } else {
       // wrong: flash both red, keep left selected so player can try again
@@ -757,10 +750,16 @@ const UI = {
         <div style="color:var(--jade);font-size:12px;font-weight:600;margin-bottom:4px">✓ Correct sentence</div>
         <strong style="color:var(--cream)">${q.correct_vn}</strong><br>
         <span style="color:var(--muted);font-size:13px">${q.correct_en}</span>
-      </div>`;
+      </div>` + this.continueButtonHtml();
     }
+  },
 
-    setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1800);
+  continueButtonHtml() {
+    return `<button class="btn-primary" style="width:100%;margin-top:14px" onclick="UI.continueSession()">Continue →</button>`;
+  },
+
+  continueSession() {
+    if (this.session) { this.session.index++; this.renderQuizView(); }
   },
 
   skipQuestion() {
@@ -842,6 +841,9 @@ const UI = {
         btn.style.borderColor = correct ? 'var(--jade)' : 'var(--coral)';
       });
 
+      // Disable all buttons before adding the continue button (it should stay enabled)
+      el.querySelectorAll('button').forEach(b => b.disabled = true);
+
       if (fb) {
         if (isCorrect) {
           fb.innerHTML = `<div style="color:var(--jade);font-weight:700;font-size:15px;text-align:center">✓ Correct!</div>`;
@@ -851,18 +853,14 @@ const UI = {
             <div style="background:var(--surface-2);border-radius:10px;padding:12px;font-size:15px;color:var(--cream)">${q.answer.join(' ')}</div>
             <div style="font-size:13px;color:var(--muted);margin-top:6px">${q.grammar.note}</div>`;
         }
+        fb.innerHTML += UI.continueButtonHtml();
       }
-
-      // Disable all buttons
-      el.querySelectorAll('button').forEach(b => b.disabled = true);
 
       const pts = Store.recordGrammarAttempt(q.grammar.id, isCorrect);
       if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
       this.updateHeader();
       Gamify.showPointsFloat(pts, el.querySelector('.btn-primary'));
       Gamify.checkAchievements();
-
-      setTimeout(() => { this.session.index++; this.renderQuizView(); }, isCorrect ? 1200 : 2200);
     };
 
     render();
