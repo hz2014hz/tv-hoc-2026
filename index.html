@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiếng Việt - Learn Vietnamese</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="app-header">
+    <span class="app-header__title">Tiếng Việt</span>
+    <div class="app-header__right">
+      <div class="app-header__streak"><span>🔥</span><span id="streak-count">0</span></div>
+      <div class="app-header__points"><span>⭐</span><span id="points-count">0</span></div>
+      <div class="app-header__level"><span id="level-title">Beginner</span></div>
+    </div>
+  </header>
+  <main id="main-content">
+    <div id="view-home" class="view active"></div>
+    <div id="view-learn" class="view"></div>
+    <div id="view-quiz" class="view"></div>
+    <div id="view-shop" class="view"></div>
+    <div id="view-progress" class="view"></div>
+    <div id="view-grammar" class="view"></div>
+    <div id="view-achievements" class="view"></div>
+  </main>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-view="home"><span class="nav-tab__icon">🏠</span><span class="nav-tab__label">Home</span></button>
+    <button class="nav-tab" data-view="learn"><span class="nav-tab__icon">📖</span><span class="nav-tab__label">Learn</span></button>
+    <button class="nav-tab" data-view="shop"><span class="nav-tab__icon">🛒</span><span class="nav-tab__label">Shop</span></button>
+    <button class="nav-tab" data-view="progress"><span class="nav-tab__icon">📊</span><span class="nav-tab__label">Progress</span></button>
+    <button class="nav-tab" data-view="grammar"><span class="nav-tab__icon">✏️</span><span class="nav-tab__label">Grammar</span></button>
+    <button class="nav-tab" data-view="achievements"><span class="nav-tab__icon">🏆</span><span class="nav-tab__label">Awards</span></button>
+  </nav>
+  <div id="toast-container"></div>
+  <div id="confetti-container"></div>
+</div>
+<script src="data.js"></script>
+<script src="store.js"></script>
+<script src="quiz.js"></script>
+<script src="gamify.js"></script>
+<script src="ui.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => UI.init());</script>
+</body>
+</html>
