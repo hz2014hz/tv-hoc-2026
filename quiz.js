@@ -97,6 +97,49 @@ const Quiz = {
       };
     }
 
+    if (mode==='particles') {
+      const available = GRAMMAR.filter(g => {
+        if (!g.key) return false;
+        if (!Store.isGrammarUnlocked(g.category)) return false;
+        if (!g.requires) return true;
+        const cats = g.requires.categories || [];
+        if (!cats.every(c => Store.isCategoryAccessible(c))) return false;
+        const tiers = g.requires.tiers || {};
+        return Object.entries(tiers).every(([c,t]) => Store.getCategoryTier(c) >= t);
+      });
+      if (available.length === 0) return null;
+
+      const pool2 = this.shuffle([...available]);
+      let g, example;
+      for (const cand of pool2) {
+        const matches = cand.examples.filter(e => e.vn.toLowerCase().includes(cand.key.toLowerCase()));
+        if (matches.length > 0) { g = cand; example = matches[Math.floor(Math.random() * matches.length)]; break; }
+      }
+      if (!g) return null;
+
+      const blankRe = new RegExp(g.key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'i');
+      const sentence_with_blank = example.vn.replace(blankRe, '___');
+
+      const sameCategory = this.shuffle(available.filter(x => x.id !== g.id && x.category === g.category));
+      const otherCategory = this.shuffle(available.filter(x => x.id !== g.id && x.category !== g.category));
+      const distractorPool = [...sameCategory, ...otherCategory];
+      const distractorKeys = [];
+      for (const d of distractorPool) {
+        if (distractorKeys.length >= 3) break;
+        if (!distractorKeys.includes(d.key) && d.key !== g.key) distractorKeys.push(d.key);
+      }
+      const choices = this.shuffle([g.key, ...distractorKeys]);
+      return {
+        type: 'particles',
+        grammar: g,
+        sentence_with_blank,
+        answer: g.key,
+        hint: example.en,
+        choices,
+        correct_index: choices.indexOf(g.key),
+      };
+    }
+
     const word = this.selectWord(pool, seenStats);
 
     if (mode==='flashcard') {

@@ -85,6 +85,29 @@ const WORDS = [
   {id:'v048',tier:6,vn:'giặt',north:null,en:'to wash (clothes)',category:'verbs',example_vn:'Tôi giặt quần áo hôm nay.',example_en:'I wash clothes today.'},
   {id:'v049',tier:6,vn:'xem',north:null,en:'to watch / look at',category:'verbs',example_vn:'Tôi xem phim tối qua.',example_en:'I watched a movie last night.'},
   {id:'v050',tier:1,vn:'là',north:null,en:'to be (identity)',category:'verbs',example_vn:'Tôi là học sinh.',example_en:'I am a student.'},
+  {id:'v051',tier:7,vn:'mặc',north:null,en:'wear (clothes)',category:'verbs',example_vn:'Cô ấy mặc áo dài.',example_en:'She wears an áo dài.'},
+  {id:'v052',tier:7,vn:'nghỉ ngơi',north:null,en:'rest',category:'verbs',example_vn:'Cuối tuần tôi thích nghỉ ngơi.',example_en:'On weekends I like to rest.'},
+  {id:'v053',tier:7,vn:'làm',north:null,en:'do / make',category:'verbs',example_vn:'Bạn đang làm gì vậy?',example_en:'What are you doing?'},
+  {id:'v054',tier:7,vn:'ra',north:null,en:'go out / exit',category:'verbs',example_vn:'Bạn muốn ra ngoài không?',example_en:'Do you want to go outside?'},
+  {id:'v055',tier:7,vn:'vào',north:null,en:'go in / enter',category:'verbs',example_vn:'Mời bạn vào nhà.',example_en:'Please come inside the house.'},
+  {id:'v056',tier:7,vn:'lên',north:null,en:'go up',category:'verbs',example_vn:'Chúng ta lên lầu hai nhé.',example_en:"Let's go up to the second floor."},
+  {id:'v057',tier:7,vn:'xuống',north:null,en:'go down',category:'verbs',example_vn:'Bạn xuống xe ở đây được rồi.',example_en:'You can get off/down here.'},
+  {id:'v058',tier:7,vn:'gọi',north:null,en:'call',category:'verbs',example_vn:'Tôi sẽ gọi cho bạn sau.',example_en:'I will call you later.'},
+  {id:'v059',tier:8,vn:'cười',north:null,en:'laugh / smile',category:'verbs',example_vn:'Em bé đang cười.',example_en:'The baby is smiling.'},
+  {id:'v060',tier:8,vn:'khóc',north:null,en:'cry',category:'verbs',example_vn:'Tại sao bạn khóc vậy?',example_en:'Why are you crying?'},
+  {id:'v061',tier:8,vn:'hát',north:null,en:'sing',category:'verbs',example_vn:'Cô ấy hát rất hay.',example_en:'She sings very well.'},
+  {id:'v062',tier:8,vn:'lái xe',north:null,en:'drive',category:'verbs',example_vn:'Ba tôi lái xe đi làm.',example_en:'My dad drives to work.'},
+  {id:'v063',tier:8,vn:'bơi',north:null,en:'swim',category:'verbs',example_vn:'Tôi không biết bơi.',example_en:"I don't know how to swim."},
+  {id:'v064',tier:8,vn:'nhảy',north:null,en:'jump / dance',category:'verbs',example_vn:'Họ đang nhảy ở bữa tiệc.',example_en:'They are dancing at the party.'},
+  {id:'v065',tier:8,vn:'dạy',north:null,en:'teach',category:'verbs',example_vn:'Cô ấy dạy tiếng Anh.',example_en:'She teaches English.'},
+  {id:'v066',tier:8,vn:'thấy',north:null,en:'see',category:'verbs',example_vn:'Tôi thấy một con chó.',example_en:'I see a dog.'},
+  {id:'v067',tier:9,vn:'cảm thấy',north:null,en:'feel',category:'verbs',example_vn:'Tôi cảm thấy rất mệt.',example_en:'I feel very tired.'},
+  {id:'v068',tier:9,vn:'nghĩ',north:null,en:'think',category:'verbs',example_vn:'Bạn nghĩ gì về việc này?',example_en:'What do you think about this?'},
+  {id:'v069',tier:9,vn:'tin',north:null,en:'believe',category:'verbs',example_vn:'Tôi tin bạn.',example_en:'I believe you.'},
+  {id:'v070',tier:9,vn:'ghét',north:null,en:'hate',category:'verbs',example_vn:'Tôi ghét trời mưa.',example_en:'I hate rainy weather.'},
+  {id:'v071',tier:9,vn:'giặt đồ',north:null,en:'do laundry',category:'verbs',example_vn:'Cuối tuần tôi thường giặt đồ.',example_en:'I usually do laundry on weekends.'},
+  {id:'v072',tier:9,vn:'rửa',north:null,en:'wash',category:'verbs',example_vn:'Làm ơn rửa chén giúp tôi.',example_en:'Please wash the dishes for me.'},
+  {id:'v073',tier:9,vn:'tắt',north:null,en:'turn off',category:'verbs',example_vn:'Nhớ tắt quạt trước khi đi.',example_en:'Remember to turn off the fan before leaving.'},
 
   // ADJECTIVES
   {id:'a001',tier:1,vn:'tốt',north:null,en:'good',category:'adjectives',example_vn:'Anh ấy là người tốt.',example_en:'He is a good person.'},
@@ -127,38 +150,94 @@ const WORDS = [
   {id:'a038',tier:5,vn:'đủ',north:null,en:'enough',category:'adjectives',example_vn:'Tiền đủ để mua rồi.',example_en:'There is enough money to buy it.'},
   {id:'a039',tier:5,vn:'đẹp trai',north:null,en:'handsome',category:'adjectives',example_vn:'Anh ấy rất đẹp trai.',example_en:'He is very handsome.'},
   {id:'a040',tier:5,vn:'xinh',north:null,en:'cute / pretty',category:'adjectives',example_vn:'Em bé này xinh quá!',example_en:'This baby is so cute!'},
+  {id:'a041',tier:6,vn:'rộng',north:null,en:'wide / spacious',category:'adjectives',example_vn:'Căn phòng này rất rộng.',example_en:'This room is very spacious.'},
+  {id:'a042',tier:6,vn:'chật',north:null,en:'narrow / tight',category:'adjectives',example_vn:'Cái áo này hơi chật.',example_en:'This shirt is a bit tight.'},
+  {id:'a043',tier:6,vn:'mập',north:'béo',en:'fat',category:'adjectives',example_vn:'Con chó của tôi hơi mập.',example_en:'My dog is a bit fat.'},
+  {id:'a044',tier:6,vn:'ốm',north:null,en:'thin / skinny',category:'adjectives',example_vn:'Anh ấy rất ốm.',example_en:'He is very thin.'},
+  {id:'a045',tier:6,vn:'giận',north:null,en:'angry',category:'adjectives',example_vn:'Mẹ tôi đang giận.',example_en:'My mom is angry.'},
+  {id:'a046',tier:6,vn:'mạnh',north:null,en:'strong',category:'adjectives',example_vn:'Anh ấy rất mạnh.',example_en:'He is very strong.'},
+  {id:'a047',tier:6,vn:'thông minh',north:null,en:'smart',category:'adjectives',example_vn:'Cô ấy rất thông minh.',example_en:'She is very smart.'},
+  {id:'a048',tier:6,vn:'dơ',north:'bẩn',en:'dirty',category:'adjectives',example_vn:'Đôi giày của tôi rất dơ.',example_en:'My shoes are very dirty.'},
+  {id:'a049',tier:6,vn:'mắc',north:'đắt',en:'expensive',category:'adjectives',example_vn:'Cái điện thoại này quá mắc.',example_en:'This phone is too expensive.'},
+  {id:'a050',tier:6,vn:'giàu',north:null,en:'rich',category:'adjectives',example_vn:'Ông ấy rất giàu.',example_en:'He is very rich.'},
+  {id:'a051',tier:7,vn:'nghèo',north:null,en:'poor',category:'adjectives',example_vn:'Gia đình đó rất nghèo.',example_en:'That family is very poor.'},
+  {id:'a052',tier:7,vn:'dở',north:null,en:'not tasty / bad at',category:'adjectives',example_vn:'Món ăn này hơi dở.',example_en:'This dish is not very tasty.'},
+  {id:'a053',tier:7,vn:'ngọt',north:null,en:'sweet',category:'adjectives',example_vn:'Ly trà sữa này rất ngọt.',example_en:'This milk tea is very sweet.'},
+  {id:'a054',tier:7,vn:'mặn',north:null,en:'salty',category:'adjectives',example_vn:'Món canh này hơi mặn.',example_en:'This soup is a bit salty.'},
+  {id:'a055',tier:7,vn:'chua',north:null,en:'sour',category:'adjectives',example_vn:'Trái xoài này rất chua.',example_en:'This mango is very sour.'},
+  {id:'a056',tier:7,vn:'cay',north:null,en:'spicy',category:'adjectives',example_vn:'Món này rất cay.',example_en:'This dish is very spicy.'},
+  {id:'a057',tier:7,vn:'đắng',north:null,en:'bitter',category:'adjectives',example_vn:'Ly cà phê này rất đắng.',example_en:'This coffee is very bitter.'},
+  {id:'a058',tier:7,vn:'ồn',north:null,en:'noisy / loud',category:'adjectives',example_vn:'Quán này quá ồn.',example_en:'This cafe is too noisy.'},
+  {id:'a059',tier:7,vn:'yên tĩnh',north:null,en:'quiet / peaceful',category:'adjectives',example_vn:'Ngôi làng này rất yên tĩnh.',example_en:'This village is very peaceful.'},
+  {id:'a060',tier:7,vn:'im lặng',north:null,en:'silent',category:'adjectives',example_vn:'Cả lớp rất im lặng.',example_en:'The whole class is silent.'},
+  {id:'a061',tier:8,vn:'náo nhiệt',north:null,en:'lively / bustling',category:'adjectives',example_vn:'Thành phố này rất náo nhiệt.',example_en:'This city is very lively.'},
+  {id:'a062',tier:8,vn:'rảnh',north:null,en:'free / available',category:'adjectives',example_vn:'Cuối tuần này bạn có rảnh không?',example_en:'Are you free this weekend?'},
+  {id:'a063',tier:8,vn:'sớm',north:null,en:'early',category:'adjectives',example_vn:'Tôi thức dậy rất sớm.',example_en:'I wake up very early.'},
+  {id:'a064',tier:8,vn:'đơn giản',north:null,en:'simple',category:'adjectives',example_vn:'Câu hỏi này rất đơn giản.',example_en:'This question is very simple.'},
+  {id:'a065',tier:8,vn:'phức tạp',north:null,en:'complicated',category:'adjectives',example_vn:'Vấn đề này khá phức tạp.',example_en:'This problem is quite complicated.'},
+  {id:'a066',tier:8,vn:'lười',north:null,en:'lazy',category:'adjectives',example_vn:'Con mèo của tôi rất lười.',example_en:'My cat is very lazy.'},
+  {id:'a067',tier:8,vn:'siêng',north:'chăm chỉ',en:'hardworking',category:'adjectives',example_vn:'Anh ấy rất siêng.',example_en:'He is very hardworking.'},
+  {id:'a068',tier:8,vn:'hiền',north:null,en:'gentle / kind',category:'adjectives',example_vn:'Bà tôi rất hiền.',example_en:'My grandmother is very gentle.'},
+  {id:'a069',tier:8,vn:'dữ',north:null,en:'fierce / strict',category:'adjectives',example_vn:'Con chó đó rất dữ.',example_en:'That dog is very fierce.'},
+  {id:'a070',tier:8,vn:'vui tính',north:null,en:'funny / fun-loving',category:'adjectives',example_vn:'Bạn tôi rất vui tính.',example_en:'My friend is very funny.'},
+  {id:'a071',tier:9,vn:'nghiêm túc',north:null,en:'serious',category:'adjectives',example_vn:'Anh ấy rất nghiêm túc trong công việc.',example_en:'He is very serious about work.'},
+  {id:'a072',tier:9,vn:'bệnh',north:null,en:'sick',category:'adjectives',example_vn:'Tôi bị bệnh hôm qua.',example_en:'I was sick yesterday.'},
+  {id:'a073',tier:9,vn:'đau',north:null,en:'hurting / painful',category:'adjectives',example_vn:'Chân tôi rất đau.',example_en:'My leg hurts a lot.'},
+  {id:'a074',tier:9,vn:'gần',north:null,en:'near',category:'adjectives',example_vn:'Nhà tôi rất gần trường học.',example_en:'My house is very near the school.'},
+  {id:'a075',tier:9,vn:'xa',north:null,en:'far',category:'adjectives',example_vn:'Công ty tôi ở rất xa.',example_en:'My company is very far.'},
+  {id:'a076',tier:9,vn:'sai',north:null,en:'wrong',category:'adjectives',example_vn:'Câu này bị sai rồi.',example_en:'This sentence is wrong.'},
+  {id:'a077',tier:9,vn:'quan trọng',north:null,en:'important',category:'adjectives',example_vn:'Đây là việc rất quan trọng.',example_en:'This is a very important matter.'},
+  {id:'a078',tier:9,vn:'thú vị',north:null,en:'interesting',category:'adjectives',example_vn:'Cuốn sách này rất thú vị.',example_en:'This book is very interesting.'},
 
   // NOUNS
-  {id:'n001',tier:2,vn:'nhà',north:null,en:'house / home',category:'nouns',example_vn:'Nhà tôi ở gần đây.',example_en:'My house is nearby.'},
-  {id:'n002',tier:2,vn:'phòng',north:null,en:'room',category:'nouns',example_vn:'Phòng tôi rất nhỏ.',example_en:'My room is very small.'},
-  {id:'n003',tier:2,vn:'cửa',north:null,en:'door',category:'nouns',example_vn:'Đóng cửa lại đi.',example_en:'Close the door.'},
-  {id:'n004',tier:2,vn:'bàn',north:null,en:'table / desk',category:'nouns',example_vn:'Sách ở trên bàn.',example_en:'The book is on the table.'},
-  {id:'n005',tier:2,vn:'ghế',north:null,en:'chair',category:'nouns',example_vn:'Ngồi vào ghế đi.',example_en:'Sit in the chair.'},
-  {id:'n006',tier:2,vn:'giường',north:null,en:'bed',category:'nouns',example_vn:'Tôi ngủ trên giường.',example_en:'I sleep on the bed.'},
-  {id:'n007',tier:2,vn:'sách',north:null,en:'book',category:'nouns',example_vn:'Tôi đọc sách mỗi tối.',example_en:'I read a book every evening.'},
-  {id:'n008',tier:2,vn:'bút',north:null,en:'pen',category:'nouns',example_vn:'Cho tôi mượn cái bút.',example_en:'Let me borrow a pen.'},
-  {id:'n009',tier:2,vn:'điện thoại',north:null,en:'phone',category:'nouns',example_vn:'Điện thoại tôi hết pin rồi.',example_en:'My phone is out of battery.'},
-  {id:'n010',tier:2,vn:'máy tính',north:null,en:'computer',category:'nouns',example_vn:'Tôi làm việc trên máy tính.',example_en:'I work on the computer.'},
-  {id:'n011',tier:3,vn:'xe máy',north:null,en:'motorbike',category:'nouns',example_vn:'Tôi đi xe máy đến chợ.',example_en:'I ride a motorbike to the market.'},
-  {id:'n012',tier:3,vn:'ô tô',north:'xe hơi',en:'car',category:'nouns',example_vn:'Anh ấy lái ô tô đi làm.',example_en:'He drives a car to work.'},
-  {id:'n013',tier:3,vn:'đường',north:null,en:'road / street',category:'nouns',example_vn:'Con đường này rất đông xe.',example_en:'This road is very busy.'},
-  {id:'n014',tier:3,vn:'chợ',north:null,en:'market',category:'nouns',example_vn:'Mẹ đi chợ mua rau.',example_en:'Mom goes to the market to buy vegetables.'},
-  {id:'n015',tier:3,vn:'cửa hàng',north:null,en:'shop / store',category:'nouns',example_vn:'Cửa hàng đó mở cửa lúc 8 giờ.',example_en:"That store opens at 8 o'clock."},
-  {id:'n016',tier:3,vn:'tiền',north:null,en:'money',category:'nouns',example_vn:'Bao nhiêu tiền?',example_en:'How much money?'},
-  {id:'n017',tier:3,vn:'túi',north:null,en:'bag / pocket',category:'nouns',example_vn:'Túi tôi bị mất rồi.',example_en:'My bag is lost.'},
-  {id:'n018',tier:3,vn:'quần',north:null,en:'pants / trousers',category:'nouns',example_vn:'Tôi mặc quần xanh hôm nay.',example_en:'I am wearing blue pants today.'},
-  {id:'n019',tier:3,vn:'áo',north:null,en:'shirt / top',category:'nouns',example_vn:'Chiếc áo này đẹp lắm.',example_en:'This shirt is very nice.'},
-  {id:'n020',tier:3,vn:'giày',north:null,en:'shoes',category:'nouns',example_vn:'Đôi giày mới của tôi rất thoải mái.',example_en:'My new shoes are very comfortable.'},
-  {id:'n021',tier:4,vn:'nước',north:null,en:'water',category:'nouns',example_vn:'Cho tôi một ly nước.',example_en:'Give me a glass of water.'},
-  {id:'n022',tier:4,vn:'cơm',north:null,en:'cooked rice / meal',category:'nouns',example_vn:'Cơm trưa đã sẵn sàng chưa?',example_en:'Is lunch ready yet?'},
-  {id:'n023',tier:4,vn:'bánh mì',north:null,en:'bread / baguette',category:'nouns',example_vn:'Tôi ăn bánh mì vào buổi sáng.',example_en:'I eat a baguette in the morning.'},
-  {id:'n024',tier:4,vn:'trứng',north:null,en:'egg',category:'nouns',example_vn:'Tôi ăn hai quả trứng mỗi sáng.',example_en:'I eat two eggs every morning.'},
-  {id:'n025',tier:4,vn:'thịt',north:null,en:'meat',category:'nouns',example_vn:'Bạn thích ăn thịt gì?',example_en:'What kind of meat do you like?'},
-  {id:'n026',tier:4,vn:'rau',north:null,en:'vegetables',category:'nouns',example_vn:'Ăn nhiều rau tốt cho sức khỏe.',example_en:'Eating lots of vegetables is good for health.'},
-  {id:'n027',tier:4,vn:'hoa quả',north:'trái cây',en:'fruit',category:'nouns',example_vn:'Tôi thích ăn hoa quả nhiệt đới.',example_en:'I like eating tropical fruit.'},
-  {id:'n028',tier:4,vn:'đồ uống',north:null,en:'drinks / beverages',category:'nouns',example_vn:'Đồ uống yêu thích của bạn là gì?',example_en:'What is your favorite drink?'},
-  {id:'n029',tier:4,vn:'cửa sổ',north:null,en:'window',category:'nouns',example_vn:'Mở cửa sổ ra cho thoáng.',example_en:'Open the window for ventilation.'},
-  {id:'n030',tier:4,vn:'chìa khóa',north:null,en:'key',category:'nouns',example_vn:'Tôi quên chìa khóa ở nhà rồi.',example_en:'I forgot the key at home.'},
+  {id:'n001',tier:1,vn:'nhà',north:null,en:'house / home',category:'nouns',example_vn:'Nhà tôi ở gần đây.',example_en:'My house is nearby.'},
+  {id:'n002',tier:1,vn:'phòng',north:null,en:'room',category:'nouns',example_vn:'Phòng tôi rất nhỏ.',example_en:'My room is very small.'},
+  {id:'n003',tier:1,vn:'cửa',north:null,en:'door',category:'nouns',example_vn:'Đóng cửa lại đi.',example_en:'Close the door.'},
+  {id:'n004',tier:1,vn:'bàn',north:null,en:'table / desk',category:'nouns',example_vn:'Sách ở trên bàn.',example_en:'The book is on the table.'},
+  {id:'n005',tier:1,vn:'ghế',north:null,en:'chair',category:'nouns',example_vn:'Ngồi vào ghế đi.',example_en:'Sit in the chair.'},
+  {id:'n006',tier:1,vn:'giường',north:null,en:'bed',category:'nouns',example_vn:'Tôi ngủ trên giường.',example_en:'I sleep on the bed.'},
+  {id:'n007',tier:1,vn:'sách',north:null,en:'book',category:'nouns',example_vn:'Tôi đọc sách mỗi tối.',example_en:'I read a book every evening.'},
+  {id:'n008',tier:1,vn:'bút',north:null,en:'pen',category:'nouns',example_vn:'Cho tôi mượn cái bút.',example_en:'Let me borrow a pen.'},
+  {id:'n009',tier:1,vn:'điện thoại',north:null,en:'phone',category:'nouns',example_vn:'Điện thoại tôi hết pin rồi.',example_en:'My phone is out of battery.'},
+  {id:'n010',tier:1,vn:'máy tính',north:null,en:'computer',category:'nouns',example_vn:'Tôi làm việc trên máy tính.',example_en:'I work on the computer.'},
+  {id:'n011',tier:2,vn:'xe máy',north:null,en:'motorbike',category:'nouns',example_vn:'Tôi đi xe máy đến chợ.',example_en:'I ride a motorbike to the market.'},
+  {id:'n012',tier:2,vn:'ô tô',north:'xe hơi',en:'car',category:'nouns',example_vn:'Anh ấy lái ô tô đi làm.',example_en:'He drives a car to work.'},
+  {id:'n013',tier:2,vn:'đường',north:null,en:'road / street',category:'nouns',example_vn:'Con đường này rất đông xe.',example_en:'This road is very busy.'},
+  {id:'n014',tier:2,vn:'chợ',north:null,en:'market',category:'nouns',example_vn:'Mẹ đi chợ mua rau.',example_en:'Mom goes to the market to buy vegetables.'},
+  {id:'n015',tier:2,vn:'cửa hàng',north:null,en:'shop / store',category:'nouns',example_vn:'Cửa hàng đó mở cửa lúc 8 giờ.',example_en:"That store opens at 8 o'clock."},
+  {id:'n016',tier:2,vn:'tiền',north:null,en:'money',category:'nouns',example_vn:'Bao nhiêu tiền?',example_en:'How much money?'},
+  {id:'n017',tier:2,vn:'túi',north:null,en:'bag / pocket',category:'nouns',example_vn:'Túi tôi bị mất rồi.',example_en:'My bag is lost.'},
+  {id:'n018',tier:2,vn:'quần',north:null,en:'pants / trousers',category:'nouns',example_vn:'Tôi mặc quần xanh hôm nay.',example_en:'I am wearing blue pants today.'},
+  {id:'n019',tier:2,vn:'áo',north:null,en:'shirt / top',category:'nouns',example_vn:'Chiếc áo này đẹp lắm.',example_en:'This shirt is very nice.'},
+  {id:'n020',tier:2,vn:'giày',north:null,en:'shoes',category:'nouns',example_vn:'Đôi giày mới của tôi rất thoải mái.',example_en:'My new shoes are very comfortable.'},
+  {id:'n021',tier:3,vn:'nước',north:null,en:'water',category:'nouns',example_vn:'Cho tôi một ly nước.',example_en:'Give me a glass of water.'},
+  {id:'n022',tier:3,vn:'cơm',north:null,en:'cooked rice / meal',category:'nouns',example_vn:'Cơm trưa đã sẵn sàng chưa?',example_en:'Is lunch ready yet?'},
+  {id:'n023',tier:3,vn:'bánh mì',north:null,en:'bread / baguette',category:'nouns',example_vn:'Tôi ăn bánh mì vào buổi sáng.',example_en:'I eat a baguette in the morning.'},
+  {id:'n024',tier:3,vn:'trứng',north:null,en:'egg',category:'nouns',example_vn:'Tôi ăn hai quả trứng mỗi sáng.',example_en:'I eat two eggs every morning.'},
+  {id:'n025',tier:3,vn:'thịt',north:null,en:'meat',category:'nouns',example_vn:'Bạn thích ăn thịt gì?',example_en:'What kind of meat do you like?'},
+  {id:'n026',tier:3,vn:'rau',north:null,en:'vegetables',category:'nouns',example_vn:'Ăn nhiều rau tốt cho sức khỏe.',example_en:'Eating lots of vegetables is good for health.'},
+  {id:'n027',tier:3,vn:'hoa quả',north:'trái cây',en:'fruit',category:'nouns',example_vn:'Tôi thích ăn hoa quả nhiệt đới.',example_en:'I like eating tropical fruit.'},
+  {id:'n028',tier:3,vn:'đồ uống',north:null,en:'drinks / beverages',category:'nouns',example_vn:'Đồ uống yêu thích của bạn là gì?',example_en:'What is your favorite drink?'},
+  {id:'n029',tier:3,vn:'cửa sổ',north:null,en:'window',category:'nouns',example_vn:'Mở cửa sổ ra cho thoáng.',example_en:'Open the window for ventilation.'},
+  {id:'n030',tier:3,vn:'chìa khóa',north:null,en:'key',category:'nouns',example_vn:'Tôi quên chìa khóa ở nhà rồi.',example_en:'I forgot the key at home.'},
+  {id:'n031',tier:4,vn:'người',north:null,en:'person',category:'nouns',example_vn:'Anh ấy là một người tốt.',example_en:'He is a good person.'},
+  {id:'n032',tier:4,vn:'trời',north:null,en:'sky / weather',category:'nouns',example_vn:'Trời hôm nay đẹp quá.',example_en:'The weather today is so beautiful.'},
+  {id:'n033',tier:4,vn:'cây',north:null,en:'tree',category:'nouns',example_vn:'Trước nhà tôi có một cây lớn.',example_en:'In front of my house there is a big tree.'},
+  {id:'n034',tier:4,vn:'biển',north:null,en:'sea / beach',category:'nouns',example_vn:'Mùa hè chúng tôi thường đi biển.',example_en:'In summer we usually go to the beach.'},
+  {id:'n035',tier:4,vn:'núi',north:null,en:'mountain',category:'nouns',example_vn:'Ở quê tôi có nhiều núi.',example_en:'In my hometown there are many mountains.'},
+  {id:'n036',tier:4,vn:'xe',north:null,en:'vehicle',category:'nouns',example_vn:'Tôi đi làm bằng xe.',example_en:'I go to work by vehicle.'},
+  {id:'n037',tier:4,vn:'đầu',north:null,en:'head',category:'nouns',example_vn:'Đầu tôi hơi đau.',example_en:'My head hurts a little.'},
+  {id:'n038',tier:4,vn:'tay',north:null,en:'hand / arm',category:'nouns',example_vn:'Rửa tay trước khi ăn.',example_en:'Wash your hands before eating.'},
+  {id:'n039',tier:4,vn:'chân',north:null,en:'leg / foot',category:'nouns',example_vn:'Chân tôi rất mỏi.',example_en:'My legs are very sore.'},
+  {id:'n040',tier:4,vn:'miệng',north:null,en:'mouth',category:'nouns',example_vn:'Miệng tôi bị đau.',example_en:'My mouth hurts.'},
+  {id:'n041',tier:5,vn:'bụng',north:null,en:'stomach',category:'nouns',example_vn:'Bụng tôi đang đói.',example_en:'My stomach is hungry.'},
+  {id:'n042',tier:5,vn:'xe buýt',north:null,en:'bus',category:'nouns',example_vn:'Tôi đi học bằng xe buýt.',example_en:'I go to school by bus.'},
+  {id:'n043',tier:5,vn:'máy bay',north:null,en:'airplane',category:'nouns',example_vn:'Chúng tôi sẽ đi máy bay về Việt Nam.',example_en:'We will fly back to Vietnam.'},
+  {id:'n044',tier:5,vn:'nón',north:'mũ',en:'hat',category:'nouns',example_vn:'Đội nón khi đi nắng.',example_en:'Wear a hat when going out in the sun.'},
+  {id:'n045',tier:5,vn:'học sinh',north:null,en:'student',category:'nouns',example_vn:'Nó là một học sinh giỏi.',example_en:'He is a good student.'},
+  {id:'n046',tier:5,vn:'giáo viên',north:null,en:'teacher',category:'nouns',example_vn:'Cô ấy là giáo viên tiếng Anh.',example_en:'She is an English teacher.'},
+  {id:'n047',tier:5,vn:'công việc',north:null,en:'job / work',category:'nouns',example_vn:'Công việc của tôi rất thú vị.',example_en:'My job is very interesting.'},
+  {id:'n048',tier:5,vn:'bài tập',north:null,en:'homework',category:'nouns',example_vn:'Tôi chưa làm xong bài tập.',example_en:"I haven't finished my homework yet."},
 
   // FOOD
   {id:'f001',tier:1,vn:'phở',north:null,en:'pho (noodle soup)',category:'food',example_vn:'Phở là món ăn nổi tiếng của Việt Nam.',example_en:'Pho is a famous Vietnamese dish.'},
@@ -213,26 +292,26 @@ const WORDS = [
   {id:'f050',tier:6,vn:'thực đơn',north:null,en:'menu',category:'food',example_vn:'Cho tôi xem thực đơn.',example_en:'Please show me the menu.'},
 
   // FAMILY
-  {id:'fam001',tier:2,vn:'gia đình',north:null,en:'family',category:'family',example_vn:'Gia đình tôi có bốn người.',example_en:'My family has four people.'},
-  {id:'fam002',tier:2,vn:'ba',north:'bố',en:'father / dad',category:'family',example_vn:'Ba tôi làm kỹ sư.',example_en:'My father is an engineer.'},
-  {id:'fam003',tier:2,vn:'má',north:'mẹ',en:'mother / mom',category:'family',example_vn:'Má tôi nấu ăn rất ngon.',example_en:'My mother cooks very deliciously.'},
-  {id:'fam004',tier:2,vn:'anh',north:null,en:'older brother',category:'family',example_vn:'Anh tôi đang học đại học.',example_en:'My older brother is studying at university.'},
-  {id:'fam005',tier:2,vn:'chị',north:null,en:'older sister',category:'family',example_vn:'Chị tôi đã lập gia đình rồi.',example_en:'My older sister is already married.'},
-  {id:'fam006',tier:2,vn:'em',north:null,en:'younger sibling',category:'family',example_vn:'Em tôi học lớp 5.',example_en:'My younger sibling is in grade 5.'},
-  {id:'fam007',tier:2,vn:'em trai',north:null,en:'younger brother',category:'family',example_vn:'Em trai tôi rất nghịch ngợm.',example_en:'My younger brother is very mischievous.'},
-  {id:'fam008',tier:2,vn:'em gái',north:null,en:'younger sister',category:'family',example_vn:'Em gái tôi thích học nhạc.',example_en:'My younger sister likes studying music.'},
-  {id:'fam009',tier:2,vn:'ông',north:null,en:'grandfather / elderly man',category:'family',example_vn:'Ông nội tôi đã 80 tuổi.',example_en:'My grandfather is 80 years old.'},
-  {id:'fam010',tier:2,vn:'bà',north:null,en:'grandmother / elderly woman',category:'family',example_vn:'Bà ngoại kể chuyện rất hay.',example_en:'My grandmother tells stories very well.'},
-  {id:'fam011',tier:2,vn:'con',north:null,en:'child (son or daughter)',category:'family',example_vn:'Họ có hai con.',example_en:'They have two children.'},
-  {id:'fam012',tier:2,vn:'con trai',north:null,en:'son',category:'family',example_vn:'Con trai tôi học rất giỏi.',example_en:'My son studies very well.'},
-  {id:'fam013',tier:2,vn:'con gái',north:null,en:'daughter',category:'family',example_vn:'Con gái tôi thích vẽ tranh.',example_en:'My daughter likes drawing.'},
-  {id:'fam014',tier:2,vn:'chồng',north:null,en:'husband',category:'family',example_vn:'Chồng cô ấy là bác sĩ.',example_en:'Her husband is a doctor.'},
-  {id:'fam015',tier:2,vn:'vợ',north:null,en:'wife',category:'family',example_vn:'Vợ anh ấy dạy học.',example_en:'His wife is a teacher.'},
-  {id:'fam016',tier:2,vn:'bạn trai',north:null,en:'boyfriend',category:'family',example_vn:'Bạn trai cô ấy rất tốt bụng.',example_en:'Her boyfriend is very kind.'},
-  {id:'fam017',tier:2,vn:'bạn gái',north:null,en:'girlfriend',category:'family',example_vn:'Bạn gái anh ấy học cùng lớp.',example_en:'His girlfriend is in the same class.'},
-  {id:'fam018',tier:2,vn:'bạn bè',north:null,en:'friends',category:'family',example_vn:'Bạn bè tôi rất thân thiện.',example_en:'My friends are very friendly.'},
-  {id:'fam019',tier:2,vn:'hàng xóm',north:null,en:'neighbor',category:'family',example_vn:'Hàng xóm tôi rất tốt bụng.',example_en:'My neighbor is very kind.'},
-  {id:'fam020',tier:2,vn:'người thân',north:null,en:'relative / loved one',category:'family',example_vn:'Tôi nhớ người thân ở quê.',example_en:'I miss my relatives back home.'},
+  {id:'fam001',tier:1,vn:'gia đình',north:null,en:'family',category:'family',example_vn:'Gia đình tôi có bốn người.',example_en:'My family has four people.'},
+  {id:'fam002',tier:1,vn:'ba',north:'bố',en:'father / dad',category:'family',example_vn:'Ba tôi làm kỹ sư.',example_en:'My father is an engineer.'},
+  {id:'fam003',tier:1,vn:'má',north:'mẹ',en:'mother / mom',category:'family',example_vn:'Má tôi nấu ăn rất ngon.',example_en:'My mother cooks very deliciously.'},
+  {id:'fam004',tier:1,vn:'anh',north:null,en:'older brother',category:'family',example_vn:'Anh tôi đang học đại học.',example_en:'My older brother is studying at university.'},
+  {id:'fam005',tier:1,vn:'chị',north:null,en:'older sister',category:'family',example_vn:'Chị tôi đã lập gia đình rồi.',example_en:'My older sister is already married.'},
+  {id:'fam006',tier:1,vn:'em',north:null,en:'younger sibling',category:'family',example_vn:'Em tôi học lớp 5.',example_en:'My younger sibling is in grade 5.'},
+  {id:'fam007',tier:1,vn:'em trai',north:null,en:'younger brother',category:'family',example_vn:'Em trai tôi rất nghịch ngợm.',example_en:'My younger brother is very mischievous.'},
+  {id:'fam008',tier:1,vn:'em gái',north:null,en:'younger sister',category:'family',example_vn:'Em gái tôi thích học nhạc.',example_en:'My younger sister likes studying music.'},
+  {id:'fam009',tier:1,vn:'ông',north:null,en:'grandfather / elderly man',category:'family',example_vn:'Ông nội tôi đã 80 tuổi.',example_en:'My grandfather is 80 years old.'},
+  {id:'fam010',tier:1,vn:'bà',north:null,en:'grandmother / elderly woman',category:'family',example_vn:'Bà ngoại kể chuyện rất hay.',example_en:'My grandmother tells stories very well.'},
+  {id:'fam011',tier:1,vn:'con',north:null,en:'child (son or daughter)',category:'family',example_vn:'Họ có hai con.',example_en:'They have two children.'},
+  {id:'fam012',tier:1,vn:'con trai',north:null,en:'son',category:'family',example_vn:'Con trai tôi học rất giỏi.',example_en:'My son studies very well.'},
+  {id:'fam013',tier:1,vn:'con gái',north:null,en:'daughter',category:'family',example_vn:'Con gái tôi thích vẽ tranh.',example_en:'My daughter likes drawing.'},
+  {id:'fam014',tier:1,vn:'chồng',north:null,en:'husband',category:'family',example_vn:'Chồng cô ấy là bác sĩ.',example_en:'Her husband is a doctor.'},
+  {id:'fam015',tier:1,vn:'vợ',north:null,en:'wife',category:'family',example_vn:'Vợ anh ấy dạy học.',example_en:'His wife is a teacher.'},
+  {id:'fam016',tier:1,vn:'bạn trai',north:null,en:'boyfriend',category:'family',example_vn:'Bạn trai cô ấy rất tốt bụng.',example_en:'Her boyfriend is very kind.'},
+  {id:'fam017',tier:1,vn:'bạn gái',north:null,en:'girlfriend',category:'family',example_vn:'Bạn gái anh ấy học cùng lớp.',example_en:'His girlfriend is in the same class.'},
+  {id:'fam018',tier:1,vn:'bạn bè',north:null,en:'friends',category:'family',example_vn:'Bạn bè tôi rất thân thiện.',example_en:'My friends are very friendly.'},
+  {id:'fam019',tier:1,vn:'hàng xóm',north:null,en:'neighbor',category:'family',example_vn:'Hàng xóm tôi rất tốt bụng.',example_en:'My neighbor is very kind.'},
+  {id:'fam020',tier:1,vn:'người thân',north:null,en:'relative / loved one',category:'family',example_vn:'Tôi nhớ người thân ở quê.',example_en:'I miss my relatives back home.'},
 
   // NUMBERS
   {id:'num001',tier:2,vn:'không',north:null,en:'zero (0)',category:'numbers',example_vn:'Số điện thoại bắt đầu bằng không.',example_en:'Phone numbers start with zero.'},
@@ -257,84 +336,94 @@ const WORDS = [
   {id:'num020',tier:3,vn:'triệu',north:null,en:'million',category:'numbers',example_vn:'Cái điện thoại đó mười triệu đồng.',example_en:'That phone costs ten million dong.'},
 
   // TIME
-  {id:'t001',tier:2,vn:'hôm nay',north:null,en:'today',category:'time',example_vn:'Hôm nay trời đẹp lắm.',example_en:'Today the weather is very nice.'},
-  {id:'t002',tier:2,vn:'hôm qua',north:null,en:'yesterday',category:'time',example_vn:'Hôm qua tôi đi xem phim.',example_en:'Yesterday I went to see a movie.'},
-  {id:'t003',tier:2,vn:'ngày mai',north:null,en:'tomorrow',category:'time',example_vn:'Ngày mai tôi sẽ đến gặp bạn.',example_en:'Tomorrow I will come to see you.'},
-  {id:'t004',tier:2,vn:'bây giờ',north:null,en:'now / right now',category:'time',example_vn:'Bây giờ là mấy giờ?',example_en:'What time is it now?'},
-  {id:'t005',tier:2,vn:'sau',north:null,en:'after / later',category:'time',example_vn:'Tôi sẽ gọi bạn sau.',example_en:'I will call you later.'},
-  {id:'t006',tier:2,vn:'trước',north:null,en:'before / earlier',category:'time',example_vn:"Đến trước bảy giờ nhé.",example_en:"Come before seven o'clock."},
-  {id:'t007',tier:2,vn:'sáng',north:null,en:'morning',category:'time',example_vn:'Buổi sáng tôi uống cà phê.',example_en:'In the morning I drink coffee.'},
-  {id:'t008',tier:2,vn:'trưa',north:null,en:'noon / midday',category:'time',example_vn:'Buổi trưa chúng tôi ăn cơm.',example_en:'At noon we eat rice.'},
-  {id:'t009',tier:2,vn:'chiều',north:null,en:'afternoon',category:'time',example_vn:'Buổi chiều tôi đi chơi với bạn.',example_en:'In the afternoon I hang out with friends.'},
-  {id:'t010',tier:2,vn:'tối',north:null,en:'evening',category:'time',example_vn:'Buổi tối tôi đọc sách.',example_en:'In the evening I read books.'},
-  {id:'t011',tier:3,vn:'đêm',north:null,en:'night (late)',category:'time',example_vn:'Ban đêm trời lạnh hơn.',example_en:'At night it is colder.'},
-  {id:'t012',tier:3,vn:'tuần',north:null,en:'week',category:'time',example_vn:'Tuần này tôi rất bận.',example_en:'This week I am very busy.'},
-  {id:'t013',tier:3,vn:'tháng',north:null,en:'month',category:'time',example_vn:'Tháng này có ba mươi ngày.',example_en:'This month has thirty days.'},
-  {id:'t014',tier:3,vn:'năm',north:null,en:'year',category:'time',example_vn:'Năm ngoái tôi đến Việt Nam.',example_en:'Last year I came to Vietnam.'},
-  {id:'t015',tier:3,vn:'giờ',north:null,en:"hour / o'clock",category:'time',example_vn:'Bây giờ là ba giờ chiều.',example_en:'Now it is three in the afternoon.'},
-  {id:'t016',tier:3,vn:'phút',north:null,en:'minute',category:'time',example_vn:'Chờ tôi năm phút.',example_en:'Wait for me five minutes.'},
-  {id:'t017',tier:3,vn:'thứ Hai',north:null,en:'Monday',category:'time',example_vn:'Thứ Hai tôi đi học.',example_en:'On Monday I go to school.'},
-  {id:'t018',tier:3,vn:'thứ Ba',north:null,en:'Tuesday',category:'time',example_vn:'Thứ Ba tôi có lớp tiếng Anh.',example_en:'On Tuesday I have English class.'},
-  {id:'t019',tier:3,vn:'thứ Tư',north:null,en:'Wednesday',category:'time',example_vn:'Thứ Tư tôi đi tập thể dục.',example_en:'On Wednesday I go exercise.'},
-  {id:'t020',tier:3,vn:'thứ Năm',north:null,en:'Thursday',category:'time',example_vn:'Thứ Năm tôi họp nhóm.',example_en:'On Thursday I have a group meeting.'},
-  {id:'t021',tier:3,vn:'thứ Sáu',north:null,en:'Friday',category:'time',example_vn:'Thứ Sáu là ngày cuối tuần làm việc.',example_en:'Friday is the last workday of the week.'},
-  {id:'t022',tier:3,vn:'thứ Bảy',north:null,en:'Saturday',category:'time',example_vn:'Thứ Bảy tôi đi chơi.',example_en:'On Saturday I go out.'},
-  {id:'t023',tier:3,vn:'Chủ Nhật',north:null,en:'Sunday',category:'time',example_vn:'Chủ Nhật tôi nghỉ ngơi ở nhà.',example_en:'On Sunday I rest at home.'},
-  {id:'t024',tier:3,vn:'cuối tuần',north:null,en:'weekend',category:'time',example_vn:'Cuối tuần bạn làm gì?',example_en:'What do you do on weekends?'},
-  {id:'t025',tier:3,vn:'ngày',north:null,en:'day / date',category:'time',example_vn:'Hôm nay là ngày mấy?',example_en:'What date is today?'},
+  {id:'t001',tier:1,vn:'hôm nay',north:null,en:'today',category:'time',example_vn:'Hôm nay trời đẹp lắm.',example_en:'Today the weather is very nice.'},
+  {id:'t002',tier:1,vn:'hôm qua',north:null,en:'yesterday',category:'time',example_vn:'Hôm qua tôi đi xem phim.',example_en:'Yesterday I went to see a movie.'},
+  {id:'t003',tier:1,vn:'ngày mai',north:null,en:'tomorrow',category:'time',example_vn:'Ngày mai tôi sẽ đến gặp bạn.',example_en:'Tomorrow I will come to see you.'},
+  {id:'t004',tier:1,vn:'bây giờ',north:null,en:'now / right now',category:'time',example_vn:'Bây giờ là mấy giờ?',example_en:'What time is it now?'},
+  {id:'t005',tier:1,vn:'sau',north:null,en:'after / later',category:'time',example_vn:'Tôi sẽ gọi bạn sau.',example_en:'I will call you later.'},
+  {id:'t006',tier:1,vn:'trước',north:null,en:'before / earlier',category:'time',example_vn:"Đến trước bảy giờ nhé.",example_en:"Come before seven o'clock."},
+  {id:'t007',tier:1,vn:'sáng',north:null,en:'morning',category:'time',example_vn:'Buổi sáng tôi uống cà phê.',example_en:'In the morning I drink coffee.'},
+  {id:'t008',tier:1,vn:'trưa',north:null,en:'noon / midday',category:'time',example_vn:'Buổi trưa chúng tôi ăn cơm.',example_en:'At noon we eat rice.'},
+  {id:'t009',tier:1,vn:'chiều',north:null,en:'afternoon',category:'time',example_vn:'Buổi chiều tôi đi chơi với bạn.',example_en:'In the afternoon I hang out with friends.'},
+  {id:'t010',tier:1,vn:'tối',north:null,en:'evening',category:'time',example_vn:'Buổi tối tôi đọc sách.',example_en:'In the evening I read books.'},
+  {id:'t011',tier:2,vn:'đêm',north:null,en:'night (late)',category:'time',example_vn:'Ban đêm trời lạnh hơn.',example_en:'At night it is colder.'},
+  {id:'t012',tier:2,vn:'tuần',north:null,en:'week',category:'time',example_vn:'Tuần này tôi rất bận.',example_en:'This week I am very busy.'},
+  {id:'t013',tier:2,vn:'tháng',north:null,en:'month',category:'time',example_vn:'Tháng này có ba mươi ngày.',example_en:'This month has thirty days.'},
+  {id:'t014',tier:2,vn:'năm',north:null,en:'year',category:'time',example_vn:'Năm ngoái tôi đến Việt Nam.',example_en:'Last year I came to Vietnam.'},
+  {id:'t015',tier:2,vn:'giờ',north:null,en:"hour / o'clock",category:'time',example_vn:'Bây giờ là ba giờ chiều.',example_en:'Now it is three in the afternoon.'},
+  {id:'t016',tier:2,vn:'phút',north:null,en:'minute',category:'time',example_vn:'Chờ tôi năm phút.',example_en:'Wait for me five minutes.'},
+  {id:'t017',tier:2,vn:'thứ Hai',north:null,en:'Monday',category:'time',example_vn:'Thứ Hai tôi đi học.',example_en:'On Monday I go to school.'},
+  {id:'t018',tier:2,vn:'thứ Ba',north:null,en:'Tuesday',category:'time',example_vn:'Thứ Ba tôi có lớp tiếng Anh.',example_en:'On Tuesday I have English class.'},
+  {id:'t019',tier:2,vn:'thứ Tư',north:null,en:'Wednesday',category:'time',example_vn:'Thứ Tư tôi đi tập thể dục.',example_en:'On Wednesday I go exercise.'},
+  {id:'t020',tier:2,vn:'thứ Năm',north:null,en:'Thursday',category:'time',example_vn:'Thứ Năm tôi họp nhóm.',example_en:'On Thursday I have a group meeting.'},
+  {id:'t021',tier:2,vn:'thứ Sáu',north:null,en:'Friday',category:'time',example_vn:'Thứ Sáu là ngày cuối tuần làm việc.',example_en:'Friday is the last workday of the week.'},
+  {id:'t022',tier:2,vn:'thứ Bảy',north:null,en:'Saturday',category:'time',example_vn:'Thứ Bảy tôi đi chơi.',example_en:'On Saturday I go out.'},
+  {id:'t023',tier:2,vn:'Chủ Nhật',north:null,en:'Sunday',category:'time',example_vn:'Chủ Nhật tôi nghỉ ngơi ở nhà.',example_en:'On Sunday I rest at home.'},
+  {id:'t024',tier:2,vn:'cuối tuần',north:null,en:'weekend',category:'time',example_vn:'Cuối tuần bạn làm gì?',example_en:'What do you do on weekends?'},
+  {id:'t025',tier:2,vn:'ngày',north:null,en:'day / date',category:'time',example_vn:'Hôm nay là ngày mấy?',example_en:'What date is today?'},
 
   // COLORS
-  {id:'c001',tier:2,vn:'đỏ',north:null,en:'red',category:'colors',example_vn:'Cái áo đỏ này rất đẹp.',example_en:'This red shirt is very beautiful.'},
-  {id:'c002',tier:2,vn:'xanh lam',north:null,en:'blue',category:'colors',example_vn:'Bầu trời xanh lam thật đẹp.',example_en:'The blue sky is very beautiful.'},
-  {id:'c003',tier:2,vn:'xanh lá',north:null,en:'green',category:'colors',example_vn:'Rừng xanh lá cây rất mát.',example_en:'The green forest is very cool.'},
-  {id:'c004',tier:2,vn:'vàng',north:null,en:'yellow',category:'colors',example_vn:'Hoa hướng dương màu vàng rực rỡ.',example_en:'Sunflowers are bright yellow.'},
-  {id:'c005',tier:2,vn:'trắng',north:null,en:'white',category:'colors',example_vn:'Chiếc áo trắng sạch đẹp lắm.',example_en:'The white shirt looks clean and nice.'},
-  {id:'c006',tier:2,vn:'đen',north:null,en:'black',category:'colors',example_vn:'Mèo đen này rất đáng yêu.',example_en:'This black cat is very adorable.'},
-  {id:'c007',tier:2,vn:'hồng',north:null,en:'pink',category:'colors',example_vn:'Hoa đào màu hồng rất đẹp.',example_en:'The pink peach blossoms are very beautiful.'},
-  {id:'c008',tier:2,vn:'tím',north:null,en:'purple',category:'colors',example_vn:'Cô ấy mặc váy tím.',example_en:'She is wearing a purple dress.'},
-  {id:'c009',tier:2,vn:'cam',north:null,en:'orange (color)',category:'colors',example_vn:'Quả cam màu cam đẹp.',example_en:'The orange fruit is beautifully orange.'},
-  {id:'c010',tier:2,vn:'nâu',north:null,en:'brown',category:'colors',example_vn:'Cái túi nâu này rất đẹp.',example_en:'This brown bag is very nice.'},
-  {id:'c011',tier:2,vn:'xám',north:null,en:'gray',category:'colors',example_vn:'Bầu trời xám khi trời mưa.',example_en:'The sky is gray when it rains.'},
-  {id:'c012',tier:2,vn:'xanh dương',north:null,en:'dark blue / navy',category:'colors',example_vn:'Anh ấy mặc quần xanh dương.',example_en:'He is wearing dark blue pants.'},
+  {id:'c001',tier:1,vn:'đỏ',north:null,en:'red',category:'colors',example_vn:'Cái áo đỏ này rất đẹp.',example_en:'This red shirt is very beautiful.'},
+  {id:'c002',tier:1,vn:'xanh lam',north:null,en:'blue',category:'colors',example_vn:'Bầu trời xanh lam thật đẹp.',example_en:'The blue sky is very beautiful.'},
+  {id:'c003',tier:1,vn:'xanh lá',north:null,en:'green',category:'colors',example_vn:'Rừng xanh lá cây rất mát.',example_en:'The green forest is very cool.'},
+  {id:'c004',tier:1,vn:'vàng',north:null,en:'yellow',category:'colors',example_vn:'Hoa hướng dương màu vàng rực rỡ.',example_en:'Sunflowers are bright yellow.'},
+  {id:'c005',tier:1,vn:'trắng',north:null,en:'white',category:'colors',example_vn:'Chiếc áo trắng sạch đẹp lắm.',example_en:'The white shirt looks clean and nice.'},
+  {id:'c006',tier:1,vn:'đen',north:null,en:'black',category:'colors',example_vn:'Mèo đen này rất đáng yêu.',example_en:'This black cat is very adorable.'},
+  {id:'c007',tier:1,vn:'hồng',north:null,en:'pink',category:'colors',example_vn:'Hoa đào màu hồng rất đẹp.',example_en:'The pink peach blossoms are very beautiful.'},
+  {id:'c008',tier:1,vn:'tím',north:null,en:'purple',category:'colors',example_vn:'Cô ấy mặc váy tím.',example_en:'She is wearing a purple dress.'},
+  {id:'c009',tier:1,vn:'cam',north:null,en:'orange (color)',category:'colors',example_vn:'Quả cam màu cam đẹp.',example_en:'The orange fruit is beautifully orange.'},
+  {id:'c010',tier:1,vn:'nâu',north:null,en:'brown',category:'colors',example_vn:'Cái túi nâu này rất đẹp.',example_en:'This brown bag is very nice.'},
+  {id:'c011',tier:1,vn:'xám',north:null,en:'gray',category:'colors',example_vn:'Bầu trời xám khi trời mưa.',example_en:'The sky is gray when it rains.'},
+  {id:'c012',tier:1,vn:'xanh dương',north:null,en:'dark blue / navy',category:'colors',example_vn:'Anh ấy mặc quần xanh dương.',example_en:'He is wearing dark blue pants.'},
 
   // PLACES
-  {id:'pl001',tier:2,vn:'nhà hàng',north:null,en:'restaurant',category:'places',example_vn:'Chúng tôi ăn tối ở nhà hàng đó.',example_en:'We have dinner at that restaurant.'},
-  {id:'pl002',tier:2,vn:'quán ăn',north:null,en:'food stall / eatery',category:'places',example_vn:'Quán ăn nhỏ này rất ngon.',example_en:'This small eatery is very delicious.'},
-  {id:'pl003',tier:2,vn:'quán cà phê',north:null,en:'cafe / coffee shop',category:'places',example_vn:'Tôi hay ngồi làm việc ở quán cà phê.',example_en:'I often sit and work at a cafe.'},
-  {id:'pl004',tier:2,vn:'khách sạn',north:null,en:'hotel',category:'places',example_vn:'Khách sạn này có hồ bơi.',example_en:'This hotel has a swimming pool.'},
-  {id:'pl005',tier:2,vn:'bệnh viện',north:null,en:'hospital',category:'places',example_vn:'Bệnh viện gần nhà tôi.',example_en:'The hospital is near my house.'},
-  {id:'pl006',tier:2,vn:'trường học',north:null,en:'school',category:'places',example_vn:'Trường học của tôi rất to.',example_en:'My school is very large.'},
-  {id:'pl007',tier:2,vn:'siêu thị',north:null,en:'supermarket',category:'places',example_vn:'Tôi mua đồ ở siêu thị mỗi tuần.',example_en:'I shop at the supermarket every week.'},
-  {id:'pl008',tier:2,vn:'ngân hàng',north:null,en:'bank',category:'places',example_vn:'Ngân hàng mở cửa lúc tám giờ sáng.',example_en:'The bank opens at eight in the morning.'},
-  {id:'pl009',tier:2,vn:'sân bay',north:null,en:'airport',category:'places',example_vn:'Sân bay Tân Sơn Nhất rất đông.',example_en:'Tan Son Nhat airport is very busy.'},
-  {id:'pl010',tier:2,vn:'ga tàu',north:null,en:'train station',category:'places',example_vn:'Ga tàu gần trung tâm thành phố.',example_en:'The train station is near the city center.'},
-  {id:'pl011',tier:2,vn:'bưu điện',north:null,en:'post office',category:'places',example_vn:'Tôi gửi bưu kiện ở bưu điện.',example_en:'I send packages at the post office.'},
-  {id:'pl012',tier:2,vn:'công viên',north:null,en:'park',category:'places',example_vn:'Tôi đi dạo trong công viên mỗi sáng.',example_en:'I walk in the park every morning.'},
-  {id:'pl013',tier:2,vn:'bãi biển',north:null,en:'beach',category:'places',example_vn:'Bãi biển Đà Nẵng rất đẹp.',example_en:'Da Nang beach is very beautiful.'},
-  {id:'pl014',tier:2,vn:'thành phố',north:null,en:'city',category:'places',example_vn:'Thành phố Hồ Chí Minh rất náo nhiệt.',example_en:'Ho Chi Minh City is very bustling.'},
-  {id:'pl015',tier:2,vn:'làng',north:null,en:'village',category:'places',example_vn:'Làng quê Việt Nam rất yên bình.',example_en:'Vietnamese countryside villages are very peaceful.'},
+  {id:'pl001',tier:1,vn:'nhà hàng',north:null,en:'restaurant',category:'places',example_vn:'Chúng tôi ăn tối ở nhà hàng đó.',example_en:'We have dinner at that restaurant.'},
+  {id:'pl002',tier:1,vn:'quán ăn',north:null,en:'food stall / eatery',category:'places',example_vn:'Quán ăn nhỏ này rất ngon.',example_en:'This small eatery is very delicious.'},
+  {id:'pl003',tier:1,vn:'quán cà phê',north:null,en:'cafe / coffee shop',category:'places',example_vn:'Tôi hay ngồi làm việc ở quán cà phê.',example_en:'I often sit and work at a cafe.'},
+  {id:'pl004',tier:1,vn:'khách sạn',north:null,en:'hotel',category:'places',example_vn:'Khách sạn này có hồ bơi.',example_en:'This hotel has a swimming pool.'},
+  {id:'pl005',tier:1,vn:'bệnh viện',north:null,en:'hospital',category:'places',example_vn:'Bệnh viện gần nhà tôi.',example_en:'The hospital is near my house.'},
+  {id:'pl006',tier:1,vn:'trường học',north:null,en:'school',category:'places',example_vn:'Trường học của tôi rất to.',example_en:'My school is very large.'},
+  {id:'pl007',tier:1,vn:'siêu thị',north:null,en:'supermarket',category:'places',example_vn:'Tôi mua đồ ở siêu thị mỗi tuần.',example_en:'I shop at the supermarket every week.'},
+  {id:'pl008',tier:1,vn:'ngân hàng',north:null,en:'bank',category:'places',example_vn:'Ngân hàng mở cửa lúc tám giờ sáng.',example_en:'The bank opens at eight in the morning.'},
+  {id:'pl009',tier:1,vn:'sân bay',north:null,en:'airport',category:'places',example_vn:'Sân bay Tân Sơn Nhất rất đông.',example_en:'Tan Son Nhat airport is very busy.'},
+  {id:'pl010',tier:1,vn:'ga tàu',north:null,en:'train station',category:'places',example_vn:'Ga tàu gần trung tâm thành phố.',example_en:'The train station is near the city center.'},
+  {id:'pl011',tier:1,vn:'bưu điện',north:null,en:'post office',category:'places',example_vn:'Tôi gửi bưu kiện ở bưu điện.',example_en:'I send packages at the post office.'},
+  {id:'pl012',tier:1,vn:'công viên',north:null,en:'park',category:'places',example_vn:'Tôi đi dạo trong công viên mỗi sáng.',example_en:'I walk in the park every morning.'},
+  {id:'pl013',tier:1,vn:'bãi biển',north:null,en:'beach',category:'places',example_vn:'Bãi biển Đà Nẵng rất đẹp.',example_en:'Da Nang beach is very beautiful.'},
+  {id:'pl014',tier:1,vn:'thành phố',north:null,en:'city',category:'places',example_vn:'Thành phố Hồ Chí Minh rất náo nhiệt.',example_en:'Ho Chi Minh City is very bustling.'},
+  {id:'pl015',tier:1,vn:'làng',north:null,en:'village',category:'places',example_vn:'Làng quê Việt Nam rất yên bình.',example_en:'Vietnamese countryside villages are very peaceful.'},
+  {id:'pl016',tier:2,vn:'công ty',north:null,en:'company',category:'places',example_vn:'Tôi làm việc ở một công ty lớn.',example_en:'I work at a big company.'},
+  {id:'pl017',tier:2,vn:'quê',north:null,en:'hometown',category:'places',example_vn:'Quê tôi ở miền Tây.',example_en:'My hometown is in the Mekong Delta.'},
 
   // PREPOSITIONS
-  {id:'prep001',tier:2,vn:'ở',north:null,en:'at / in (location)',category:'prepositions',example_vn:'Tôi ở nhà hôm nay.',example_en:'I am at home today.'},
-  {id:'prep002',tier:2,vn:'trong',north:null,en:'inside / in',category:'prepositions',example_vn:'Sách ở trong túi.',example_en:'The book is inside the bag.'},
-  {id:'prep003',tier:2,vn:'ngoài',north:null,en:'outside / out',category:'prepositions',example_vn:'Trời ngoài kia đẹp lắm.',example_en:'It is very beautiful outside.'},
-  {id:'prep004',tier:2,vn:'trên',north:null,en:'on top / above',category:'prepositions',example_vn:'Điện thoại ở trên bàn.',example_en:'The phone is on the table.'},
-  {id:'prep005',tier:2,vn:'dưới',north:null,en:'below / under',category:'prepositions',example_vn:'Mèo nằm dưới ghế.',example_en:'The cat is lying under the chair.'},
-  {id:'prep006',tier:2,vn:'trước',north:null,en:'in front of / before',category:'prepositions',example_vn:'Đứng trước cửa chờ tôi.',example_en:'Stand in front of the door and wait for me.'},
-  {id:'prep007',tier:2,vn:'sau',north:null,en:'behind / after',category:'prepositions',example_vn:'Nhà hàng ở sau siêu thị.',example_en:'The restaurant is behind the supermarket.'},
-  {id:'prep008',tier:2,vn:'bên cạnh',north:null,en:'next to / beside',category:'prepositions',example_vn:'Bưu điện bên cạnh ngân hàng.',example_en:'The post office is next to the bank.'},
-  {id:'prep009',tier:2,vn:'giữa',north:null,en:'between / in the middle',category:'prepositions',example_vn:'Tôi ngồi giữa hai người bạn.',example_en:'I sit between two friends.'},
-  {id:'prep010',tier:2,vn:'và',north:null,en:'and',category:'prepositions',example_vn:'Tôi mua cà phê và bánh mì.',example_en:'I bought coffee and a baguette.'},
-  {id:'prep011',tier:3,vn:'nhưng',north:null,en:'but',category:'prepositions',example_vn:"Tôi thích đồ cay nhưng không ăn được.",example_en:"I like spicy food but can't eat it."},
-  {id:'prep012',tier:3,vn:'hoặc',north:null,en:'or',category:'prepositions',example_vn:'Bạn muốn cà phê hoặc trà?',example_en:'Do you want coffee or tea?'},
-  {id:'prep013',tier:3,vn:'vì',north:null,en:'because',category:'prepositions',example_vn:'Tôi ở nhà vì trời mưa.',example_en:'I stay home because it is raining.'},
-  {id:'prep014',tier:3,vn:'nên',north:null,en:'so / therefore',category:'prepositions',example_vn:'Trời mưa nên tôi ở nhà.',example_en:'It rained so I stayed home.'},
-  {id:'prep015',tier:3,vn:'nếu',north:null,en:'if',category:'prepositions',example_vn:'Nếu trời đẹp, tôi sẽ đi chơi.',example_en:'If the weather is nice, I will go out.'},
-  {id:'prep016',tier:3,vn:'khi',north:null,en:'when',category:'prepositions',example_vn:'Khi tôi đến, bạn đang ngủ.',example_en:'When I arrived, you were sleeping.'},
-  {id:'prep017',tier:3,vn:'với',north:null,en:'with',category:'prepositions',example_vn:'Tôi đi ăn với bạn bè.',example_en:'I go eat with friends.'},
-  {id:'prep018',tier:3,vn:'về',north:null,en:'about / regarding',category:'prepositions',example_vn:'Bạn biết gì về Việt Nam?',example_en:'What do you know about Vietnam?'},
-  {id:'prep019',tier:3,vn:'từ',north:null,en:'from',category:'prepositions',example_vn:'Tôi đến từ Hà Nội.',example_en:'I am from Hanoi.'},
-  {id:'prep020',tier:3,vn:'đến',north:null,en:'to / until',category:'prepositions',example_vn:'Từ nhà đến chợ mất bao lâu?',example_en:'How long from home to the market?'},
+  {id:'prep001',tier:1,vn:'ở',north:null,en:'at / in (location)',category:'prepositions',example_vn:'Tôi ở nhà hôm nay.',example_en:'I am at home today.'},
+  {id:'prep002',tier:1,vn:'trong',north:null,en:'inside / in',category:'prepositions',example_vn:'Sách ở trong túi.',example_en:'The book is inside the bag.'},
+  {id:'prep003',tier:1,vn:'ngoài',north:null,en:'outside / out',category:'prepositions',example_vn:'Trời ngoài kia đẹp lắm.',example_en:'It is very beautiful outside.'},
+  {id:'prep004',tier:1,vn:'trên',north:null,en:'on top / above',category:'prepositions',example_vn:'Điện thoại ở trên bàn.',example_en:'The phone is on the table.'},
+  {id:'prep005',tier:1,vn:'dưới',north:null,en:'below / under',category:'prepositions',example_vn:'Mèo nằm dưới ghế.',example_en:'The cat is lying under the chair.'},
+  {id:'prep006',tier:1,vn:'trước',north:null,en:'in front of / before',category:'prepositions',example_vn:'Đứng trước cửa chờ tôi.',example_en:'Stand in front of the door and wait for me.'},
+  {id:'prep007',tier:1,vn:'sau',north:null,en:'behind / after',category:'prepositions',example_vn:'Nhà hàng ở sau siêu thị.',example_en:'The restaurant is behind the supermarket.'},
+  {id:'prep008',tier:1,vn:'bên cạnh',north:null,en:'next to / beside',category:'prepositions',example_vn:'Bưu điện bên cạnh ngân hàng.',example_en:'The post office is next to the bank.'},
+  {id:'prep009',tier:1,vn:'giữa',north:null,en:'between / in the middle',category:'prepositions',example_vn:'Tôi ngồi giữa hai người bạn.',example_en:'I sit between two friends.'},
+  {id:'prep010',tier:1,vn:'và',north:null,en:'and',category:'prepositions',example_vn:'Tôi mua cà phê và bánh mì.',example_en:'I bought coffee and a baguette.'},
+  {id:'prep011',tier:2,vn:'nhưng',north:null,en:'but',category:'prepositions',example_vn:"Tôi thích đồ cay nhưng không ăn được.",example_en:"I like spicy food but can't eat it."},
+  {id:'prep012',tier:2,vn:'hoặc',north:null,en:'or',category:'prepositions',example_vn:'Bạn muốn cà phê hoặc trà?',example_en:'Do you want coffee or tea?'},
+  {id:'prep013',tier:2,vn:'vì',north:null,en:'because',category:'prepositions',example_vn:'Tôi ở nhà vì trời mưa.',example_en:'I stay home because it is raining.'},
+  {id:'prep014',tier:2,vn:'nên',north:null,en:'so / therefore',category:'prepositions',example_vn:'Trời mưa nên tôi ở nhà.',example_en:'It rained so I stayed home.'},
+  {id:'prep015',tier:2,vn:'nếu',north:null,en:'if',category:'prepositions',example_vn:'Nếu trời đẹp, tôi sẽ đi chơi.',example_en:'If the weather is nice, I will go out.'},
+  {id:'prep016',tier:2,vn:'khi',north:null,en:'when',category:'prepositions',example_vn:'Khi tôi đến, bạn đang ngủ.',example_en:'When I arrived, you were sleeping.'},
+  {id:'prep017',tier:2,vn:'với',north:null,en:'with',category:'prepositions',example_vn:'Tôi đi ăn với bạn bè.',example_en:'I go eat with friends.'},
+  {id:'prep018',tier:2,vn:'về',north:null,en:'about / regarding',category:'prepositions',example_vn:'Bạn biết gì về Việt Nam?',example_en:'What do you know about Vietnam?'},
+  {id:'prep019',tier:2,vn:'từ',north:null,en:'from',category:'prepositions',example_vn:'Tôi đến từ Hà Nội.',example_en:'I am from Hanoi.'},
+  {id:'prep020',tier:2,vn:'đến',north:null,en:'to / until',category:'prepositions',example_vn:'Từ nhà đến chợ mất bao lâu?',example_en:'How long from home to the market?'},
+  {id:'prep021',tier:3,vn:'thẳng',north:null,en:'straight',category:'prepositions',example_vn:'Đi thẳng rồi quẹo trái.',example_en:'Go straight then turn left.'},
+  {id:'prep022',tier:3,vn:'quẹo',north:null,en:'turn',category:'prepositions',example_vn:'Quẹo phải ở ngã tư.',example_en:'Turn right at the intersection.'},
+  {id:'prep023',tier:3,vn:'trái',north:null,en:'left',category:'prepositions',example_vn:'Nhà tôi ở bên trái.',example_en:'My house is on the left.'},
+  {id:'prep024',tier:3,vn:'phải',north:null,en:'right',category:'prepositions',example_vn:'Quẹo phải ở đây.',example_en:'Turn right here.'},
+  {id:'prep025',tier:3,vn:'ngã tư',north:null,en:'intersection (4-way)',category:'prepositions',example_vn:'Quẹo trái ở ngã tư.',example_en:'Turn left at the intersection.'},
+  {id:'prep026',tier:3,vn:'ngã ba',north:null,en:'junction (3-way)',category:'prepositions',example_vn:'Đến ngã ba thì quẹo phải.',example_en:'When you reach the junction, turn right.'},
+  {id:'prep027',tier:3,vn:'đối diện',north:null,en:'across from / opposite',category:'prepositions',example_vn:'Quán cà phê ở đối diện ngân hàng.',example_en:'The cafe is across from the bank.'},
+  {id:'prep028',tier:3,vn:'kế bên',north:null,en:'next to (casual)',category:'prepositions',example_vn:'Nhà tôi ở kế bên trường học.',example_en:'My house is next to the school.'},
 ];
 
 // =============================================================================
@@ -360,7 +449,7 @@ const GRAMMAR = [
 
   // ── IDENTITY & DESCRIPTION ────────────────────────────────────────────────
   {
-    id:'gr01', category:'identity',
+    id:'gr01', category:'identity', key:'là',
     pattern:'Subject + là + Noun',
     note:'Là = "to be" before nouns. Never use it before adjectives.',
     requires:{categories:['greetings']},
@@ -375,7 +464,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr02', category:'identity',
+    id:'gr02', category:'identity', key:null,
     pattern:'Subject + Adjective (no "to be")',
     note:'Adjectives act as predicates directly — no copula needed before them.',
     requires:{categories:['adjectives']},
@@ -390,7 +479,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr03', category:'identity',
+    id:'gr03', category:'intensifiers', key:'rất',
     pattern:'rất + Adjective (very)',
     note:'Rất intensifies adjectives. Place it directly before the adjective.',
     requires:{categories:['adjectives']},
@@ -405,7 +494,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr04', category:'identity',
+    id:'gr04', category:'intensifiers', key:'quá',
     pattern:'Adjective + quá (so / too)',
     note:'Quá follows the adjective. Expresses strong degree or exclamation.',
     requires:{categories:['adjectives']},
@@ -420,7 +509,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr05', category:'identity',
+    id:'gr05', category:'intensifiers', key:'lắm',
     pattern:'Adjective + lắm (very — Southern emphasis)',
     note:'Lắm follows the adjective. Common in Southern Vietnamese, stronger than rất.',
     requires:{categories:['adjectives']},
@@ -434,7 +523,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr06', category:'identity',
+    id:'gr06', category:'intensifiers', key:'hơi',
     pattern:'hơi + Adjective (a bit / slightly)',
     note:'Hơi softens adjectives. Often implies mild dissatisfaction.',
     requires:{categories:['adjectives']},
@@ -450,7 +539,7 @@ const GRAMMAR = [
 
   // ── NEGATION ──────────────────────────────────────────────────────────────
   {
-    id:'gr07', category:'negation',
+    id:'gr07', category:'negation', key:'không',
     pattern:'Subject + không + Verb/Adj',
     note:'Không negates verbs and adjectives. Place it directly before the verb.',
     requires:{categories:['verbs']},
@@ -465,7 +554,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr08', category:'negation',
+    id:'gr08', category:'negation', key:'không phải là',
     pattern:'Subject + không phải là + Noun',
     note:'Use không phải là (never không là) to negate identity statements with là.',
     requires:{categories:['greetings']},
@@ -479,7 +568,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr09', category:'negation',
+    id:'gr09', category:'negation', key:'chưa',
     pattern:'Subject + chưa + Verb (not yet)',
     note:"Chưa = 'not yet'. Implies the action is expected. Answer: rồi (done) or chưa.",
     requires:{categories:['verbs']},
@@ -493,7 +582,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr10', category:'negation',
+    id:'gr10', category:'negation', key:'chưa',
     pattern:'Verb + chưa? (Have you … yet?)',
     note:"Tag chưa? at the end to ask 'done yet?'. Reply: rồi (yes) or chưa (not yet).",
     requires:{categories:['verbs']},
@@ -509,7 +598,7 @@ const GRAMMAR = [
 
   // ── QUESTIONS ─────────────────────────────────────────────────────────────
   {
-    id:'gr11', category:'questions',
+    id:'gr11', category:'questions', key:'không',
     pattern:'Statement + không? (Yes/No question)',
     note:'Append không? to any statement to form a yes/no question.',
     requires:{categories:['greetings']},
@@ -524,7 +613,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr12', category:'questions',
+    id:'gr12', category:'questions', key:'có',
     pattern:'Subject + có + Verb + không?',
     note:'The có...không? frame is the standard yes/no question for actions.',
     requires:{categories:['verbs']},
@@ -539,7 +628,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr13', category:'questions',
+    id:'gr13', category:'questions', key:'gì',
     pattern:'Subject + Verb + gì? (what)',
     note:'Gì stays at the end in the object position — same place the answer would go.',
     requires:{categories:['verbs']},
@@ -554,7 +643,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr14', category:'questions',
+    id:'gr14', category:'questions', key:'ai',
     pattern:'Ai + Verb? / Verb + ai? (who)',
     note:'Ai (who) sits where the subject or object would be.',
     requires:{categories:['verbs']},
@@ -568,7 +657,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr15', category:'questions',
+    id:'gr15', category:'questions', key:'ở đâu',
     pattern:'Subject + ở đâu? (where)',
     note:'Ở đâu replaces the location at the end of the sentence.',
     requires:{categories:['greetings']},
@@ -583,7 +672,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr16', category:'questions',
+    id:'gr16', category:'questions', key:'khi nào',
     pattern:'Subject + Verb + khi nào? (when)',
     note:'Khi nào can go at the start or end. End position is more natural in speech.',
     requires:{categories:['verbs']},
@@ -597,7 +686,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr17', category:'questions',
+    id:'gr17', category:'questions', key:'tại sao',
     pattern:'Tại sao + Subject + Verb? (why)',
     note:'Tại sao (why) usually starts the question. Vì sao is a more formal variant.',
     requires:{categories:['adjectives']},
@@ -611,7 +700,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr18', category:'questions',
+    id:'gr18', category:'questions', key:'như thế nào',
     pattern:'Subject + như thế nào? (how / what is it like)',
     note:'Như thế nào asks for description. Thế nào alone is more casual in speech.',
     requires:{categories:['greetings']},
@@ -625,7 +714,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr19', category:'questions',
+    id:'gr19', category:'questions', key:'bao nhiêu',
     pattern:'Bao nhiêu + Noun? (how much/many)',
     note:'Bao nhiêu asks about quantity or price. Goes before the noun.',
     requires:{categories:['numbers']},
@@ -639,7 +728,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr20', category:'questions',
+    id:'gr20', category:'questions', key:'bao lâu',
     pattern:'Đi mất bao lâu? (how long does it take)',
     note:'Bao lâu asks about duration. Mất = takes (time).',
     requires:{categories:['verbs']},
@@ -655,7 +744,7 @@ const GRAMMAR = [
 
   // ── TENSE MARKERS ─────────────────────────────────────────────────────────
   {
-    id:'gr21', category:'tense',
+    id:'gr21', category:'tense', key:'đã',
     pattern:'Subject + đã + Verb + rồi (completed past)',
     note:'Đã marks a completed action. Rồi (already) at the end adds emphasis.',
     requires:{categories:['verbs']},
@@ -670,7 +759,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr22', category:'tense',
+    id:'gr22', category:'tense', key:'đang',
     pattern:'Subject + đang + Verb (present progressive)',
     note:'Đang marks an action happening right now — equivalent to English -ing.',
     requires:{categories:['verbs']},
@@ -685,7 +774,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr23', category:'tense',
+    id:'gr23', category:'tense', key:'sẽ',
     pattern:'Subject + sẽ + Verb (future)',
     note:'Sẽ marks future intention or prediction. Time words reinforce the meaning.',
     requires:{categories:['verbs']},
@@ -700,7 +789,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr24', category:'tense',
+    id:'gr24', category:'tense', key:'vừa',
     pattern:'Subject + vừa + Verb + xong (just finished)',
     note:'Vừa...xong = just completed. Xong signals completion of the action.',
     requires:{categories:['verbs']},
@@ -714,7 +803,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr25', category:'tense',
+    id:'gr25', category:'tense', key:'sắp',
     pattern:'Subject + sắp + Verb + rồi (about to)',
     note:'Sắp = about to / soon. Marks an action that will happen very shortly.',
     requires:{categories:['verbs']},
@@ -730,7 +819,7 @@ const GRAMMAR = [
 
   // ── MODAL VERBS ────────────────────────────────────────────────────────────
   {
-    id:'gr26', category:'modal',
+    id:'gr26', category:'modal', key:'muốn',
     pattern:'Subject + muốn + Verb (want to)',
     note:"Muốn (want) chains directly to the next verb — no 'to' particle.",
     requires:{categories:['verbs']},
@@ -745,7 +834,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr27', category:'modal',
+    id:'gr27', category:'modal', key:'cần',
     pattern:'Subject + cần + Verb/Noun (need)',
     note:'Cần (need) works before both verbs and nouns. No infinitive marker.',
     requires:{categories:['verbs']},
@@ -759,7 +848,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr28', category:'modal',
+    id:'gr28', category:'modal', key:'có thể',
     pattern:'Subject + có thể + Verb + không? (can)',
     note:'Có thể = can / able to. Pairs with không? to make polite requests.',
     requires:{categories:['verbs']},
@@ -774,7 +863,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr29', category:'modal',
+    id:'gr29', category:'modal', key:'phải',
     pattern:'Subject + phải + Verb (must / have to)',
     note:"Phải = must / have to. Implies obligation. Không phải = don't have to.",
     requires:{categories:['verbs']},
@@ -788,7 +877,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr30', category:'modal',
+    id:'gr30', category:'modal', key:'nên',
     pattern:'Subject + nên + Verb (should)',
     note:'Nên = should. Gives advice or recommendation. Weaker obligation than phải.',
     requires:{categories:['verbs']},
@@ -802,7 +891,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr31', category:'modal',
+    id:'gr31', category:'modal', key:'Cho tôi',
     pattern:"Cho tôi + Noun (give me / I'd like)",
     note:'Cho tôi is the standard ordering formula in restaurants and shops.',
     requires:{categories:['food']},
@@ -817,7 +906,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr32', category:'modal',
+    id:'gr32', category:'modal', key:'được',
     pattern:'Subject + được + Verb (allowed to / managed to)',
     note:'Được = allowed to, or managed to do something successfully.',
     requires:{categories:['verbs']},
@@ -830,10 +919,66 @@ const GRAMMAR = [
       {prompt_en:'You are allowed to sit here.', tiles:['Bạn','được','ngồi','đây','.'], answer:['Bạn','được','ngồi','đây','.']},
     ],
   },
+  {
+    id:'gr46', category:'modal', key:'không được',
+    pattern:'Subject + không được + Verb (must not)',
+    note:'Không được = not allowed to / must not. Stronger prohibition than đừng.',
+    requires:{categories:['verbs']},
+    examples:[
+      {vn:'Bạn không được hút thuốc ở đây.', en:'You are not allowed to smoke here.'},
+      {vn:'Tôi không được ăn đồ ngọt.', en:'I am not allowed to eat sweets.'},
+      {vn:'Anh không được đi trễ.', en:'You must not be late.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'You are not allowed to smoke here.', tiles:['Bạn','không được','hút thuốc','ở đây','.'], answer:['Bạn','không được','hút thuốc','ở đây','.']},
+    ],
+  },
+  {
+    id:'gr47', category:'modal', key:'định',
+    pattern:'Subject + định + Verb (plan to)',
+    note:'Định = plan to / intend to. States an intention, less firm than sẽ.',
+    requires:{categories:['verbs']},
+    examples:[
+      {vn:'Tôi định đi du lịch.', en:'I plan to travel.'},
+      {vn:'Bạn định làm gì tối nay?', en:'What do you plan to do tonight?'},
+      {vn:'Chúng tôi định mua nhà.', en:'We plan to buy a house.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'I plan to travel.', tiles:['Tôi','định','đi','du lịch','.'], answer:['Tôi','định','đi','du lịch','.']},
+    ],
+  },
+  {
+    id:'gr48', category:'modal', key:'dám',
+    pattern:'Subject + dám + Verb (dare to)',
+    note:'Dám = dare to. Often used in questions or with không to express lack of courage.',
+    requires:{categories:['verbs']},
+    examples:[
+      {vn:'Tôi không dám nói.', en:"I don't dare to say it."},
+      {vn:'Bạn có dám thử không?', en:'Do you dare to try?'},
+      {vn:'Anh ấy dám làm mọi thứ.', en:'He dares to do anything.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'Do you dare to try?', tiles:['Bạn','có','dám','thử','không','?'], answer:['Bạn','có','dám','thử','không','?']},
+    ],
+  },
+  {
+    id:'gr49', category:'modal', key:'cứ',
+    pattern:'cứ + Verb (go ahead and… — casual)',
+    note:"Cứ before a verb gives casual encouragement or permission — 'just go ahead and do it'.",
+    requires:{categories:['verbs']},
+    examples:[
+      {vn:'Bạn cứ ăn đi, đừng ngại.', en:"Go ahead and eat, don't be shy."},
+      {vn:'Cứ hỏi nếu bạn không hiểu.', en:"Just ask if you don't understand."},
+      {vn:'Anh cứ nói thẳng.', en:'Just say it directly.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:"Just ask if you don't understand.", tiles:['Cứ','hỏi','nếu','bạn','không hiểu','.'], answer:['Cứ','hỏi','nếu','bạn','không hiểu','.']},
+    ],
+  },
 
   // ── COMPARISONS ────────────────────────────────────────────────────────────
   {
-    id:'gr33', category:'comparisons',
+    id:'gr33', category:'comparisons', key:'hơn',
     pattern:'A + Adj + hơn + B (A is more … than B)',
     note:"Hơn = more than / -er. Place after the adjective. No extra 'more' needed.",
     requires:{categories:['adjectives']},
@@ -848,7 +993,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr34', category:'comparisons',
+    id:'gr34', category:'comparisons', key:'nhất',
     pattern:'A + Adj + nhất (A is the most …)',
     note:'Nhất = most / -est. Place after the adjective as a superlative suffix.',
     requires:{categories:['adjectives']},
@@ -862,7 +1007,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr35', category:'comparisons',
+    id:'gr35', category:'comparisons', key:'bằng',
     pattern:'A + Adj + bằng + B (A is as … as B)',
     note:"Bằng = as … as. Used for equality. Không bằng = not as … as.",
     requires:{categories:['adjectives']},
@@ -875,10 +1020,24 @@ const GRAMMAR = [
       {prompt_en:'She is as tall as him.', tiles:['Cô ấy','cao','bằng','anh ấy','.'], answer:['Cô ấy','cao','bằng','anh ấy','.']},
     ],
   },
+  {
+    id:'gr50', category:'comparisons', key:'kém',
+    pattern:'A + Adj + kém + B (A is less … than B)',
+    note:'Kém = less than / not as good as. Opposite of hơn.',
+    requires:{categories:['adjectives']},
+    examples:[
+      {vn:'Tôi hát kém chị tôi.', en:'I sing worse than my older sister.'},
+      {vn:'Phở này kém ngon hơn phở kia.', en:'This pho is less delicious than that one.'},
+      {vn:'Anh ấy kém tôi hai tuổi.', en:'He is two years younger than me.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'I sing worse than my older sister.', tiles:['Tôi','hát','kém','chị tôi','.'], answer:['Tôi','hát','kém','chị tôi','.']},
+    ],
+  },
 
   // ── CLASSIFIERS ────────────────────────────────────────────────────────────
   {
-    id:'gr36', category:'classifiers',
+    id:'gr36', category:'classifiers', key:'con',
     pattern:'con + animal noun',
     note:'Con is the classifier for animals and some small objects.',
     requires:{categories:['numbers']},
@@ -892,7 +1051,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr37', category:'classifiers',
+    id:'gr37', category:'classifiers', key:'cái',
     pattern:'cái + object noun',
     note:'Cái is the general classifier for inanimate objects.',
     requires:{categories:['nouns'], tiers:{nouns:2}},
@@ -906,7 +1065,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr38', category:'classifiers',
+    id:'gr38', category:'classifiers', key:'người',
     pattern:'người + person noun',
     note:'Người classifies people. Use when counting or referring to a person.',
     requires:{categories:['numbers']},
@@ -920,7 +1079,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr39', category:'classifiers',
+    id:'gr39', category:'classifiers', key:'cuốn',
     pattern:'cuốn/quyển + book noun',
     note:'Cuốn and quyển are interchangeable classifiers for books.',
     requires:{categories:['nouns'], tiers:{nouns:2}},
@@ -933,10 +1092,25 @@ const GRAMMAR = [
       {prompt_en:'I read a book.', tiles:['Tôi','đọc','một','cuốn sách','.'], answer:['Tôi','đọc','một','cuốn sách','.']},
     ],
   },
+  {
+    id:'gr51', category:'classifiers', key:null,
+    pattern:'Number + Classifier + Noun (counting)',
+    note:'Vietnamese always inserts a classifier between a number and the noun it counts — never Number+Noun directly.',
+    requires:{categories:['numbers','nouns']},
+    examples:[
+      {vn:'Tôi có hai quyển sách.', en:'I have two books.'},
+      {vn:'Cho tôi ba cái bánh.', en:'Give me three cakes.'},
+      {vn:'Nhà tôi có bốn con mèo.', en:'My house has four cats.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'I have two books.', tiles:['Tôi','có','hai','quyển sách','.'], answer:['Tôi','có','hai','quyển sách','.']},
+      {prompt_en:'Give me three cakes.', tiles:['Cho tôi','ba','cái bánh','.'], answer:['Cho tôi','ba','cái bánh','.']},
+    ],
+  },
 
   // ── LINKING STRUCTURES ─────────────────────────────────────────────────────
   {
-    id:'gr40', category:'linking',
+    id:'gr40', category:'linking', key:'vì',
     pattern:'vì … nên … (because … so …)',
     note:'Vì introduces the reason, nên introduces the result.',
     requires:{categories:['verbs','adjectives']},
@@ -951,7 +1125,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr41', category:'linking',
+    id:'gr41', category:'linking', key:'nếu',
     pattern:'nếu … thì … (if … then …)',
     note:'Nếu = if. Thì = then (optional but common in speech).',
     requires:{categories:['verbs']},
@@ -966,7 +1140,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr42', category:'linking',
+    id:'gr42', category:'linking', key:'khi',
     pattern:'khi + clause (when)',
     note:'Khi introduces a time clause. The main clause follows.',
     requires:{categories:['verbs']},
@@ -980,7 +1154,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr43', category:'linking',
+    id:'gr43', category:'linking', key:'và',
     pattern:'A + và + B (and)',
     note:'Và connects nouns, adjectives, or clauses. Same as English "and".',
     requires:{categories:['verbs']},
@@ -994,7 +1168,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr44', category:'linking',
+    id:'gr44', category:'linking', key:'nhưng',
     pattern:'A + nhưng + B (but)',
     note:'Nhưng connects contrasting clauses. Same position as English "but".',
     requires:{categories:['adjectives']},
@@ -1008,7 +1182,7 @@ const GRAMMAR = [
     ],
   },
   {
-    id:'gr45', category:'linking',
+    id:'gr45', category:'linking', key:'cũng',
     pattern:'Subject + cũng + Verb/Adj (also / too)',
     note:"Cũng = also. Goes before the verb or adjective, never at the end.",
     requires:{categories:['verbs']},
@@ -1020,6 +1194,143 @@ const GRAMMAR = [
     word_order_exercises:[
       {prompt_en:'I also like pho.', tiles:['Tôi','cũng','thích','phở','.'], answer:['Tôi','cũng','thích','phở','.']},
       {prompt_en:'He also wants to go.', tiles:['Anh ấy','cũng','muốn','đi','.'], answer:['Anh ấy','cũng','muốn','đi','.']},
+    ],
+  },
+
+  // ── POSSESSION ────────────────────────────────────────────────────────────
+  {
+    id:'gr52', category:'possession', key:'của',
+    pattern:'Noun + của + Owner (possession)',
+    note:"Của = of / belonging to. Often dropped when the meaning is already clear, e.g. 'nhà tôi' instead of 'nhà của tôi'.",
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Đây là xe của tôi.', en:'This is my vehicle.'},
+      {vn:'Sách của bạn ở trên bàn.', en:'Your book is on the table.'},
+      {vn:'Đây là nhà của gia đình tôi.', en:'This is my family home.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'This is my vehicle.', tiles:['Đây','là','xe','của','tôi','.'], answer:['Đây','là','xe','của','tôi','.']},
+      {prompt_en:'Your book is on the table.', tiles:['Sách','của','bạn','ở trên','bàn','.'], answer:['Sách','của','bạn','ở trên','bàn','.']},
+    ],
+  },
+
+  // ── IMPERATIVES ───────────────────────────────────────────────────────────
+  {
+    id:'gr53', category:'imperatives', key:'Làm ơn',
+    pattern:'Làm ơn + Verb (please — polite request)',
+    note:'Làm ơn softens a request politely, placed before the verb — common with strangers or service staff.',
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Làm ơn giúp tôi.', en:'Please help me.'},
+      {vn:'Làm ơn nói chậm hơn.', en:'Please speak more slowly.'},
+      {vn:'Làm ơn cho tôi xem thực đơn.', en:'Please show me the menu.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'Please help me.', tiles:['Làm ơn','giúp','tôi','.'], answer:['Làm ơn','giúp','tôi','.']},
+    ],
+  },
+  {
+    id:'gr54', category:'imperatives', key:'Hãy',
+    pattern:"Hãy + Verb (let's / please do — polite suggestion)",
+    note:'Hãy before a verb makes a polite suggestion or soft command, often used in writing or formal speech.',
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Hãy ngồi xuống.', en:'Please sit down.'},
+      {vn:'Hãy cẩn thận.', en:'Please be careful.'},
+      {vn:'Hãy cho tôi biết nếu bạn cần gì.', en:'Please let me know if you need anything.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'Please sit down.', tiles:['Hãy','ngồi','xuống','.'], answer:['Hãy','ngồi','xuống','.']},
+    ],
+  },
+  {
+    id:'gr55', category:'imperatives', key:'Đừng',
+    pattern:"Đừng + Verb (don't — negative command)",
+    note:"Đừng before a verb forms a negative command — 'don't do that'.",
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Đừng lo lắng.', en:"Don't worry."},
+      {vn:'Đừng nói dối.', en:"Don't lie."},
+      {vn:'Đừng đi trễ nhé.', en:"Don't be late, okay?"},
+    ],
+    word_order_exercises:[
+      {prompt_en:"Don't worry.", tiles:['Đừng','lo lắng','.'], answer:['Đừng','lo lắng','.']},
+    ],
+  },
+
+  // ── DIRECTIONS ────────────────────────────────────────────────────────────
+  {
+    id:'gr56', category:'directions', key:'quẹo',
+    pattern:'Đi thẳng / Quẹo trái / Quẹo phải (giving directions)',
+    note:'Chain these phrases in sequence to give directions: go straight, then turn left or right.',
+    requires:{categories:['prepositions'], tiers:{prepositions:3}},
+    examples:[
+      {vn:'Đi thẳng rồi quẹo trái.', en:'Go straight then turn left.'},
+      {vn:'Bạn quẹo phải ở ngã tư.', en:'You turn right at the intersection.'},
+      {vn:'Đến ngã ba thì quẹo trái.', en:'When you reach the junction, turn left.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'Go straight then turn left.', tiles:['Đi thẳng','rồi','quẹo','trái','.'], answer:['Đi thẳng','rồi','quẹo','trái','.']},
+      {prompt_en:'You turn right at the intersection.', tiles:['Bạn','quẹo','phải','ở','ngã tư','.'], answer:['Bạn','quẹo','phải','ở','ngã tư','.']},
+    ],
+  },
+  {
+    id:'gr57', category:'directions', key:'đối diện',
+    pattern:'Noun + đối diện / kế bên + Noun (across from / next to)',
+    note:'Đối diện = across from, kế bên = next to (casual). Both follow the noun being located.',
+    requires:{categories:['prepositions'], tiers:{prepositions:3}},
+    examples:[
+      {vn:'Quán cà phê ở đối diện ngân hàng.', en:'The cafe is across from the bank.'},
+      {vn:'Bệnh viện đối diện công viên.', en:'The hospital is across from the park.'},
+      {vn:'Nhà tôi ở kế bên trường học.', en:'My house is next to the school.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'The cafe is across from the bank.', tiles:['Quán cà phê','ở','đối diện','ngân hàng','.'], answer:['Quán cà phê','ở','đối diện','ngân hàng','.']},
+      {prompt_en:'My house is next to the school.', tiles:['Nhà tôi','ở','kế bên','trường học','.'], answer:['Nhà tôi','ở','kế bên','trường học','.']},
+    ],
+  },
+  {
+    id:'gr58', category:'directions', key:'bao xa',
+    pattern:'Cách đây bao xa? (how far is it)',
+    note:"Cách...bao xa asks the distance to something; 'cách đây bao xa' = how far from here.",
+    requires:{categories:['prepositions'], tiers:{prepositions:3}},
+    examples:[
+      {vn:'Sân bay cách đây bao xa?', en:'How far is the airport from here?'},
+      {vn:'Nhà bạn cách trường bao xa?', en:'How far is your house from school?'},
+      {vn:'Biển cách đây bao xa?', en:'How far is the beach from here?'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'How far is the airport from here?', tiles:['Sân bay','cách đây','bao xa','?'], answer:['Sân bay','cách đây','bao xa','?']},
+    ],
+  },
+
+  // ── NUMBERS (formation rules) ────────────────────────────────────────────
+  {
+    id:'gr59', category:'numbers', key:null,
+    pattern:'mười + digit (11–19, mười lăm is irregular)',
+    note:"Teens are formed with mười + digit. Watch out: 15 is 'mười lăm' not 'mười năm' — a tone-shifted exception.",
+    requires:{categories:['numbers'], tiers:{numbers:3}},
+    examples:[
+      {vn:'Tôi mười một tuổi.', en:'I am eleven years old.'},
+      {vn:'Bây giờ là mười lăm phút.', en:"It's fifteen minutes now."},
+      {vn:'Anh ấy mười chín tuổi.', en:'He is nineteen years old.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'I am eleven years old.', tiles:['Tôi','mười một','tuổi','.'], answer:['Tôi','mười một','tuổi','.']},
+    ],
+  },
+  {
+    id:'gr60', category:'numbers', key:null,
+    pattern:'digit + mươi (tens); …mươi + mốt not một (21, 31…); một trăm (hundreds)',
+    note:"Tens: digit+mươi (hai mươi=20). For 21/31/etc. the final 'one' becomes mốt, not một. Hundreds: một trăm=100.",
+    requires:{categories:['numbers'], tiers:{numbers:3}},
+    examples:[
+      {vn:'Tôi hai mươi mốt tuổi.', en:'I am twenty-one years old.'},
+      {vn:'Cái này giá một trăm nghìn.', en:'This costs one hundred thousand.'},
+      {vn:'Ba mươi mốt ngày trong tháng này.', en:'Thirty-one days this month.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'I am twenty-one years old.', tiles:['Tôi','hai mươi mốt','tuổi','.'], answer:['Tôi','hai mươi mốt','tuổi','.']},
     ],
   },
 ];
@@ -1047,22 +1358,30 @@ const SHOP_ITEMS = [
   {id:'mode_fill',    type:'mode', name:'Fill the Blank',  cost:1200, desc:'Complete sentences with missing words', unlockKey:'fill_sentence', icon:'📝'},
   {id:'mode_word_order', type:'mode', name:'Word Order',   cost:1200, desc:'Tap words to build sentences in order', unlockKey:'word_order',   icon:'🔧'},
   {id:'mode_grammar', type:'mode', name:'Grammar Drill',   cost:1800, desc:'Practice A1 sentence patterns',     unlockKey:'grammar_quiz', icon:'🧠'},
+  {id:'mode_particles', type:'mode', name:'Particles',     cost:900,  desc:'Fill in the missing grammar word',  unlockKey:'particles',    icon:'🧩'},
 
   // ── Greetings: tier1 free (8 words), tier2 unlocks rest (12 words) ──────
   {id:'greetings_t2', type:'tier', name:'Greetings II',    cost:120,  desc:'+12 more greeting phrases', unlockKey:'greetings', tier:2, wordsInTier:12},
 
-  // ── Verbs: tier1 free (6), tiers 2-6 add 10/10/10/10/4 ─────────────────
+  // ── Verbs: tier1 free (6), tiers 2-9 add 10/10/10/10/4/8/8/7 ────────────
   {id:'verbs_t2', type:'tier', name:'Verbs II',   cost:150, desc:'+10 action words', unlockKey:'verbs', tier:2, wordsInTier:10},
   {id:'verbs_t3', type:'tier', name:'Verbs III',  cost:280, desc:'+10 more verbs',   unlockKey:'verbs', tier:3, wordsInTier:10},
   {id:'verbs_t4', type:'tier', name:'Verbs IV',   cost:450, desc:'+10 more verbs',   unlockKey:'verbs', tier:4, wordsInTier:10},
   {id:'verbs_t5', type:'tier', name:'Verbs V',    cost:650, desc:'+10 more verbs',   unlockKey:'verbs', tier:5, wordsInTier:10},
-  {id:'verbs_t6', type:'tier', name:'Verbs VI',   cost:900, desc:'+4 final verbs (complete)', unlockKey:'verbs', tier:6, wordsInTier:4},
+  {id:'verbs_t6', type:'tier', name:'Verbs VI',   cost:900, desc:'+4 more verbs', unlockKey:'verbs', tier:6, wordsInTier:4},
+  {id:'verbs_t7', type:'tier', name:'Verbs VII',  cost:1150, desc:'+8 more verbs (daily life & communication)', unlockKey:'verbs', tier:7, wordsInTier:8},
+  {id:'verbs_t8', type:'tier', name:'Verbs VIII', cost:1400, desc:'+8 more verbs (movement & senses)', unlockKey:'verbs', tier:8, wordsInTier:8},
+  {id:'verbs_t9', type:'tier', name:'Verbs IX',   cost:1650, desc:'+7 final verbs (household, complete)', unlockKey:'verbs', tier:9, wordsInTier:7},
 
-  // ── Adjectives: tier1 free (4), tiers 2-5 add 10/10/10/6 ────────────────
+  // ── Adjectives: tier1 free (4), tiers 2-9 add 10/10/10/6/10/10/10/8 ─────
   {id:'adjectives_t2', type:'tier', name:'Adjectives II',  cost:150, desc:'+10 describing words', unlockKey:'adjectives', tier:2, wordsInTier:10},
   {id:'adjectives_t3', type:'tier', name:'Adjectives III', cost:280, desc:'+10 more adjectives',  unlockKey:'adjectives', tier:3, wordsInTier:10},
   {id:'adjectives_t4', type:'tier', name:'Adjectives IV',  cost:450, desc:'+10 more adjectives',  unlockKey:'adjectives', tier:4, wordsInTier:10},
-  {id:'adjectives_t5', type:'tier', name:'Adjectives V',   cost:650, desc:'+6 final adjectives (complete)', unlockKey:'adjectives', tier:5, wordsInTier:6},
+  {id:'adjectives_t5', type:'tier', name:'Adjectives V',   cost:650, desc:'+6 more adjectives', unlockKey:'adjectives', tier:5, wordsInTier:6},
+  {id:'adjectives_t6', type:'tier', name:'Adjectives VI',  cost:900, desc:'+10 more adjectives (feelings, taste, money)', unlockKey:'adjectives', tier:6, wordsInTier:10},
+  {id:'adjectives_t7', type:'tier', name:'Adjectives VII', cost:1150, desc:'+10 more adjectives (taste & sound)', unlockKey:'adjectives', tier:7, wordsInTier:10},
+  {id:'adjectives_t8', type:'tier', name:'Adjectives VIII', cost:1400, desc:'+10 more adjectives (difficulty & personality)', unlockKey:'adjectives', tier:8, wordsInTier:10},
+  {id:'adjectives_t9', type:'tier', name:'Adjectives IX',  cost:1650, desc:'+8 final adjectives (complete)', unlockKey:'adjectives', tier:9, wordsInTier:8},
 
   // ── Food: tier1 free (2: phở+cà phê), tiers 2-6 add 10/10/10/10/8 ──────
   {id:'food_t2', type:'tier', name:'Food & Drink II',  cost:150, desc:'+10 food & drink words', unlockKey:'food', tier:2, wordsInTier:10},
@@ -1075,10 +1394,12 @@ const SHOP_ITEMS = [
   {id:'numbers_t2', type:'tier', name:'Numbers II',  cost:100, desc:'+8 numbers (3–10)', unlockKey:'numbers', tier:2, wordsInTier:8},
   {id:'numbers_t3', type:'tier', name:'Numbers III', cost:200, desc:'+10 numbers & quantities (complete)', unlockKey:'numbers', tier:3, wordsInTier:10},
 
-  // ── Nouns: fully locked, tier2 +10, tier3 +10, tier4 +10 ────────────────
+  // ── Nouns: fully locked, tier1 +10, tier2 +10, tier3 +10, tier4 +10, tier5 +8 ──
   {id:'nouns_t2', type:'tier', name:'Objects I',   cost:200, desc:'First 10 everyday objects', unlockKey:'nouns', tier:1, wordsInTier:10},
   {id:'nouns_t3', type:'tier', name:'Objects II',  cost:380, desc:'+10 more objects',           unlockKey:'nouns', tier:2, wordsInTier:10},
-  {id:'nouns_t4', type:'tier', name:'Objects III', cost:580, desc:'+10 final objects (complete)', unlockKey:'nouns', tier:3, wordsInTier:10},
+  {id:'nouns_t4', type:'tier', name:'Objects III', cost:580, desc:'+10 more objects',    unlockKey:'nouns', tier:3, wordsInTier:10},
+  {id:'nouns_t5', type:'tier', name:'Objects IV',  cost:800, desc:'+10 more objects (nature, body parts)', unlockKey:'nouns', tier:4, wordsInTier:10},
+  {id:'nouns_t6', type:'tier', name:'Objects V',   cost:1000, desc:'+8 final objects (transportation, school & work, complete)', unlockKey:'nouns', tier:5, wordsInTier:8},
 
   // ── Family: fully locked, unlocks all 20 at once (small category) ───────
   {id:'family_t2', type:'tier', name:'Family',     cost:250, desc:'All 20 family terms', unlockKey:'family', tier:1, wordsInTier:20},
@@ -1090,12 +1411,14 @@ const SHOP_ITEMS = [
   // ── Colors: fully locked, unlocks all 12 at once (small category) ───────
   {id:'colors_t2', type:'tier', name:'Colors',     cost:150, desc:'All 12 colors', unlockKey:'colors', tier:1, wordsInTier:12},
 
-  // ── Places: fully locked, unlocks all 15 at once (small category) ───────
+  // ── Places: fully locked, tier1 all 15 at once, tier2 +2 more ────────────
   {id:'places_t2', type:'tier', name:'Places',     cost:250, desc:'All 15 place words', unlockKey:'places', tier:1, wordsInTier:15},
+  {id:'places_t3', type:'tier', name:'Places II',  cost:400, desc:'+2 more places (company, hometown, complete)', unlockKey:'places', tier:2, wordsInTier:2},
 
-  // ── Prepositions: fully locked, tier2 +10, tier3 +10 ────────────────────
+  // ── Prepositions: fully locked, tier1 +10, tier2 +10, tier3 +8 ──────────
   {id:'prepositions_t2', type:'tier', name:'Prepositions I',  cost:300, desc:'First 10 prepositions & connectors', unlockKey:'prepositions', tier:1, wordsInTier:10},
-  {id:'prepositions_t3', type:'tier', name:'Prepositions II', cost:550, desc:'+10 more (complete)',                  unlockKey:'prepositions', tier:2, wordsInTier:10},
+  {id:'prepositions_t3', type:'tier', name:'Prepositions II', cost:550, desc:'+10 more',                  unlockKey:'prepositions', tier:2, wordsInTier:10},
+  {id:'prepositions_t4', type:'tier', name:'Directions',      cost:750, desc:'+8 direction words (thẳng, quẹo trái/phải, complete)', unlockKey:'prepositions', tier:3, wordsInTier:8},
 
   // ── Grammar categories (flat unlock per category) ────────────────────────
   // identity & description: free (used from day 1 in grammar reference)
@@ -1106,6 +1429,10 @@ const SHOP_ITEMS = [
   {id:'gram_comparisons',  type:'grammar', name:'Comparisons',   cost:500,  desc:'hơn / nhất / bằng',               unlockKey:'comparisons',  icon:'⚖️'},
   {id:'gram_classifiers',  type:'grammar', name:'Classifiers',   cost:450,  desc:'con / cái / người / cuốn',         unlockKey:'classifiers',  icon:'🔢'},
   {id:'gram_linking',      type:'grammar', name:'Linking',       cost:500,  desc:'vì…nên / nếu…thì / và / nhưng / cũng', unlockKey:'linking',  icon:'🔗'},
+  {id:'gram_possession',   type:'grammar', name:'Possession',    cost:150,  desc:'của',                              unlockKey:'possession',   icon:'🔖'},
+  {id:'gram_imperatives',  type:'grammar', name:'Imperatives',   cost:300,  desc:'làm ơn / hãy / đừng',              unlockKey:'imperatives',  icon:'👉'},
+  {id:'gram_directions',   type:'grammar', name:'Directions',    cost:400,  desc:'thẳng / quẹo trái / quẹo phải / đối diện', unlockKey:'directions', icon:'🧭'},
+  {id:'gram_numbers',      type:'grammar', name:'Number Formation', cost:250, desc:'mười lăm exception / hai mươi mốt', unlockKey:'numbers',   icon:'🔟'},
 ];
 
 const CATEGORY_META = {
@@ -1121,3 +1448,12 @@ const CATEGORY_META = {
   places:{label:'Places',icon:'📍',color:'#4B6FE8'},
   prepositions:{label:'Prepositions',icon:'🔗',color:'#8BA3B8'},
 };
+
+// Southern-vs-Northern pronunciation notes — reference only, not quizzed.
+const PRONUNCIATION_NOTES = [
+  "gi-, d-, v- are all pronounced like the English 'y' in the South (giá, da, và all start with the same /y/ sound) — in the North they're kept distinct.",
+  "r is a true 'r' sound in the South (like English 'r'); in the North it often sounds like 'z'.",
+  "The hỏi and ngã tones are usually merged into one tone in casual Southern speech, while Northern speech keeps them distinct.",
+  "Final -n/-ng and -t/-c often blur together in fast Southern speech (e.g. 'ăn' can sound close to 'ăng') — don't worry if you can't hear the difference at first.",
+  "Southerners say dạ for a polite 'yes'/acknowledgment far more often than vâng (which is more Northern); very casually, 'không' is often shortened to hông or hổng.",
+];

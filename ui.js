@@ -140,6 +140,7 @@ const UI = {
       {key:'fill_sentence',   label:'Fill the Blank',  icon:'📝', worksWith:'words',   desc:'Complete a sentence'},
       {key:'grammar_quiz',    label:'Grammar Drill',   icon:'🧠', worksWith:'grammar', desc:'Grammar patterns only'},
       {key:'word_order',      label:'Word Order',      icon:'🔧', worksWith:'grammar', desc:'Grammar patterns only'},
+      {key:'particles',       label:'Particles',       icon:'🧩', worksWith:'grammar', desc:'Fill in the missing grammar word'},
     ].map(m => {
       const shopItem = SHOP_ITEMS.find(s => s.unlockKey === m.key);
       return {...m, cost: shopItem ? shopItem.cost : 0};
@@ -150,7 +151,7 @@ const UI = {
     const unlockedCats = Object.keys(Store.state.category_tiers).filter(c => Store.isCategoryAccessible(c));
 
     // Determine compatibility warnings for current selection
-    const isGrammarMode = ['grammar_quiz','word_order'].includes(this.learnMode);
+    const isGrammarMode = ['grammar_quiz','word_order','particles'].includes(this.learnMode);
     const isAllCat = this.learnCategory === 'all';
     const currentPool = isAllCat ? allWords : Store.getUnlockedWords(this.learnCategory);
     let warning = null;
@@ -259,7 +260,7 @@ const UI = {
   selectMode(mode) {
     this.learnMode = mode;
     // if switching to grammar mode, set category to 'all'
-    if (['grammar_quiz','word_order'].includes(mode)) this.learnCategory = 'all';
+    if (['grammar_quiz','word_order','particles'].includes(mode)) this.learnCategory = 'all';
     this.renderLearn();
   },
   selectCategory(cat) { this.learnCategory = cat; this.renderLearn(); },
@@ -276,7 +277,7 @@ const UI = {
     const SESSION_SIZE = 10;
     const GUARANTEED_STRUGGLE = 2; // at least 2 slots reserved for <60% accuracy words
     const GUARANTEED_UNSEEN = 2;   // at least 2 slots reserved for never-seen words
-    const isGrammarMode = ['grammar_quiz','word_order'].includes(mode);
+    const isGrammarMode = ['grammar_quiz','word_order','particles'].includes(mode);
     const questions = [];
 
     if (isGrammarMode) {
@@ -372,6 +373,7 @@ const UI = {
     else if (q.type === 'match_pairs') this.renderMatchPairs(q, el);
     else if (q.type === 'grammar_quiz') this.renderGrammarQuiz(q, el);
     else if (q.type === 'word_order') this.renderWordOrder(q, el);
+    else if (q.type === 'particles') this.renderParticles(q, el);
   },
 
   dialectHtml(note) {
@@ -594,6 +596,49 @@ const UI = {
     }
 
     setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1400);
+  },
+
+  renderParticles(q, el) {
+    const choiceHtml = q.choices.map((c, i) => `
+      <button class="choice-btn" onclick="UI.checkParticle('${c}', ${i === q.correct_index}, this)">
+        <span class="choice-btn__index">${i+1}</span>
+        <span>${c}</span>
+      </button>`).join('');
+
+    el.innerHTML = `
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Fill in the grammar word</div>
+        <div style="font-size:20px;font-weight:600;color:var(--cream);line-height:1.5">${q.sentence_with_blank.replace('___','<span style="color:var(--gold);border-bottom:2px solid var(--gold);padding:0 6px">___</span>')}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">Hint: ${q.hint}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Pattern: ${q.grammar.pattern}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">${choiceHtml}</div>
+      <div id="particle-feedback" style="margin-top:16px;display:none"></div>`;
+
+    this._currentQ = q;
+  },
+
+  checkParticle(chosen, isCorrect, btn) {
+    const q = this._currentQ;
+    document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) {
+      document.querySelectorAll('.choice-btn').forEach(b => { if (b.textContent.trim() === q.answer) b.classList.add('correct'); });
+    }
+
+    const pts = Store.recordGrammarAttempt(q.grammar.id, isCorrect);
+    if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
+    this.updateHeader();
+    Gamify.showPointsFloat(pts, btn);
+    Gamify.checkAchievements();
+
+    const fb = document.getElementById('particle-feedback');
+    if (fb) {
+      fb.style.display = 'block';
+      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.grammar.note}</div>`;
+    }
+
+    setTimeout(() => { this.session.index++; this.renderQuizView(); }, 1800);
   },
 
   renderMatchPairs(q, el) {
@@ -1093,12 +1138,12 @@ const UI = {
 
   // ── GRAMMAR ───────────────────────────────────────────────────────────────
   renderGrammar() {
-    const cats = ['all','identity','negation','questions','tense','modal','comparisons','classifiers','linking'];
-    const catLabels = {all:'All',identity:'Identity',negation:'Negation',questions:'Questions',tense:'Tense',modal:'Modals',comparisons:'Compare',classifiers:'Classifiers',linking:'Linking'};
+    const cats = ['all','identity','intensifiers','negation','questions','tense','modal','comparisons','classifiers','possession','imperatives','directions','numbers','linking'];
+    const catLabels = {all:'All',identity:'Identity',intensifiers:'Intensifiers',negation:'Negation',questions:'Questions',tense:'Tense',modal:'Modals',comparisons:'Compare',classifiers:'Classifiers',possession:'Possession',imperatives:'Imperatives',directions:'Directions',numbers:'Numbers',linking:'Linking'};
     const activeCat = this._grammarCat || 'all';
 
     const tabsHtml = cats.map(c => {
-      const unlocked = c === 'all' || c === 'identity' || Store.isGrammarUnlocked(c);
+      const unlocked = c === 'all' || c === 'identity' || c === 'intensifiers' || Store.isGrammarUnlocked(c);
       const shopItem = SHOP_ITEMS.find(i => i.type === 'grammar' && i.unlockKey === c);
       return `<button class="category-pill${c===activeCat?' active':''}"
         ${unlocked ? `onclick="UI._grammarCat='${c}';UI.renderGrammar()"` : 'disabled'}
@@ -1143,10 +1188,19 @@ const UI = {
         </div>`;
     }).join('') : `<div style="color:var(--muted);font-size:14px;text-align:center;padding:24px">Buy this grammar category in the Shop to unlock these patterns.</div>`;
 
+    const pronunciationHtml = `
+      <div style="background:rgba(139,163,184,0.08);border:1px solid rgba(139,163,184,0.2);border-radius:12px;padding:12px 14px;margin-bottom:20px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">🗣️ Southern Pronunciation Notes</div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+          ${PRONUNCIATION_NOTES.map(n => `<li style="font-size:13px;color:var(--cream);line-height:1.5">${n}</li>`).join('')}
+        </ul>
+      </div>`;
+
     document.getElementById('view-grammar').innerHTML = `
       <div style="padding:16px;max-width:100%">
         <div class="section-title">A1 Grammar Reference</div>
         <div style="font-size:13px;color:var(--muted);margin-bottom:16px">${unlockedCount} / ${GRAMMAR.length} patterns unlocked · examples rotate on each visit</div>
+        ${pronunciationHtml}
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">${tabsHtml}</div>
         <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">${cardsHtml}</div>
         ${Store.isModeUnlocked('grammar_quiz')
@@ -1164,7 +1218,7 @@ const UI = {
       else { const e=Store.state.seen[w.id]; if(e.seen<5)e.seen=5; e.correct=Math.max(e.correct,Math.ceil(e.seen*0.8)); }
     }
     // Boost all unlocked grammar patterns to ≥80%
-    const unlockedGram = Store.state.unlocked_grammar || ['identity'];
+    const unlockedGram = Store.state.unlocked_grammar || ['identity', 'intensifiers'];
     for (const g of GRAMMAR) {
       if (!unlockedGram.includes(g.category)) continue;
       if (!Store.state.grammar_seen[g.id]) Store.state.grammar_seen[g.id] = {seen:5,correct:4};
@@ -1173,7 +1227,7 @@ const UI = {
     Store.state.total_correct = Object.values(Store.state.seen).reduce((s,e)=>s+e.correct,0);
     Store.state.total_attempts = Object.values(Store.state.seen).reduce((s,e)=>s+e.seen,0);
     Store.save();
-    Gamify.showToast(`Boosted ${words.length} words + ${GRAMMAR.filter(g=>(Store.state.unlocked_grammar||['identity']).includes(g.category)).length} grammar patterns to ≥80%`, 'gold');
+    Gamify.showToast(`Boosted ${words.length} words + ${GRAMMAR.filter(g=>(Store.state.unlocked_grammar||['identity', 'intensifiers']).includes(g.category)).length} grammar patterns to ≥80%`, 'gold');
     UI.renderShop();
     UI.updateHeader();
   },
