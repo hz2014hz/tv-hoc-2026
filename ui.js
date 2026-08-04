@@ -59,6 +59,26 @@ const UI = {
     document.getElementById('level-title').textContent = lvl.title;
   },
 
+  refreshCurrentView() {
+    const name = this.currentView;
+    if (name === 'home') this.renderHome();
+    else if (name === 'learn') this.renderLearn();
+    else if (name === 'shop') this.renderShop();
+    else if (name === 'progress') this.renderProgress();
+    else if (name === 'grammar') this.renderGrammar();
+    else if (name === 'achievements') this.renderAchievements();
+  },
+
+  // ── DEBUG (tap the ⭐ or level label in the top bar) ────────────────────────
+  debugAddStars() {
+    Store.state.points += 300;
+    Store.state.total_points_earned += 300;
+    Store.save();
+    Gamify.showToast('🐛 +300 stars', 'gold');
+    this.updateHeader();
+    this.refreshCurrentView();
+  },
+
   // ── HOME ──────────────────────────────────────────────────────────────────
   renderHome() {
     const seen = Store.getSeenCount();
@@ -127,10 +147,10 @@ const UI = {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
             <span style="font-size:28px;flex-shrink:0">${currentLesson.icon}</span>
             <div>
-              <div style="font-weight:700;font-size:16px">${currentLesson.title}</div>
+              <div style="font-weight:700;font-size:16px">Lesson ${currentLesson.order}: ${currentLesson.title}</div>
               <div style="font-size:12px;color:var(--muted)">${currentLesson.topic}</div>
             </div>
-            <div style="margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap">Lesson ${currentLesson.order}/${totalLessons}</div>
+            <div style="margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap">${currentLesson.order}/${totalLessons}</div>
           </div>
           <button class="btn-primary" style="width:100%;font-size:16px;padding:14px" onclick="UI.startSession('all','${Store.state.last_mode}')">
             ▶ Continue — ${Store.state.last_mode.replace(/_/g,' ')}
@@ -213,7 +233,7 @@ const UI = {
     const lessonPills = !isGrammarMode ? [...unlockedLessons].reverse().map(l => {
       const active = this.learnLesson === l.id;
       return `<button class="category-pill${active?' active':''}" onclick="UI.selectLesson('${l.id}')">
-        ${l.icon} ${l.title} <span style="color:var(--muted);font-weight:400">${l.word_ids.length}</span>
+        ${l.order}. ${l.icon} ${l.title} <span style="color:var(--muted);font-weight:400">${l.word_ids.length}</span>
       </button>`;
     }).join('') : '';
 
@@ -221,7 +241,7 @@ const UI = {
     const modeMeta = modes.find(m => m.key === this.learnMode);
     const activeLessonMeta = LESSONS.find(l => l.id === this.learnLesson);
     const catLabel = isAllLesson ? `All Words (${allWords.length})` :
-      `${activeLessonMeta ? activeLessonMeta.icon+' '+activeLessonMeta.title : this.learnLesson} (${currentPool.length} words)`;
+      `${activeLessonMeta ? 'Lesson '+activeLessonMeta.order+': '+activeLessonMeta.icon+' '+activeLessonMeta.title : this.learnLesson} (${currentPool.length} words)`;
 
     // Word weight preview — show how many unseen/struggling/known
     const unseen   = currentPool.filter(w => !Store.state.seen[w.id] || Store.state.seen[w.id].seen===0).length;
@@ -1017,7 +1037,7 @@ const UI = {
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
             <span style="font-size:22px">${l.icon}</span>
             <div style="flex:1">
-              <span class="shop-card__name" style="margin:0">${l.title}</span>
+              <span class="shop-card__name" style="margin:0">Lesson ${l.order}: ${l.title}</span>
               <div style="font-size:11px;color:var(--muted)">${l.topic}</div>
             </div>
             ${isDone
@@ -1046,10 +1066,6 @@ const UI = {
           <div style="font-size:14px;color:var(--muted);margin-bottom:4px">Your Balance</div>
           <div style="font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--gold)">⭐ ${Store.state.points}</div>
           <div style="font-size:13px;color:var(--muted);margin-top:4px">${lvl.title} · ${Store.state.total_points_earned} pts earned total</div>
-          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
-            <button onclick="Store.state.points+=300;Store.state.total_points_earned+=300;Store.save();UI.updateHeader();UI.renderShop();" style="background:rgba(217,107,72,0.15);border:1px dashed var(--coral);border-radius:8px;padding:6px 14px;font-size:12px;color:var(--coral);cursor:pointer;font-weight:600">🐛 +300 stars</button>
-            <button onclick="UI._debugBoostAccuracy()" style="background:rgba(45,155,111,0.12);border:1px dashed var(--jade);border-radius:8px;padding:6px 14px;font-size:12px;color:var(--jade);cursor:pointer;font-weight:600">🐛 boost accuracy</button>
-          </div>
         </div>
         <div class="section-eyebrow" style="margin-bottom:10px">🎮 Learning Modes</div>
         <div class="grid-2" style="margin-bottom:24px">${modesHtml}</div>
@@ -1110,7 +1126,7 @@ const UI = {
 
       tabsHtml = [...unlockedLessons].reverse().map(l => {
         const active = l.id === activeLesson;
-        return `<button class="category-pill${active?' active':''}" onclick="UI._progressLesson='${l.id}';UI.renderProgress()">${l.icon} ${l.title}</button>`;
+        return `<button class="category-pill${active?' active':''}" onclick="UI._progressLesson='${l.id}';UI.renderProgress()">${l.order}. ${l.icon} ${l.title}</button>`;
       }).join('');
 
       words = activeLessonMeta ? Store.getWordsForLesson(activeLessonMeta.id).sort((a,b) => {
@@ -1275,7 +1291,7 @@ const UI = {
   },
 
   // ── DEBUG ─────────────────────────────────────────────────────────────────
-  _debugBoostAccuracy() {
+  debugBoostAccuracy() {
     // Boost all unlocked words to ≥80%
     const words = Store.getAllUnlockedWords();
     for (const w of words) {
@@ -1291,9 +1307,9 @@ const UI = {
     Store.state.total_correct = Object.values(Store.state.seen).reduce((s,e)=>s+e.correct,0);
     Store.state.total_attempts = Object.values(Store.state.seen).reduce((s,e)=>s+e.seen,0);
     Store.save();
-    Gamify.showToast(`Boosted ${words.length} words + ${unlockedGrammar.length} grammar patterns to ≥80%`, 'gold');
-    UI.renderShop();
-    UI.updateHeader();
+    Gamify.showToast(`🐛 Boosted ${words.length} words + ${unlockedGrammar.length} grammar patterns to ≥80%`, 'gold');
+    this.updateHeader();
+    this.refreshCurrentView();
   },
 
   // ── ACHIEVEMENTS ──────────────────────────────────────────────────────────

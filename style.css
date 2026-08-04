@@ -26,8 +26,9 @@ table{border-collapse:collapse;width:100%}
 .app-header__right{display:flex;align-items:center;gap:8px}
 .app-header__streak,.app-header__points,.app-header__level{display:flex;align-items:center;gap:5px;background:var(--surface-2);border-radius:var(--rfull);padding:5px 11px;font-size:13px;font-weight:600}
 .app-header__streak{color:var(--gold);border:1px solid rgba(232,184,75,0.2)}
-.app-header__points{color:var(--jade);border:1px solid rgba(45,155,111,0.2)}
-.app-header__level{color:var(--muted);border:1px solid rgba(139,163,184,0.2)}
+.app-header__points{color:var(--jade);border:1px solid rgba(45,155,111,0.2);cursor:pointer;user-select:none}
+.app-header__level{color:var(--muted);border:1px solid rgba(139,163,184,0.2);cursor:pointer;user-select:none}
+.app-header__points:active,.app-header__level:active{transform:scale(0.94)}
 
 .nav-tabs{position:sticky;bottom:0;left:0;right:0;z-index:100;height:var(--nav-height);background:var(--surface);border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:stretch;justify-content:space-around;box-shadow:0 -4px 20px rgba(0,0,0,0.35)}
 .nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;color:var(--muted);font-size:11px;font-weight:500;transition:color var(--t-fast);position:relative;-webkit-tap-highlight-color:transparent}
