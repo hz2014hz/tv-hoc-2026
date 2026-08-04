@@ -54,13 +54,16 @@ const Quiz = {
           mode = 'grammar_quiz';
         } else {
           const ex = exs[Math.floor(Math.random() * exs.length)];
-          const shuffled = Quiz.shuffle([...ex.tiles]);
+          const isPunct = t => /^[.,!?]+$/.test(t);
+          const tiles = ex.tiles.filter(t => !isPunct(t));
+          const answer = ex.answer.filter(t => !isPunct(t));
+          const shuffled = Quiz.shuffle([...tiles]);
           return {
             type: 'word_order',
             grammar: g,
             prompt_en: ex.prompt_en,
             tiles: shuffled,
-            answer: ex.answer,
+            answer,
           };
         }
       }
