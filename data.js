@@ -33,6 +33,12 @@ const WORDS = [
   {id:'g018',tier:2,vn:'Chúc mừng',north:null,en:'Congratulations',category:'greetings',example_vn:'Chúc mừng sinh nhật bạn!',example_en:'Happy birthday!'},
   {id:'g019',tier:2,vn:'Không sao',north:null,en:"It's okay / No problem",category:'greetings',example_vn:'Không sao, đừng lo.',example_en:"It's okay, don't worry."},
   {id:'g020',tier:2,vn:'Xin chào mừng',north:null,en:'Welcome',category:'greetings',example_vn:'Xin chào mừng đến Việt Nam!',example_en:'Welcome to Vietnam!'},
+  {id:'g021',tier:1,vn:'tôi',north:null,en:'I / me',category:'greetings',example_vn:'Tôi là sinh viên.',example_en:'I am a student.'},
+  {id:'g022',tier:1,vn:'bạn',north:null,en:'you (neutral)',category:'greetings',example_vn:'Bạn tên là gì?',example_en:'What is your name?'},
+  {id:'g023',tier:2,vn:'chúng tôi',north:null,en:'we / us',category:'greetings',example_vn:'Chúng tôi là bạn bè.',example_en:'We are friends.'},
+  {id:'g024',tier:2,vn:'họ',north:null,en:'they / them',category:'greetings',example_vn:'Họ là người Việt Nam.',example_en:'They are Vietnamese.'},
+  {id:'g025',tier:3,vn:'tuổi',north:null,en:'age / years old',category:'greetings',example_vn:'Tôi hai mươi tuổi.',example_en:'I am twenty years old.'},
+  {id:'g026',tier:3,vn:'quốc tịch',north:null,en:'nationality',category:'greetings',example_vn:'Quốc tịch của bạn là gì?',example_en:'What is your nationality?'},
 
   // VERBS
   {id:'v001',tier:1,vn:'ăn',north:null,en:'to eat',category:'verbs',example_vn:'Tôi ăn cơm mỗi ngày.',example_en:'I eat rice every day.'},
@@ -238,6 +244,16 @@ const WORDS = [
   {id:'n046',tier:5,vn:'giáo viên',north:null,en:'teacher',category:'nouns',example_vn:'Cô ấy là giáo viên tiếng Anh.',example_en:'She is an English teacher.'},
   {id:'n047',tier:5,vn:'công việc',north:null,en:'job / work',category:'nouns',example_vn:'Công việc của tôi rất thú vị.',example_en:'My job is very interesting.'},
   {id:'n048',tier:5,vn:'bài tập',north:null,en:'homework',category:'nouns',example_vn:'Tôi chưa làm xong bài tập.',example_en:"I haven't finished my homework yet."},
+  {id:'n049',tier:6,vn:'sinh viên',north:null,en:'university student',category:'nouns',example_vn:'Tôi là sinh viên năm hai.',example_en:'I am a second-year university student.'},
+  {id:'n050',tier:6,vn:'bác sĩ',north:null,en:'doctor',category:'nouns',example_vn:'Anh ấy là bác sĩ.',example_en:'He is a doctor.'},
+  {id:'n051',tier:6,vn:'kỹ sư',north:null,en:'engineer',category:'nouns',example_vn:'Chị tôi là kỹ sư.',example_en:'My older sister is an engineer.'},
+  {id:'n052',tier:6,vn:'luật sư',north:null,en:'lawyer',category:'nouns',example_vn:'Ba tôi là luật sư.',example_en:'My father is a lawyer.'},
+  {id:'n053',tier:6,vn:'y tá',north:null,en:'nurse',category:'nouns',example_vn:'Cô ấy là y tá ở bệnh viện này.',example_en:'She is a nurse at this hospital.'},
+  {id:'n054',tier:6,vn:'nhân viên',north:null,en:'employee / staff',category:'nouns',example_vn:'Tôi là nhân viên công ty này.',example_en:'I am an employee of this company.'},
+  {id:'n055',tier:6,vn:'doanh nhân',north:null,en:'businessperson',category:'nouns',example_vn:'Ông ấy là một doanh nhân thành công.',example_en:'He is a successful businessperson.'},
+  {id:'n056',tier:6,vn:'mưa',north:null,en:'rain',category:'nouns',example_vn:'Hôm nay trời mưa to.',example_en:'Today it is raining heavily.'},
+  {id:'n057',tier:6,vn:'nắng',north:null,en:'sunshine',category:'nouns',example_vn:'Trời nắng đẹp quá.',example_en:'The sunshine is so beautiful.'},
+  {id:'n058',tier:6,vn:'gió',north:null,en:'wind',category:'nouns',example_vn:'Hôm nay gió mạnh lắm.',example_en:'The wind is very strong today.'},
 
   // FOOD
   {id:'f001',tier:1,vn:'phở',north:null,en:'pho (noodle soup)',category:'food',example_vn:'Phở là món ăn nổi tiếng của Việt Nam.',example_en:'Pho is a famous Vietnamese dish.'},
@@ -394,6 +410,14 @@ const WORDS = [
   {id:'pl015',tier:1,vn:'làng',north:null,en:'village',category:'places',example_vn:'Làng quê Việt Nam rất yên bình.',example_en:'Vietnamese countryside villages are very peaceful.'},
   {id:'pl016',tier:2,vn:'công ty',north:null,en:'company',category:'places',example_vn:'Tôi làm việc ở một công ty lớn.',example_en:'I work at a big company.'},
   {id:'pl017',tier:2,vn:'quê',north:null,en:'hometown',category:'places',example_vn:'Quê tôi ở miền Tây.',example_en:'My hometown is in the Mekong Delta.'},
+  {id:'pl018',tier:3,vn:'Việt Nam',north:null,en:'Vietnam',category:'places',example_vn:'Tôi đang học tiếng Việt Nam.',example_en:'I am learning Vietnamese in Vietnam.'},
+  {id:'pl019',tier:3,vn:'Mỹ',north:null,en:'USA / America',category:'places',example_vn:'Tôi đến từ Mỹ.',example_en:'I come from the USA.'},
+  {id:'pl020',tier:3,vn:'Anh',north:null,en:'England / UK',category:'places',example_vn:'Cô ấy đến từ Anh.',example_en:'She comes from the UK.'},
+  {id:'pl021',tier:3,vn:'Pháp',north:null,en:'France',category:'places',example_vn:'Anh ấy là người Pháp.',example_en:'He is French.'},
+  {id:'pl022',tier:3,vn:'Đức',north:null,en:'Germany',category:'places',example_vn:'Bạn tôi sống ở Đức.',example_en:'My friend lives in Germany.'},
+  {id:'pl023',tier:3,vn:'Úc',north:null,en:'Australia',category:'places',example_vn:'Gia đình tôi ở Úc.',example_en:'My family is in Australia.'},
+  {id:'pl024',tier:3,vn:'Nhật Bản',north:null,en:'Japan',category:'places',example_vn:'Cô ấy đến từ Nhật Bản.',example_en:'She comes from Japan.'},
+  {id:'pl025',tier:3,vn:'Hàn Quốc',north:null,en:'Korea',category:'places',example_vn:'Anh ấy học tiếng Hàn Quốc.',example_en:'He is studying Korean.'},
 
   // PREPOSITIONS
   {id:'prep001',tier:1,vn:'ở',north:null,en:'at / in (location)',category:'prepositions',example_vn:'Tôi ở nhà hôm nay.',example_en:'I am at home today.'},
@@ -1333,6 +1357,52 @@ const GRAMMAR = [
       {prompt_en:'I am twenty-one years old.', tiles:['Tôi','hai mươi mốt','tuổi','.'], answer:['Tôi','hai mươi mốt','tuổi','.']},
     ],
   },
+
+  // ── PRONOUNS & ADDRESS TERMS ──────────────────────────────────────────────
+  {
+    id:'gr61', category:'pronouns', key:'bạn',
+    pattern:'Tôi / bạn (default I / you)',
+    note:"Tôi = I/me, works with anyone. Bạn = you (neutral) — the safe default until you know the other person's age. Vietnamese has no single fixed word for 'you' like English does; see anh/chị/em below for the age-based system used once you know someone better.",
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Tôi là sinh viên.', en:'I am a student.'},
+      {vn:'Bạn tên là gì?', en:'What is your name?'},
+      {vn:'Tôi và bạn là bạn bè.', en:'You and I are friends.'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'What is your name?', tiles:['Bạn','tên','là','gì','?'], answer:['Bạn','tên','là','gì','?']},
+      {prompt_en:'I am a student.', tiles:['Tôi','là','sinh viên','.'], answer:['Tôi','là','sinh viên','.']},
+    ],
+  },
+  {
+    id:'gr62', category:'pronouns', key:'em',
+    pattern:'anh / chị / em (age-based address terms)',
+    note:"Vietnamese has no single word for 'you' — you pick a term based on the OTHER person's age and gender relative to you, then use that SAME word to refer to yourself when speaking to them. Anh = older male, chị = older female, em = younger person (either gender). A younger speaker calls an older man 'anh' and calls themselves 'em' in the very same sentence.",
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Em tên là gì?', en:'What is your name? (asking someone younger than you)'},
+      {vn:'Em là sinh viên.', en:'I am a student. (said by a younger speaker to someone older)'},
+      {vn:'Anh chờ em một chút nhé.', en:'Wait for me a moment. (older listener = anh, younger speaker = em)'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'What is your name? (asking someone younger)', tiles:['Em','tên','là','gì','?'], answer:['Em','tên','là','gì','?']},
+      {prompt_en:'I am a student. (younger speaker)', tiles:['Em','là','sinh viên','.'], answer:['Em','là','sinh viên','.']},
+    ],
+  },
+  {
+    id:'gr63', category:'pronouns', key:'ông',
+    pattern:'ông / bà (elders, formal "Mr. / Mrs.")',
+    note:'Ông = grandfather-equivalent, used for elderly men or as a formal, respectful "Mr.". Bà = grandmother-equivalent, for elderly women or formal "Mrs./Ms.". The same self-referential rule applies: an elderly person may call themselves ông/bà when speaking to someone much younger.',
+    requires:{categories:['greetings']},
+    examples:[
+      {vn:'Ông khỏe không?', en:'How are you? (asking an elderly man)'},
+      {vn:'Ông là bác sĩ à?', en:'Are you a doctor? (asking an elderly man, politely)'},
+      {vn:'Cháu chào ông ạ.', en:'Hello, sir. (a young person greeting an elderly man)'},
+    ],
+    word_order_exercises:[
+      {prompt_en:'How are you? (asking an elderly man)', tiles:['Ông','khỏe','không','?'], answer:['Ông','khỏe','không','?']},
+    ],
+  },
 ];
 
 const ACHIEVEMENTS = [
@@ -1361,7 +1431,8 @@ const SHOP_ITEMS = [
   {id:'mode_particles', type:'mode', name:'Particles',     cost:900,  desc:'Fill in the missing grammar word',  unlockKey:'particles',    icon:'🧩'},
 
   // ── Greetings: tier1 free (8 words), tier2 unlocks rest (12 words) ──────
-  {id:'greetings_t2', type:'tier', name:'Greetings II',    cost:120,  desc:'+12 more greeting phrases', unlockKey:'greetings', tier:2, wordsInTier:12},
+  {id:'greetings_t2', type:'tier', name:'Greetings II',    cost:120,  desc:'+14 more greeting phrases (incl. we/they)', unlockKey:'greetings', tier:2, wordsInTier:14},
+  {id:'greetings_t3', type:'tier', name:'Greetings III',   cost:220,  desc:'+2 self-intro words (age, nationality, complete)', unlockKey:'greetings', tier:3, wordsInTier:2},
 
   // ── Verbs: tier1 free (6), tiers 2-9 add 10/10/10/10/4/8/8/7 ────────────
   {id:'verbs_t2', type:'tier', name:'Verbs II',   cost:150, desc:'+10 action words', unlockKey:'verbs', tier:2, wordsInTier:10},
@@ -1399,7 +1470,8 @@ const SHOP_ITEMS = [
   {id:'nouns_t3', type:'tier', name:'Objects II',  cost:380, desc:'+10 more objects',           unlockKey:'nouns', tier:2, wordsInTier:10},
   {id:'nouns_t4', type:'tier', name:'Objects III', cost:580, desc:'+10 more objects',    unlockKey:'nouns', tier:3, wordsInTier:10},
   {id:'nouns_t5', type:'tier', name:'Objects IV',  cost:800, desc:'+10 more objects (nature, body parts)', unlockKey:'nouns', tier:4, wordsInTier:10},
-  {id:'nouns_t6', type:'tier', name:'Objects V',   cost:1000, desc:'+8 final objects (transportation, school & work, complete)', unlockKey:'nouns', tier:5, wordsInTier:8},
+  {id:'nouns_t6', type:'tier', name:'Objects V',   cost:1000, desc:'+8 more objects (transportation, school & work)', unlockKey:'nouns', tier:5, wordsInTier:8},
+  {id:'nouns_t7', type:'tier', name:'Objects VI',  cost:1200, desc:'+10 final objects (occupations, weather, complete)', unlockKey:'nouns', tier:6, wordsInTier:10},
 
   // ── Family: fully locked, unlocks all 20 at once (small category) ───────
   {id:'family_t2', type:'tier', name:'Family',     cost:250, desc:'All 20 family terms', unlockKey:'family', tier:1, wordsInTier:20},
@@ -1413,7 +1485,8 @@ const SHOP_ITEMS = [
 
   // ── Places: fully locked, tier1 all 15 at once, tier2 +2 more ────────────
   {id:'places_t2', type:'tier', name:'Places',     cost:250, desc:'All 15 place words', unlockKey:'places', tier:1, wordsInTier:15},
-  {id:'places_t3', type:'tier', name:'Places II',  cost:400, desc:'+2 more places (company, hometown, complete)', unlockKey:'places', tier:2, wordsInTier:2},
+  {id:'places_t3', type:'tier', name:'Places II',  cost:400, desc:'+2 more places (company, hometown)', unlockKey:'places', tier:2, wordsInTier:2},
+  {id:'places_t4', type:'tier', name:'Places III', cost:600, desc:'+8 countries (complete)', unlockKey:'places', tier:3, wordsInTier:8},
 
   // ── Prepositions: fully locked, tier1 +10, tier2 +10, tier3 +8 ──────────
   {id:'prepositions_t2', type:'tier', name:'Prepositions I',  cost:300, desc:'First 10 prepositions & connectors', unlockKey:'prepositions', tier:1, wordsInTier:10},

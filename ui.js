@@ -381,16 +381,33 @@ const UI = {
     return `<div class="dialect-note" style="justify-content:center;margin-top:8px">🗺️ ${note}</div>`;
   },
 
+  speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'vi-VN';
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  },
+
+  escAttr(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  },
+
+  speakBtnHtml(text, size = 16) {
+    return `<button class="speak-btn" style="font-size:${size}px" data-text="${this.escAttr(text)}" onclick="event.stopPropagation();UI.speak(this.dataset.text)" title="Listen">🔊</button>`;
+  },
+
   renderFlashcard(q, el) {
     el.innerHTML = `
       <div style="text-align:center;padding:12px 0">
         <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px">What does this mean?</div>
         <div id="fc-card" style="cursor:pointer;background:var(--surface);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 24px;margin-bottom:16px;transition:all 0.3s">
-          <div style="font-family:var(--font-display);font-size:clamp(32px,6vw,52px);font-weight:700;color:var(--cream);margin-bottom:8px">${q.word.vn}</div>
+          <div style="font-family:var(--font-display);font-size:clamp(32px,6vw,52px);font-weight:700;color:var(--cream);margin-bottom:8px">${q.word.vn} ${this.speakBtnHtml(q.word.vn, 22)}</div>
           ${this.dialectHtml(q.dialect_note)}
           <div id="fc-reveal" style="display:none;margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px">
             <div style="font-size:22px;font-weight:600;color:var(--gold);margin-bottom:8px">${q.word.en}</div>
-            <div style="font-size:14px;color:var(--muted);font-style:italic">${q.word.example_vn}</div>
+            <div style="font-size:14px;color:var(--muted);font-style:italic">${q.word.example_vn} ${this.speakBtnHtml(q.word.example_vn)}</div>
             <div style="font-size:13px;color:var(--muted)">${q.word.example_en}</div>
           </div>
         </div>
@@ -473,7 +490,7 @@ const UI = {
     el.innerHTML = `
       <div style="text-align:center;margin-bottom:24px">
         <div style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">${q.prompt}</div>
-        <div style="font-family:var(--font-display);font-size:clamp(26px,5vw,40px);font-weight:700;color:var(--cream)">${q.display_word}</div>
+        <div style="font-family:var(--font-display);font-size:clamp(26px,5vw,40px);font-weight:700;color:var(--cream)">${q.display_word}${q.asking==='en'?' '+this.speakBtnHtml(q.display_word,22):''}</div>
         ${this.dialectHtml(q.dialect_note)}
       </div>
       <div style="display:flex;flex-direction:column;gap:10px" id="mc-choices">${choiceHtml}</div>
@@ -501,7 +518,7 @@ const UI = {
     if (fb) {
       fb.style.display = 'block';
       fb.innerHTML = `<div style="background:var(--surface-2);border-radius:12px;padding:14px;font-size:14px;color:var(--muted);font-style:italic">
-        ${q.word.example_vn}<br><span style="font-size:13px">${q.word.example_en}</span></div>` + this.continueButtonHtml();
+        ${q.word.example_vn} ${this.speakBtnHtml(q.word.example_vn)}<br><span style="font-size:13px">${q.word.example_en}</span></div>` + this.continueButtonHtml();
     }
   },
 
@@ -548,7 +565,7 @@ const UI = {
     } else {
       fb.innerHTML = `<span style="color:var(--coral);font-weight:600">✗ Answer: <strong style="color:var(--cream)">${q.answer}</strong>${q.word.north?' (N: '+q.word.north+')':''}</span>`;
     }
-    fb.innerHTML += `<div style="margin-top:8px;font-size:13px;color:var(--muted);font-style:italic">${q.word.example_vn} — ${q.word.example_en}</div>`;
+    fb.innerHTML += `<div style="margin-top:8px;font-size:13px;color:var(--muted);font-style:italic">${q.word.example_vn} ${this.speakBtnHtml(q.word.example_vn)} — ${q.word.example_en}</div>`;
     fb.innerHTML += this.continueButtonHtml();
   },
 
@@ -589,7 +606,7 @@ const UI = {
     const fb = document.getElementById('fill-feedback');
     if (fb) {
       fb.style.display = 'block';
-      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.word.example_vn}<br>${q.word.example_en}</div>` + this.continueButtonHtml();
+      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.word.example_vn} ${this.speakBtnHtml(q.word.example_vn)}<br>${q.word.example_en}</div>` + this.continueButtonHtml();
     }
   },
 
@@ -630,7 +647,8 @@ const UI = {
     const fb = document.getElementById('particle-feedback');
     if (fb) {
       fb.style.display = 'block';
-      fb.innerHTML = `<div style="font-size:14px;color:var(--muted);font-style:italic">${q.grammar.note}</div>` + this.continueButtonHtml();
+      fb.innerHTML = `<div style="font-size:14px;color:var(--cream)">${q.example_vn} ${this.speakBtnHtml(q.example_vn)}</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic;margin-top:6px">${q.grammar.note}</div>` + this.continueButtonHtml();
     }
   },
 
@@ -748,7 +766,7 @@ const UI = {
       fb.style.display = 'block';
       fb.innerHTML = `<div style="background:var(--surface-2);border-radius:12px;padding:14px;font-size:14px">
         <div style="color:var(--jade);font-size:12px;font-weight:600;margin-bottom:4px">✓ Correct sentence</div>
-        <strong style="color:var(--cream)">${q.correct_vn}</strong><br>
+        <strong style="color:var(--cream)">${q.correct_vn}</strong> ${this.speakBtnHtml(q.correct_vn)}<br>
         <span style="color:var(--muted);font-size:13px">${q.correct_en}</span>
       </div>` + this.continueButtonHtml();
     }
@@ -844,13 +862,14 @@ const UI = {
       // Disable all buttons before adding the continue button (it should stay enabled)
       el.querySelectorAll('button').forEach(b => b.disabled = true);
 
+      const fullSentence = q.answer.join(' ');
       if (fb) {
         if (isCorrect) {
-          fb.innerHTML = `<div style="color:var(--jade);font-weight:700;font-size:15px;text-align:center">✓ Correct!</div>`;
+          fb.innerHTML = `<div style="color:var(--jade);font-weight:700;font-size:15px;text-align:center">✓ Correct! ${UI.speakBtnHtml(fullSentence)}</div>`;
         } else {
           fb.innerHTML = `
             <div style="color:var(--coral);font-weight:600;margin-bottom:8px">✗ Correct order:</div>
-            <div style="background:var(--surface-2);border-radius:10px;padding:12px;font-size:15px;color:var(--cream)">${q.answer.join(' ')}</div>
+            <div style="background:var(--surface-2);border-radius:10px;padding:12px;font-size:15px;color:var(--cream)">${fullSentence} ${UI.speakBtnHtml(fullSentence)}</div>
             <div style="font-size:13px;color:var(--muted);margin-top:6px">${q.grammar.note}</div>`;
         }
         fb.innerHTML += UI.continueButtonHtml();
@@ -1136,12 +1155,12 @@ const UI = {
 
   // ── GRAMMAR ───────────────────────────────────────────────────────────────
   renderGrammar() {
-    const cats = ['all','identity','intensifiers','negation','questions','tense','modal','comparisons','classifiers','possession','imperatives','directions','numbers','linking'];
-    const catLabels = {all:'All',identity:'Identity',intensifiers:'Intensifiers',negation:'Negation',questions:'Questions',tense:'Tense',modal:'Modals',comparisons:'Compare',classifiers:'Classifiers',possession:'Possession',imperatives:'Imperatives',directions:'Directions',numbers:'Numbers',linking:'Linking'};
+    const cats = ['all','identity','pronouns','intensifiers','negation','questions','tense','modal','comparisons','classifiers','possession','imperatives','directions','numbers','linking'];
+    const catLabels = {all:'All',identity:'Identity',pronouns:'Pronouns',intensifiers:'Intensifiers',negation:'Negation',questions:'Questions',tense:'Tense',modal:'Modals',comparisons:'Compare',classifiers:'Classifiers',possession:'Possession',imperatives:'Imperatives',directions:'Directions',numbers:'Numbers',linking:'Linking'};
     const activeCat = this._grammarCat || 'all';
 
     const tabsHtml = cats.map(c => {
-      const unlocked = c === 'all' || c === 'identity' || c === 'intensifiers' || Store.isGrammarUnlocked(c);
+      const unlocked = c === 'all' || c === 'identity' || c === 'intensifiers' || c === 'pronouns' || Store.isGrammarUnlocked(c);
       const shopItem = SHOP_ITEMS.find(i => i.type === 'grammar' && i.unlockKey === c);
       return `<button class="category-pill${c===activeCat?' active':''}"
         ${unlocked ? `onclick="UI._grammarCat='${c}';UI.renderGrammar()"` : 'disabled'}
@@ -1180,7 +1199,7 @@ const UI = {
             <div style="flex-shrink:0;text-align:right">${accHtml}</div>
           </div>
           <div class="grammar-card__formula">${g.pattern}</div>
-          <div class="grammar-card__example">${ex.vn}</div>
+          <div class="grammar-card__example">${ex.vn} ${this.speakBtnHtml(ex.vn)}</div>
           <div class="grammar-card__translation">${ex.en}</div>
           <div class="grammar-card__note">💡 ${g.note}</div>
         </div>`;
@@ -1216,7 +1235,7 @@ const UI = {
       else { const e=Store.state.seen[w.id]; if(e.seen<5)e.seen=5; e.correct=Math.max(e.correct,Math.ceil(e.seen*0.8)); }
     }
     // Boost all unlocked grammar patterns to ≥80%
-    const unlockedGram = Store.state.unlocked_grammar || ['identity', 'intensifiers'];
+    const unlockedGram = Store.state.unlocked_grammar || ['identity', 'intensifiers', 'pronouns'];
     for (const g of GRAMMAR) {
       if (!unlockedGram.includes(g.category)) continue;
       if (!Store.state.grammar_seen[g.id]) Store.state.grammar_seen[g.id] = {seen:5,correct:4};
@@ -1225,7 +1244,7 @@ const UI = {
     Store.state.total_correct = Object.values(Store.state.seen).reduce((s,e)=>s+e.correct,0);
     Store.state.total_attempts = Object.values(Store.state.seen).reduce((s,e)=>s+e.seen,0);
     Store.save();
-    Gamify.showToast(`Boosted ${words.length} words + ${GRAMMAR.filter(g=>(Store.state.unlocked_grammar||['identity', 'intensifiers']).includes(g.category)).length} grammar patterns to ≥80%`, 'gold');
+    Gamify.showToast(`Boosted ${words.length} words + ${GRAMMAR.filter(g=>(Store.state.unlocked_grammar||['identity', 'intensifiers', 'pronouns']).includes(g.category)).length} grammar patterns to ≥80%`, 'gold');
     UI.renderShop();
     UI.updateHeader();
   },

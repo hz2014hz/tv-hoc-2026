@@ -132,6 +132,7 @@ const Quiz = {
       return {
         type: 'particles',
         grammar: g,
+        example_vn: example.vn,
         sentence_with_blank,
         answer: g.key,
         hint: example.en,

@@ -22,7 +22,7 @@ const Store = {
       },
       unlocked_modes: ['flashcard', 'multiple_choice'],
       unlocked_boosts: [],
-      unlocked_grammar: ['identity', 'intensifiers'], // identity + intensifiers free from day 1
+      unlocked_grammar: ['identity', 'intensifiers', 'pronouns'], // free from day 1
       achievements: [],
       consec_correct: 0, typed_correct: 0,
       total_correct: 0, total_attempts: 0,
@@ -39,7 +39,11 @@ const Store = {
         this.state = Object.assign(this.defaultState(), saved);
         // also merge nested category_tiers
         this.state.category_tiers = Object.assign(this.defaultState().category_tiers, saved.category_tiers || {});
-        if (!this.state.unlocked_grammar) this.state.unlocked_grammar = ['identity', 'intensifiers'];
+        if (!this.state.unlocked_grammar) this.state.unlocked_grammar = ['identity', 'intensifiers', 'pronouns'];
+        // free categories are always granted, even to saves created before they existed
+        ['identity', 'intensifiers', 'pronouns'].forEach(c => {
+          if (!this.state.unlocked_grammar.includes(c)) this.state.unlocked_grammar.push(c);
+        });
         // migrate old flat unlocked_categories → category_tiers
         if (saved.unlocked_categories && !saved.category_tiers) {
           saved.unlocked_categories.forEach(cat => {
@@ -152,7 +156,7 @@ const Store = {
   isCategoryAccessible(cat) { return (this.state.category_tiers[cat] || 0) > 0; },
 
   isModeUnlocked(mode) { return this.state.unlocked_modes.includes(mode); },
-  isGrammarUnlocked(gramCat) { return (this.state.unlocked_grammar || ['identity', 'intensifiers']).includes(gramCat); },
+  isGrammarUnlocked(gramCat) { return (this.state.unlocked_grammar || ['identity', 'intensifiers', 'pronouns']).includes(gramCat); },
 
   // Get the next purchasable tier item for a category
   getNextTierItem(cat) {
@@ -206,7 +210,7 @@ const Store = {
       this.save(); return true;
     }
     if (item.type === 'grammar') {
-      if (!this.state.unlocked_grammar) this.state.unlocked_grammar = ['identity', 'intensifiers'];
+      if (!this.state.unlocked_grammar) this.state.unlocked_grammar = ['identity', 'intensifiers', 'pronouns'];
       if (this.state.unlocked_grammar.includes(item.unlockKey)) return false;
       // Accuracy gate: all patterns in already-unlocked grammar categories must be ≥60%
       const gate = this.checkGrammarAccuracyGate();
@@ -220,7 +224,7 @@ const Store = {
 
   // Grammar accuracy gate: all patterns in already-unlocked grammar categories must be ≥60%
   checkGrammarAccuracyGate() {
-    const unlocked = this.state.unlocked_grammar || ['identity', 'intensifiers'];
+    const unlocked = this.state.unlocked_grammar || ['identity', 'intensifiers', 'pronouns'];
     const notReady = [];
     let ready = 0;
     for (const g of GRAMMAR) {
