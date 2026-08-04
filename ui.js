@@ -2,7 +2,7 @@ const UI = {
   currentView: 'home',
   session: null,      // {questions, index, score, pts_earned, mode, category}
   matchState: null,   // {selectedLeft, selectedRight, matched, pairs}
-  learnCategory: 'greetings',
+  learnLesson: 'all',
   learnMode: 'multiple_choice',
 
   init() {
@@ -70,7 +70,10 @@ const UI = {
     const circum = 2 * Math.PI * 52;
     const dash = (pct / 100 * circum).toFixed(1);
 
-    const unlockedCats = Object.keys(Store.state.category_tiers).filter(c => Store.isCategoryAccessible(c));
+    const currentLesson = Store.getCurrentLesson();
+    const totalLessons = LESSONS.length;
+
+    const unlockedCats = Object.keys(CATEGORY_META).filter(c => Store.isCategoryAccessible(c));
     const catBars = unlockedCats.map(cat => {
       const meta = CATEGORY_META[cat] || {label: cat, icon: '📁', color: '#8BA3B8'};
       const p = Store.getCategoryProgress(cat);
@@ -118,9 +121,21 @@ const UI = {
           <div class="stat-card"><div class="stat-card__number">${Store.state.best_streak}</div><div class="stat-card__label">Best Streak</div></div>
         </div>
 
-        <button class="btn-primary" style="width:100%;margin-bottom:20px;font-size:16px;padding:16px" onclick="UI.startSession('${Store.state.last_category}','${Store.state.last_mode}')">
-          ▶ Continue — ${Store.state.last_category==='all'?'🌐 All Words':(CATEGORY_META[Store.state.last_category]||{icon:'📖'}).icon+' '+Store.state.last_category} · ${Store.state.last_mode.replace(/_/g,' ')}
-        </button>
+        ${currentLesson ? `
+        <div class="section-eyebrow" style="margin-bottom:12px">📖 Current Lesson</div>
+        <div style="background:var(--surface);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.06);margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span style="font-size:28px;flex-shrink:0">${currentLesson.icon}</span>
+            <div>
+              <div style="font-weight:700;font-size:16px">${currentLesson.title}</div>
+              <div style="font-size:12px;color:var(--muted)">${currentLesson.topic}</div>
+            </div>
+            <div style="margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap">Lesson ${currentLesson.order}/${totalLessons}</div>
+          </div>
+          <button class="btn-primary" style="width:100%;font-size:16px;padding:14px" onclick="UI.startSession('all','${Store.state.last_mode}')">
+            ▶ Continue — ${Store.state.last_mode.replace(/_/g,' ')}
+          </button>
+        </div>` : ''}
 
         <div class="section-eyebrow" style="margin-bottom:12px">Category Progress</div>
         <div style="display:grid;gap:8px;margin-bottom:20px">${catBars}</div>
@@ -155,21 +170,21 @@ const UI = {
       return {...m, cost: shopItem ? shopItem.cost : 0};
     });
 
-    // "all" = special category using all unlocked words
+    // "all" = special selection using all unlocked words across every lesson
     const allWords = Store.getAllUnlockedWords();
-    const unlockedCats = Object.keys(Store.state.category_tiers).filter(c => Store.isCategoryAccessible(c));
+    const unlockedLessons = Store.getUnlockedLessons();
 
     // Determine compatibility warnings for current selection
     const isGrammarMode = ['grammar_quiz','word_order','particles'].includes(this.learnMode);
-    const isAllCat = this.learnCategory === 'all';
-    const currentPool = isAllCat ? allWords : Store.getUnlockedWords(this.learnCategory);
+    const isAllLesson = this.learnLesson === 'all';
+    const currentPool = isAllLesson ? allWords : Store.getWordsForLesson(this.learnLesson);
     let warning = null;
-    if (isGrammarMode && !isAllCat) {
-      warning = 'Grammar modes use patterns from all your unlocked words, not just one category. Switch to "All Words" or it will still work fine.';
+    if (isGrammarMode && !isAllLesson) {
+      warning = 'Grammar modes use patterns from all your unlocked lessons, not just one. Switch to "All Words" or it will still work fine.';
     } else if (!isGrammarMode && this.learnMode === 'match_pairs' && currentPool.length < 6) {
-      warning = `Match Pairs needs at least 6 words. This category only has ${currentPool.length} unlocked. Pick a bigger category or use All Words.`;
+      warning = `Match Pairs needs at least 6 words. This lesson only has ${currentPool.length}. Pick a bigger lesson or use All Words.`;
     } else if (!isGrammarMode && currentPool.length === 0) {
-      warning = 'No words unlocked in this category yet. Buy it in the Shop first.';
+      warning = 'No words in this lesson yet.';
     }
 
     const modePills = modes.map(m => {
@@ -189,37 +204,24 @@ const UI = {
       }
     }).join('');
 
-    // All Words option first, then unlocked categories
+    // All Words option first, then unlocked lessons (most recent first)
     const allWordsPill = !isGrammarMode ? `
-      <button class="category-pill${this.learnCategory==='all'?' active':''}" onclick="UI.selectCategory('all')"
-        style="${this.learnCategory==='all'?'':''}">
+      <button class="category-pill${isAllLesson?' active':''}" onclick="UI.selectLesson('all')">
         🌐 All Words <span style="color:var(--muted);font-weight:400">${allWords.length}</span>
       </button>` : '';
 
-    const catPills = Object.entries(CATEGORY_META).map(([key, meta]) => {
-      const owned = Store.isCategoryAccessible(key);
-      const active = this.learnCategory === key;
-      if (owned) {
-        const p = Store.getCategoryProgress(key);
-        const incompatible = isGrammarMode; // grammar modes don't use categories
-        return `<button class="category-pill${active?' active':''}${incompatible?' '  :''}"
-          style="${incompatible?'opacity:0.4;cursor:not-allowed':''}"
-          ${incompatible?'title="Grammar modes use all words, not a single category"':''}
-          ${incompatible?'disabled':'onclick="UI.selectCategory(\''+key+'\')"'}>
-          ${meta.icon} ${meta.label} <span style="color:var(--muted);font-weight:400">${p.seen}/${p.total}</span>
-        </button>`;
-      } else {
-        const item = Store.getNextTierItem(key);
-        return `<button class="category-pill" style="opacity:0.35;cursor:not-allowed" title="Buy in Shop">
-          🔒 ${meta.label}${item?' ('+item.cost+'⭐)':''}
-        </button>`;
-      }
-    }).join('');
+    const lessonPills = !isGrammarMode ? [...unlockedLessons].reverse().map(l => {
+      const active = this.learnLesson === l.id;
+      return `<button class="category-pill${active?' active':''}" onclick="UI.selectLesson('${l.id}')">
+        ${l.icon} ${l.title} <span style="color:var(--muted);font-weight:400">${l.word_ids.length}</span>
+      </button>`;
+    }).join('') : '';
 
     // Session preview
     const modeMeta = modes.find(m => m.key === this.learnMode);
-    const catLabel = this.learnCategory === 'all' ? `All Words (${allWords.length})` :
-      `${(CATEGORY_META[this.learnCategory]||{icon:'📖',label:this.learnCategory}).icon} ${(CATEGORY_META[this.learnCategory]||{label:this.learnCategory}).label} (${currentPool.length} words)`;
+    const activeLessonMeta = LESSONS.find(l => l.id === this.learnLesson);
+    const catLabel = isAllLesson ? `All Words (${allWords.length})` :
+      `${activeLessonMeta ? activeLessonMeta.icon+' '+activeLessonMeta.title : this.learnLesson} (${currentPool.length} words)`;
 
     // Word weight preview — show how many unseen/struggling/known
     const unseen   = currentPool.filter(w => !Store.state.seen[w.id] || Store.state.seen[w.id].seen===0).length;
@@ -239,9 +241,9 @@ const UI = {
           <div style="background:rgba(232,184,75,0.08);border:1px solid rgba(232,184,75,0.2);border-radius:12px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:var(--gold)">
             📖 Grammar modes practice sentence patterns — they use all your unlocked vocabulary automatically.
           </div>` : `
-          <div class="section-eyebrow" style="margin-bottom:8px">Category</div>
+          <div class="section-eyebrow" style="margin-bottom:8px">Lesson</div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
-            ${allWordsPill}${catPills}
+            ${allWordsPill}${lessonPills}
           </div>`}
 
         ${warning ? `<div style="background:rgba(217,107,72,0.1);border:1px solid rgba(217,107,72,0.25);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--coral)">⚠️ ${warning}</div>` : ''}
@@ -260,7 +262,7 @@ const UI = {
           <div style="font-size:12px;color:var(--muted)">Patterns filtered to your unlocked vocabulary</div>`}
         </div>
 
-        <button class="btn-primary" style="width:100%;font-size:16px;padding:16px" ${warning&&warning.includes('No words')?'disabled':''} onclick="UI.startSession('${this.learnCategory}','${this.learnMode}')">
+        <button class="btn-primary" style="width:100%;font-size:16px;padding:16px" ${warning&&warning.includes('No words')?'disabled':''} onclick="UI.startSession('${this.learnLesson}','${this.learnMode}')">
           Start Session (10 questions) →
         </button>
       </div>`;
@@ -268,18 +270,19 @@ const UI = {
 
   selectMode(mode) {
     this.learnMode = mode;
-    // if switching to grammar mode, set category to 'all'
-    if (['grammar_quiz','word_order','particles'].includes(mode)) this.learnCategory = 'all';
+    // if switching to grammar mode, set selection to 'all'
+    if (['grammar_quiz','word_order','particles'].includes(mode)) this.learnLesson = 'all';
     this.renderLearn();
   },
-  selectCategory(cat) { this.learnCategory = cat; this.renderLearn(); },
+  selectLesson(lessonOrAll) { this.learnLesson = lessonOrAll; this.renderLearn(); },
 
   // ── SESSION ───────────────────────────────────────────────────────────────
-  startSession(category, mode) {
-    if (category !== 'all' && !Store.isCategoryAccessible(category)) { Gamify.showToast('Buy this category in the Shop first!','error'); return; }
+  // `lessonOrAll` is 'all' (every unlocked word) or a specific LESSONS id
+  startSession(lessonOrAll, mode) {
+    if (lessonOrAll !== 'all' && !Store.isLessonUnlocked(lessonOrAll)) { Gamify.showToast('This lesson isn\'t unlocked yet!','error'); return; }
     if (!Store.isModeUnlocked(mode)) { Gamify.showToast('Buy this mode in the Shop first!','error'); return; }
 
-    Store.state.last_category = category;
+    Store.state.last_category = lessonOrAll;
     Store.state.last_mode = mode;
     Store.save();
 
@@ -292,11 +295,11 @@ const UI = {
     if (isGrammarMode) {
       // Grammar modes don't use word pools — just generate normally
       for (let i = 0; i < SESSION_SIZE; i++) {
-        const q = Quiz.generateQuestion(mode, category, Store.state.seen);
+        const q = Quiz.generateQuestion(mode, lessonOrAll, Store.state.seen);
         if (q) questions.push(q);
       }
     } else {
-      const pool = category === 'all' ? Store.getAllUnlockedWords() : Store.getUnlockedWords(category);
+      const pool = lessonOrAll === 'all' ? Store.getAllUnlockedWords() : Store.getWordsForLesson(lessonOrAll);
       const seen = Store.state.seen;
 
       const unseenWords    = pool.filter(w => !seen[w.id] || seen[w.id].seen === 0);
@@ -331,7 +334,7 @@ const UI = {
       // Generate remaining questions via weighted selection
       for (let i = 0; i < remaining; i++) {
         if (fillerPool.length === 0) break;
-        const q = Quiz.generateQuestion(mode, category, seen);
+        const q = Quiz.generateQuestion(mode, lessonOrAll, seen);
         if (q) questions.push(q);
       }
 
@@ -339,7 +342,7 @@ const UI = {
       Quiz.shuffle(questions);
     }
 
-    this.session = { questions, index: 0, score: 0, pts_earned: 0, mode, category };
+    this.session = { questions, index: 0, score: 0, pts_earned: 0, mode, category: lessonOrAll };
     this.matchState = null;
     this.showView('quiz');
     this.renderQuizView();
@@ -992,100 +995,48 @@ const UI = {
         </div>`;
     }).join('');
 
-    // Grammar categories section
-    // Compute grammar gate once for all grammar shop cards
-    const grammarGate = Store.checkGrammarAccuracyGate();
+    // Lessons section — one card per lesson, unlocked strictly in order
+    const gate = Store.checkLessonAccuracyGate();
+    const lessonsHtml = LESSONS.map((l, i) => {
+      const isDone = i < Store.state.unlocked_lesson;
+      const isNext = i === Store.state.unlocked_lesson;
+      const isFuture = i > Store.state.unlocked_lesson;
+      const canAfford = Store.state.points >= l.cost;
+      const gateMet = gate.met;
 
-    const grammarShopHtml = SHOP_ITEMS.filter(i => i.type === 'grammar').map(item => {
-      const owned = Store.isItemOwned(item);
-      const canAfford = Store.state.points >= item.cost;
-      const gateMet = grammarGate.met;
-      // Count patterns in this specific category and their accuracy
-      const catPatterns = GRAMMAR.filter(g => g.category === item.unlockKey);
-      const catReady = catPatterns.filter(g => {
-        const s = Store.state.grammar_seen[g.id];
-        return s && s.seen > 0 && s.correct/s.seen >= 0.6;
-      }).length;
-      const gateHtml = !owned && !gateMet ? `
-        <div style="font-size:11px;color:var(--coral);margin-bottom:6px">
-          🔒 Grammar gate: ${grammarGate.ready}/${grammarGate.total} patterns at 60%+
-        </div>` : '';
-      return `
-        <div class="shop-card${owned?' owned':''}">
-          <div class="shop-card__name">${item.icon||'📖'} ${item.name}</div>
-          <div class="shop-card__desc">${item.desc}</div>
-          ${owned ? `<div style="font-size:11px;color:var(--jade);margin-top:4px">${catReady}/${catPatterns.length} patterns at 60%+</div>` : gateHtml}
-          <div class="shop-card__footer" style="margin-top:8px">
-            ${owned
-              ? `<span class="badge badge-jade">✓ Unlocked</span>`
-              : `<span style="color:var(--gold);font-weight:700">⭐ ${item.cost}</span>
-                 <button class="btn-gold" style="padding:8px 16px;font-size:13px"
-                   ${canAfford && gateMet ? '' : 'disabled'}
-                   onclick="UI.buyItem('${item.id}')">
-                   ${!gateMet ? '🔒 Gate locked' : canAfford ? 'Unlock' : 'Need '+(item.cost-Store.state.points)+' more'}
-                 </button>`}
-          </div>
-        </div>`;
-    }).join('');
-
-    // Categories section — one card per category showing tier progress
-    const allCats = Object.keys(CATEGORY_META);
-    const catsHtml = allCats.map(cat => {
-      const meta = CATEGORY_META[cat];
-      const currentTier = Store.getCategoryTier(cat);
-      const maxTier = Store.getMaxTier(cat);
-      const nextItem = Store.getNextTierItem(cat);
-      const totalWords = WORDS.filter(w => w.category === cat).length;
-      const unlockedWords = Store.getUnlockedWords(cat).length;
-      const pct = totalWords > 0 ? Math.round(unlockedWords / totalWords * 100) : 0;
-      const fullyUnlocked = currentTier >= maxTier;
-      const canAfford = nextItem && Store.state.points >= nextItem.cost;
-
-      // Accuracy gate — only relevant when already have words unlocked
-      const gate = currentTier > 0 ? Store.checkAccuracyGate(cat) : null;
-      const gateMet = !gate || gate.met;
-      const gateHtml = gate && !gate.met && nextItem ? `
+      const gateHtml = isNext && !gateMet ? `
         <div style="background:rgba(217,107,72,0.08);border:1px solid rgba(217,107,72,0.2);border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12px">
-          <div style="color:var(--coral);font-weight:600;margin-bottom:4px">🔒 Accuracy gate: ${gate.ready}/${gate.total} words at 60%+</div>
-          <div style="color:var(--muted);line-height:1.5">${gate.notReady.slice(0,5).map(w =>
-            `<span style="color:${w.unseen?'var(--muted)':'var(--coral)'}">
-              ${w.vn} ${w.unseen ? '(unseen)' : '('+w.accuracy+'%)'}
-            </span>`
+          <div style="color:var(--coral);font-weight:600;margin-bottom:4px">🔒 Accuracy gate: ${gate.ready}/${gate.total} at 60%+</div>
+          <div style="color:var(--muted);line-height:1.5">${gate.notReady.slice(0,5).map(x =>
+            `<span style="color:${x.unseen?'var(--muted)':'var(--coral)'}">${x.label} ${x.unseen ? '(unseen)' : '('+x.accuracy+'%)'}</span>`
           ).join(' · ')}${gate.notReady.length > 5 ? ` · +${gate.notReady.length-5} more` : ''}</div>
         </div>` : '';
 
       return `
-        <div class="shop-card${fullyUnlocked?' owned':''}">
+        <div class="shop-card${isDone?' owned':''}" style="${isFuture?'opacity:0.5':''}">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <span style="font-size:22px">${meta.icon}</span>
-            <span class="shop-card__name" style="margin:0">${meta.label}</span>
-            ${fullyUnlocked
-              ? `<span class="badge badge-jade" style="margin-left:auto">✓ Full</span>`
-              : currentTier === 0
-                ? `<span class="badge badge-muted" style="margin-left:auto">Locked</span>`
-                : `<span class="badge ${gateMet?'badge-jade':'badge-coral'}" style="margin-left:auto">Tier ${currentTier}/${maxTier} ${gateMet?'✓':'⚠'}</span>`}
+            <span style="font-size:22px">${l.icon}</span>
+            <div style="flex:1">
+              <span class="shop-card__name" style="margin:0">${l.title}</span>
+              <div style="font-size:11px;color:var(--muted)">${l.topic}</div>
+            </div>
+            ${isDone
+              ? `<span class="badge badge-jade" style="flex-shrink:0">✓ Done</span>`
+              : isFuture
+                ? `<span class="badge badge-muted" style="flex-shrink:0">🔒 Locked</span>`
+                : ''}
           </div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${unlockedWords} / ${totalWords} words unlocked</div>
-          <div class="progress-bar progress-bar--sm" style="margin-bottom:10px"><div class="progress-bar__fill" style="width:${pct}%;background:${meta.color}"></div></div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${l.word_ids.length} words${l.grammar_ids.length ? ' · '+l.grammar_ids.length+' grammar patterns' : ''}</div>
           ${gateHtml}
-          ${fullyUnlocked
-            ? `<div style="font-size:12px;color:var(--jade);font-weight:600">All words unlocked!</div>`
-            : nextItem
-              ? `<div class="shop-card__footer" style="margin-top:4px">
-                   <div>
-                     <div style="font-size:12px;font-weight:600;color:var(--cream)">${nextItem.name}</div>
-                     <div style="font-size:11px;color:var(--muted)">${nextItem.desc}</div>
-                   </div>
-                   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-                     <span style="color:var(--gold);font-weight:700;font-size:13px">⭐ ${nextItem.cost}</span>
-                     <button class="btn-gold" style="padding:6px 14px;font-size:12px;white-space:nowrap"
-                       ${canAfford && gateMet ? '' : 'disabled'}
-                       onclick="UI.buyItem('${nextItem.id}')">
-                       ${!gateMet ? '🔒 Gate locked' : canAfford ? 'Unlock' : 'Need '+(nextItem.cost-Store.state.points)+' more'}
-                     </button>
-                   </div>
+          ${isDone
+            ? ''
+            : isNext
+              ? `<div class="shop-card__footer">
+                   <span style="color:var(--gold);font-weight:700">${l.cost===0?'Free':'⭐ '+l.cost}</span>
+                   <button class="btn-gold" style="padding:8px 16px;font-size:13px" ${(canAfford && gateMet)?'':'disabled'}
+                     onclick="UI.buyLesson()">${!gateMet ? '🔒 Gate locked' : canAfford ? 'Unlock' : 'Need '+(l.cost-Store.state.points)+' more'}</button>
                  </div>`
-              : `<div style="font-size:12px;color:var(--muted)">No more tiers available</div>`}
+              : `<div style="font-size:12px;color:var(--muted)">⭐ ${l.cost} · unlock lesson ${i} first</div>`}
         </div>`;
     }).join('');
 
@@ -1102,10 +1053,8 @@ const UI = {
         </div>
         <div class="section-eyebrow" style="margin-bottom:10px">🎮 Learning Modes</div>
         <div class="grid-2" style="margin-bottom:24px">${modesHtml}</div>
-        <div class="section-eyebrow" style="margin-bottom:10px">📖 Grammar Categories</div>
-        <div class="grid-2" style="margin-bottom:24px">${grammarShopHtml}</div>
-        <div class="section-eyebrow" style="margin-bottom:10px">📚 Word Categories</div>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">${catsHtml}</div>
+        <div class="section-eyebrow" style="margin-bottom:10px">📚 Lessons</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">${lessonsHtml}</div>
       </div>`;
   },
 
@@ -1115,16 +1064,6 @@ const UI = {
     if (Store.isItemOwned(item)) { Gamify.showToast('Already owned!','error'); return; }
     if (Store.state.points < item.cost) { Gamify.showToast('Not enough points! Need '+(item.cost-Store.state.points)+' more.','error'); return; }
     const result = Store.unlockItem(item);
-    if (result === 'gate') {
-      if (item.type === 'grammar') {
-        const gate = Store.checkGrammarAccuracyGate();
-        Gamify.showToast(`Grammar gate: ${gate.notReady.length} pattern${gate.notReady.length>1?'s':''} below 60% — practice grammar first!`, 'error');
-      } else {
-        const gate = Store.checkAccuracyGate(item.unlockKey);
-        Gamify.showToast(`Accuracy gate: ${gate.notReady.length} word${gate.notReady.length>1?'s':''} below 60% — practice more first!`, 'error');
-      }
-      return;
-    }
     if (result) {
       Gamify.showToast(`Unlocked: ${item.name}!`, 'gold');
       Gamify.checkAchievements();
@@ -1133,24 +1072,73 @@ const UI = {
     }
   },
 
+  buyLesson() {
+    const next = Store.getNextLesson();
+    if (!next) return;
+    if (Store.state.points < next.cost) { Gamify.showToast('Not enough points! Need '+(next.cost-Store.state.points)+' more.','error'); return; }
+    const result = Store.unlockNextLesson();
+    if (result === 'gate') {
+      const gate = Store.checkLessonAccuracyGate();
+      Gamify.showToast(`Accuracy gate: ${gate.notReady.length} item${gate.notReady.length>1?'s':''} below 60% — practice more first!`, 'error');
+      return;
+    }
+    if (result) {
+      Gamify.showToast(`Unlocked: ${next.title}!`, 'gold');
+      Gamify.checkAchievements();
+      this.updateHeader();
+      this.renderShop();
+    }
+  },
+
   // ── PROGRESS ──────────────────────────────────────────────────────────────
   renderProgress() {
-    const cats = Object.keys(Store.state.category_tiers).filter(c => Store.isCategoryAccessible(c));
-    const activeCat = this._progressCat && cats.includes(this._progressCat) ? this._progressCat : (cats[0] || 'greetings');
-    this._progressCat = activeCat;
+    const mode = this._progressMode || 'category';
+    const modeToggleHtml = `
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="mode-pill${mode==='category'?' active':''}" onclick="UI._progressMode='category';UI.renderProgress()">📁 By Category</button>
+        <button class="mode-pill${mode==='lesson'?' active':''}" onclick="UI._progressMode='lesson';UI.renderProgress()">📖 By Lesson</button>
+      </div>`;
 
-    const tabsHtml = cats.map(cat => {
-      const meta = CATEGORY_META[cat] || {label:cat, icon:'📁'};
-      return `<button class="category-pill${cat===activeCat?' active':''}" onclick="UI._progressCat='${cat}';UI.renderProgress()">${meta.icon} ${meta.label}</button>`;
-    }).join('');
+    let tabsHtml, words, p, activeLessonMeta = null;
 
-    const words = Store.getUnlockedWords(activeCat)
-      .sort((a,b) => {
+    if (mode === 'lesson') {
+      const unlockedLessons = Store.getUnlockedLessons();
+      const activeLesson = this._progressLesson && unlockedLessons.some(l => l.id === this._progressLesson)
+        ? this._progressLesson : (unlockedLessons[unlockedLessons.length-1] || {}).id;
+      this._progressLesson = activeLesson;
+      activeLessonMeta = LESSONS.find(l => l.id === activeLesson) || null;
+
+      tabsHtml = [...unlockedLessons].reverse().map(l => {
+        const active = l.id === activeLesson;
+        return `<button class="category-pill${active?' active':''}" onclick="UI._progressLesson='${l.id}';UI.renderProgress()">${l.icon} ${l.title}</button>`;
+      }).join('');
+
+      words = activeLessonMeta ? Store.getWordsForLesson(activeLessonMeta.id).sort((a,b) => {
         const sa = Store.getWordStats(a.id), sb = Store.getWordStats(b.id);
         if (sa.seen_count===0 && sb.seen_count>0) return -1;
         if (sb.seen_count===0 && sa.seen_count>0) return 1;
         return sa.accuracy - sb.accuracy;
-      });
+      }) : [];
+      p = activeLessonMeta ? Store.getLessonProgress(activeLessonMeta.id) : {seen:0,mastered:0,total:0,total_all:0,gSeen:0,gMastered:0,gTotal:0,gramPatterns:[]};
+    } else {
+      const cats = Object.keys(CATEGORY_META).filter(c => Store.isCategoryAccessible(c));
+      const activeCat = this._progressCat && cats.includes(this._progressCat) ? this._progressCat : (cats[0] || 'greetings');
+      this._progressCat = activeCat;
+
+      tabsHtml = cats.map(cat => {
+        const meta = CATEGORY_META[cat] || {label:cat, icon:'📁'};
+        return `<button class="category-pill${cat===activeCat?' active':''}" onclick="UI._progressCat='${cat}';UI.renderProgress()">${meta.icon} ${meta.label}</button>`;
+      }).join('');
+
+      words = Store.getUnlockedWords(activeCat)
+        .sort((a,b) => {
+          const sa = Store.getWordStats(a.id), sb = Store.getWordStats(b.id);
+          if (sa.seen_count===0 && sb.seen_count>0) return -1;
+          if (sb.seen_count===0 && sa.seen_count>0) return 1;
+          return sa.accuracy - sb.accuracy;
+        });
+      p = Store.getCategoryProgress(activeCat);
+    }
 
     const rowsHtml = words.map(w => {
       const s = Store.getWordStats(w.id);
@@ -1178,16 +1166,34 @@ const UI = {
       </tr>`;
     }).join('');
 
-    const p = Store.getCategoryProgress(activeCat);
+    // Lesson mode also shows a small grammar-progress list, since a lesson bundles grammar too
+    const grammarProgressHtml = (mode === 'lesson' && p.gTotal > 0) ? `
+      <div class="section-eyebrow" style="margin:16px 0 10px">Grammar in this lesson</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        ${p.gramPatterns.map(g => {
+          const gs = Store.getGrammarPatternStats(g.id);
+          let accColor = 'var(--muted)';
+          if (gs.seen_count > 0) accColor = gs.accuracy >= 80 ? 'var(--jade)' : gs.accuracy >= 60 ? 'var(--gold)' : 'var(--coral)';
+          return `<div style="background:var(--surface);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,0.06)">
+            <span style="flex:1;font-size:13px;font-weight:600">${g.pattern}</span>
+            ${gs.seen_count > 0
+              ? `<span style="font-size:12px;font-weight:600;color:${accColor}">${gs.accuracy}%</span>${gs.mastered?'<span style="font-size:10px;color:var(--jade)">★</span>':''}`
+              : `<span style="color:var(--muted);font-size:12px">—</span>`}
+          </div>`;
+        }).join('')}
+      </div>` : '';
+
+    const summaryLabel = mode === 'lesson' ? `${p.total} words unlocked` : `${p.total}/${p.total_all} words unlocked`;
 
     document.getElementById('view-progress').innerHTML = `
       <div style="padding:16px;max-width:100%">
         <div class="section-title">Progress</div>
+        ${modeToggleHtml}
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">${tabsHtml}</div>
         <div style="background:var(--surface);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:20px;align-items:center">
           <div><span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--gold)">${p.seen}</span><span style="color:var(--muted);font-size:13px">/${p.total} seen</span></div>
           <div><span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--jade)">${p.mastered}</span><span style="color:var(--muted);font-size:13px"> mastered</span></div>
-          <div style="margin-left:auto;text-align:right"><span style="font-size:12px;color:var(--muted)">Tier ${Store.getCategoryTier(activeCat)}/${Store.getMaxTier(activeCat)} · ${p.total_all} words total</span></div>
+          <div style="margin-left:auto;text-align:right"><span style="font-size:12px;color:var(--muted)">${summaryLabel}</span></div>
         </div>
         <div style="overflow-x:auto;background:var(--surface);border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
           <table class="progress-table">
@@ -1195,6 +1201,7 @@ const UI = {
             <tbody>${rowsHtml}</tbody>
           </table>
         </div>
+        ${grammarProgressHtml}
       </div>`;
   },
 
@@ -1204,22 +1211,18 @@ const UI = {
     const catLabels = {all:'All',identity:'Identity',pronouns:'Pronouns',intensifiers:'Intensifiers',negation:'Negation',questions:'Questions',tense:'Tense',modal:'Modals',comparisons:'Compare',classifiers:'Classifiers',possession:'Possession',imperatives:'Imperatives',directions:'Directions',numbers:'Numbers',linking:'Linking'};
     const activeCat = this._grammarCat || 'all';
 
+    // Category pills are a pure browsing filter now — gating happens per-pattern via the Shop's Lessons
     const tabsHtml = cats.map(c => {
-      const unlocked = c === 'all' || c === 'identity' || c === 'intensifiers' || c === 'pronouns' || Store.isGrammarUnlocked(c);
-      const shopItem = SHOP_ITEMS.find(i => i.type === 'grammar' && i.unlockKey === c);
-      return `<button class="category-pill${c===activeCat?' active':''}"
-        ${unlocked ? `onclick="UI._grammarCat='${c}';UI.renderGrammar()"` : 'disabled'}
-        style="${unlocked?'':'opacity:0.4;cursor:not-allowed'}"
-        title="${unlocked?catLabels[c]:'Buy in Shop'+(shopItem?' for '+shopItem.cost+'⭐':'')}">
-        ${unlocked?'':' 🔒'} ${catLabels[c]||c}${!unlocked&&shopItem?' ('+shopItem.cost+'⭐)':''}
+      return `<button class="category-pill${c===activeCat?' active':''}" onclick="UI._grammarCat='${c}';UI.renderGrammar()">
+        ${catLabels[c]||c}
       </button>`;
     }).join('');
 
     const patterns = (activeCat === 'all'
-      ? GRAMMAR.filter(g => Store.isGrammarUnlocked(g.category))
-      : GRAMMAR.filter(g => g.category === activeCat && Store.isGrammarUnlocked(g.category)));
+      ? GRAMMAR.filter(g => Store.isGrammarUnlocked(g.id))
+      : GRAMMAR.filter(g => g.category === activeCat && Store.isGrammarUnlocked(g.id)));
 
-    const unlockedCount = GRAMMAR.filter(g => Store.isGrammarUnlocked(g.category)).length;
+    const unlockedCount = GRAMMAR.filter(g => Store.isGrammarUnlocked(g.id)).length;
 
     const cardsHtml = patterns.length ? patterns.map(g => {
       const ex = g.examples[Math.floor(Math.random() * g.examples.length)];
@@ -1266,7 +1269,7 @@ const UI = {
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">${tabsHtml}</div>
         <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">${cardsHtml}</div>
         ${Store.isModeUnlocked('grammar_quiz')
-          ? `<button class="btn-primary" style="width:100%" onclick="UI.startSession('greetings','grammar_quiz')">Practice Grammar Drills →</button>`
+          ? `<button class="btn-primary" style="width:100%" onclick="UI.startSession('all','grammar_quiz')">Practice Grammar Drills →</button>`
           : `<div style="text-align:center;color:var(--muted);font-size:14px">Buy Grammar Drill mode in the Shop to practice!</div>`}
       </div>`;
   },
@@ -1280,16 +1283,15 @@ const UI = {
       else { const e=Store.state.seen[w.id]; if(e.seen<5)e.seen=5; e.correct=Math.max(e.correct,Math.ceil(e.seen*0.8)); }
     }
     // Boost all unlocked grammar patterns to ≥80%
-    const unlockedGram = Store.state.unlocked_grammar || ['identity', 'intensifiers', 'pronouns'];
-    for (const g of GRAMMAR) {
-      if (!unlockedGram.includes(g.category)) continue;
+    const unlockedGrammar = GRAMMAR.filter(g => Store.isGrammarUnlocked(g.id));
+    for (const g of unlockedGrammar) {
       if (!Store.state.grammar_seen[g.id]) Store.state.grammar_seen[g.id] = {seen:5,correct:4};
       else { const e=Store.state.grammar_seen[g.id]; if(e.seen<5)e.seen=5; e.correct=Math.max(e.correct,Math.ceil(e.seen*0.8)); }
     }
     Store.state.total_correct = Object.values(Store.state.seen).reduce((s,e)=>s+e.correct,0);
     Store.state.total_attempts = Object.values(Store.state.seen).reduce((s,e)=>s+e.seen,0);
     Store.save();
-    Gamify.showToast(`Boosted ${words.length} words + ${GRAMMAR.filter(g=>(Store.state.unlocked_grammar||['identity', 'intensifiers', 'pronouns']).includes(g.category)).length} grammar patterns to ≥80%`, 'gold');
+    Gamify.showToast(`Boosted ${words.length} words + ${unlockedGrammar.length} grammar patterns to ≥80%`, 'gold');
     UI.renderShop();
     UI.updateHeader();
   },

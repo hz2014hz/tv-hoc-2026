@@ -30,8 +30,8 @@ const Quiz = {
 
   getDialectNote(word) { return word.north ? `South: ${word.vn} · North: ${word.north}` : null; },
 
-  generateQuestion(mode, category, seenStats) {
-    const pool = category==='all' ? Store.getAllUnlockedWords() : Store.getUnlockedWords(category);
+  generateQuestion(mode, lessonOrAll, seenStats) {
+    const pool = lessonOrAll==='all' ? Store.getAllUnlockedWords() : Store.getWordsForLesson(lessonOrAll);
     if (pool.length === 0) return null;
 
     if (mode==='match_pairs') {
@@ -42,16 +42,8 @@ const Quiz = {
     }
 
     if (mode==='grammar_quiz' || mode==='word_order') {
-      // Filter patterns whose requires are met
-      const available = GRAMMAR.filter(g => {
-        // Must have grammar category unlocked
-        if (!Store.isGrammarUnlocked(g.category)) return false;
-        if (!g.requires) return true;
-        const cats = g.requires.categories || [];
-        if (!cats.every(c => Store.isCategoryAccessible(c))) return false;
-        const tiers = g.requires.tiers || {};
-        return Object.entries(tiers).every(([c,t]) => Store.getCategoryTier(c) >= t);
-      });
+      // Filter to patterns unlocked via the player's current lesson progress
+      const available = GRAMMAR.filter(g => Store.isGrammarUnlocked(g.id));
       if (available.length === 0) return null;
       const g = available[Math.floor(Math.random() * available.length)];
 
@@ -98,15 +90,7 @@ const Quiz = {
     }
 
     if (mode==='particles') {
-      const available = GRAMMAR.filter(g => {
-        if (!g.key) return false;
-        if (!Store.isGrammarUnlocked(g.category)) return false;
-        if (!g.requires) return true;
-        const cats = g.requires.categories || [];
-        if (!cats.every(c => Store.isCategoryAccessible(c))) return false;
-        const tiers = g.requires.tiers || {};
-        return Object.entries(tiers).every(([c,t]) => Store.getCategoryTier(c) >= t);
-      });
+      const available = GRAMMAR.filter(g => g.key && Store.isGrammarUnlocked(g.id));
       if (available.length === 0) return null;
 
       const pool2 = this.shuffle([...available]);

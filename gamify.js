@@ -10,7 +10,7 @@ const Gamify = {
     streak_7:   s => s.streak >= 7,
     consec_10:  s => s.consec_correct >= 10,
     food_5:     s => WORDS.filter(w=>w.category==='food').filter(w=>s.seen[w.id]&&s.seen[w.id].seen>=5&&s.seen[w.id].correct/s.seen[w.id].seen>=0.8).length >= 5,
-    categories_3: s => Object.values(s.category_tiers).filter(t => t > 0).length >= 3,
+    categories_3: s => Object.keys(CATEGORY_META).filter(c => Store.isCategoryAccessible(c)).length >= 3,
     typist:     s => s.typed_correct >= 50,
   },
 

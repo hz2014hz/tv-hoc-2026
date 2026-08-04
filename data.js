@@ -1420,7 +1420,148 @@ const ACHIEVEMENTS = [
   {id:'typist',title:'Typist',desc:'Type 50 correct answers',icon:'⌨️'},
 ];
 
-// type:'tier' items: unlockKey=category, tier=which tier this unlocks, cost scales up per tier
+// =============================================================================
+// LESSONS — the A1 curriculum. Each lesson bundles specific WORDS ids (any
+// category) with the specific GRAMMAR ids that make that theme useful, in
+// order. Word/grammar categories stay purely for the Progress tab and the
+// Grammar tab's browse filter — unlocking now happens per lesson, not per
+// category tier. Lessons unlock strictly in order (Store.unlockNextLesson).
+// =============================================================================
+const LESSONS = [
+  {
+    id:'lesson01', order:1, title:'Xin chào!', topic:'Greetings & basic manners', icon:'👋', cost:0,
+    word_ids:['g001','g002','g003','g004','g005','g009','g010','g011','g021','g022','v050'],
+    grammar_ids:['gr01','gr61'],
+    intro_vn:'Bạn mới bắt đầu học tiếng Việt. Hãy học cách chào hỏi và nói "tôi", "bạn".', intro_en:'You are just starting to learn Vietnamese. Let\'s learn how to greet people and say "I" and "you".',
+  },
+  {
+    id:'lesson02', order:2, title:'Tôi tên là...', topic:'Introducing yourself: name, age, nationality', icon:'🙋', cost:100,
+    word_ids:['g008','g015','g016','g025','g026','n049','pl018','pl019','pl020','pl021','pl022','pl023','pl024','pl025'],
+    grammar_ids:['gr62','gr52'],
+    intro_vn:'Khi gặp người mới, bạn cần giới thiệu tên, tuổi và quốc tịch của mình.', intro_en:'When meeting someone new, you need to introduce your name, age, and nationality.',
+  },
+  {
+    id:'lesson03', order:3, title:'Gia đình tôi', topic:'My family', icon:'👨‍👩‍👧', cost:150,
+    word_ids:['fam001','fam002','fam003','fam004','fam005','fam006','fam007','fam008','fam009','fam010','fam011','fam012','fam013','fam014','fam015','fam016','fam017','fam018','fam019','fam020'],
+    grammar_ids:['gr63'],
+    intro_vn:'Gia đình rất quan trọng trong văn hóa Việt Nam. Hãy học cách gọi tên các thành viên trong gia đình.', intro_en:"Family is very important in Vietnamese culture. Let's learn how to name family members.",
+  },
+  {
+    id:'lesson04', order:4, title:'Không, chưa', topic:'Negation basics', icon:'🚫', cost:180,
+    word_ids:['v001','v002','v004','v020','a030','n001'],
+    grammar_ids:['gr07','gr08','gr09','gr10'],
+    intro_vn:'Đôi khi bạn cần nói "không" hoặc "chưa". Hãy học cách phủ định trong tiếng Việt.', intro_en:'Sometimes you need to say "no" or "not yet". Let\'s learn how to negate in Vietnamese.',
+  },
+  {
+    id:'lesson05', order:5, title:'Bạn khỏe không?', topic:'Feelings & yes/no questions', icon:'🙂', cost:220,
+    word_ids:['g007','a025','a026','a027','a028','a029','a031','a032','a033'],
+    grammar_ids:['gr02','gr11','gr12'],
+    intro_vn:'Hỏi thăm sức khỏe là một phần quan trọng khi trò chuyện. Bạn cảm thấy thế nào hôm nay?', intro_en:"Asking about someone's well-being is an important part of conversation. How do you feel today?",
+  },
+  {
+    id:'lesson06', order:6, title:'Rất, quá, hơi', topic:'Describing things: general adjectives', icon:'✨', cost:260,
+    word_ids:['a001','a002','a003','a004','a005','a006','a007','a008','a009','a010','a011','a012','a013','a034','a035','a036','a037','a038'],
+    grammar_ids:['gr03','gr04','gr05','gr06'],
+    intro_vn:'Bây giờ bạn có thể mô tả mọi thứ chi tiết hơn: rất lớn, quá nhỏ, hơi khó...', intro_en:'Now you can describe things in more detail: very big, too small, a bit difficult...',
+  },
+  {
+    id:'lesson07', order:7, title:'Một, hai, ba...', topic:'Numbers 0-10 & classifiers', icon:'🔢', cost:300,
+    word_ids:['num001','num002','num003','num004','num005','num006','num007','num008','num009','num010','num011'],
+    grammar_ids:['gr36','gr37'],
+    intro_vn:'Học đếm số là bước đầu tiên để mua sắm và hỏi giá.', intro_en:'Learning to count is the first step toward shopping and asking prices.',
+  },
+  {
+    id:'lesson08', order:8, title:'Bao nhiêu?', topic:'Bigger numbers & quantities', icon:'💯', cost:340,
+    word_ids:['num012','num013','num014','num015','num016','num017','num018','num019','num020'],
+    grammar_ids:['gr38','gr39','gr51','gr59','gr60','gr19'],
+    intro_vn:'Học các số lớn hơn và cách hỏi "bao nhiêu?" để mặc cả khi mua đồ.', intro_en:'Learn bigger numbers and how to ask "how much/many?" when shopping.',
+  },
+  {
+    id:'lesson09', order:9, title:'Hôm nay, ngày mai', topic:'Daily routine & basic tenses', icon:'🌅', cost:380,
+    word_ids:['v003','v007','v046','v047','v049','v011','v008','v009','t001','t002','t003','t004','t005','t006','t007','t008','t009','t010','t011'],
+    grammar_ids:['gr21','gr22','gr23'],
+    intro_vn:'Một ngày bình thường của bạn trông như thế nào? Hãy nói về những việc bạn đã làm, đang làm và sẽ làm.', intro_en:"What does your typical day look like? Let's talk about what you did, are doing, and will do.",
+  },
+  {
+    id:'lesson10', order:10, title:'Vừa xong, sắp rồi', topic:'Schedules & finer time expressions', icon:'⏰', cost:420,
+    word_ids:['v005','v006','v023','v034','v030','v031','v032','v033','t012','t013','t014','t015','t016','t017','t018','t019','t020','t021','t022','t023','t024','t025'],
+    grammar_ids:['gr24','gr25','gr16'],
+    intro_vn:'Bạn vừa làm gì xong? Bạn sắp làm gì? Hãy học cách nói về thời gian chính xác hơn.', intro_en:"What did you just finish doing? What are you about to do? Let's talk about time more precisely.",
+  },
+  {
+    id:'lesson11', order:11, title:'Màu sắc & đồ vật', topic:'Colors, household objects & spatial prepositions', icon:'🎨', cost:460,
+    word_ids:['c001','c002','c003','c004','c005','c006','c007','c008','c009','c010','c011','c012','n002','n003','n004','n005','n006','n007','n008','n009','n010','n029','n030','prep001','prep002','prep003','prep004','prep005','prep006','prep007','prep008','prep009'],
+    grammar_ids:[],
+    intro_vn:'Hãy nhìn quanh nhà bạn: đồ vật nào có màu gì, và chúng ở đâu?', intro_en:'Look around your house: what color are things, and where are they?',
+  },
+  {
+    id:'lesson12', order:12, title:'Ở đâu? Ai? Cái gì?', topic:'Places around town & question words', icon:'📍', cost:500,
+    word_ids:['v038','v037','v039','v062','v063','v064','v035','v036','n031','pl001','pl002','pl003','pl004','pl005','pl006','pl007','pl008','pl009','pl010','pl011','pl012','pl013','pl014','pl015','pl016','pl017'],
+    grammar_ids:['gr13','gr14','gr15'],
+    intro_vn:'Thành phố có rất nhiều nơi thú vị. Bạn muốn đi đâu hôm nay?', intro_en:'The city has so many interesting places. Where do you want to go today?',
+  },
+  {
+    id:'lesson13', order:13, title:'Đường đi', topic:'Directions & transportation', icon:'🧭', cost:540,
+    word_ids:['prep021','prep022','prep023','prep024','prep025','prep026','prep027','prep028','n011','n012','n013','n036','n042','n043'],
+    grammar_ids:['gr56','gr57','gr58'],
+    intro_vn:'Bạn bị lạc đường! Hãy học cách hỏi và chỉ đường.', intro_en:"You're lost! Let's learn how to ask for and give directions.",
+  },
+  {
+    id:'lesson14', order:14, title:'Tại sao? Thế nào?', topic:'Weather & remaining question words', icon:'🌦️', cost:580,
+    word_ids:['a014','a015','a016','a017','n032','n033','n034','n035','n056','n057','n058'],
+    grammar_ids:['gr17','gr18','gr20'],
+    intro_vn:'Hôm nay trời thế nào? Tại sao bạn thích hay không thích thời tiết này?', intro_en:"How's the weather today? Why do you like or dislike this weather?",
+  },
+  {
+    id:'lesson15', order:15, title:'Cho tôi...', topic:'Ordering food', icon:'🍜', cost:620,
+    word_ids:['v013','v040','v045','v015','f001','f002','f003','f004','f005','f006','f007','f008','f009','f010','f011','f047','f048','f049','f050','f012','f013','f014','f015','f016','f017','f018','f019','f020','f021','n021','n022','n023','n024','n025','n026','n027','n028'],
+    grammar_ids:['gr31','gr26','gr27'],
+    intro_vn:'Bạn đang ở một nhà hàng Việt Nam. Bạn muốn gọi món gì?', intro_en:"You're at a Vietnamese restaurant. What would you like to order?",
+  },
+  {
+    id:'lesson16', order:16, title:'Ngon quá!', topic:'Tastes, drinks & fruit', icon:'🥭', cost:660,
+    word_ids:['v017','v018','v070','a018','a052','a053','a054','a055','a056','a057','f022','f023','f024','f025','f026','f027','f028','f029','f030','f031','f032','f033','f034','f035','f036','f037','f038','f039','f040','f041','f042','f043','f044','f045','f046'],
+    grammar_ids:['gr45'],
+    intro_vn:'Món ăn này có vị gì? Ngọt, mặn, chua hay cay? Và bạn thích trái cây nào?', intro_en:'What does this dish taste like? Sweet, salty, sour, or spicy? And which fruits do you like?',
+  },
+  {
+    id:'lesson17', order:17, title:'Đắt hay rẻ?', topic:'Shopping & comparisons', icon:'💰', cost:700,
+    word_ids:['a019','a020','a049','a050','a051','n014','n015','n016','n017','n018','n019','n020','n044'],
+    grammar_ids:['gr33','gr34','gr35','gr50'],
+    intro_vn:'Bạn đang đi mua sắm ở chợ. Cái này giá bao nhiêu? Đắt hơn hay rẻ hơn?', intro_en:"You're shopping at the market. How much is this? Is it more expensive or cheaper?",
+  },
+  {
+    id:'lesson18', order:18, title:'Sức khỏe', topic:'Body & health', icon:'🏥', cost:740,
+    word_ids:['v052','n037','n038','n039','n040','n041','a072','a073'],
+    grammar_ids:['gr29','gr30','gr32','gr46'],
+    intro_vn:'Bạn cảm thấy không khỏe. Cơ thể bạn đau ở đâu? Bạn nên làm gì?', intro_en:"You're not feeling well. Where does your body hurt? What should you do?",
+  },
+  {
+    id:'lesson19', order:19, title:'Kế hoạch', topic:'Work, plans & occupations', icon:'💼', cost:780,
+    word_ids:['v026','v027','v028','v029','v041','v042','v043','v044','v053','v058','n045','n046','n047','n048','n050','n051','n052','n053','n054','n055'],
+    grammar_ids:['gr28','gr47','gr48','gr49'],
+    intro_vn:'Bạn làm nghề gì? Bạn định làm gì vào tuần tới?', intro_en:"What's your job? What do you plan to do next week?",
+  },
+  {
+    id:'lesson20', order:20, title:'Tính cách', topic:'Personality & appearance', icon:'🧑', cost:820,
+    word_ids:['a021','a022','a023','a024','a039','a040','a041','a042','a043','a044','a045','a046','a047','a048','a058','a059','a060','a061','a062','a063','a064','a065','a066','a067','a068','a069','a070','a071','a074','a075','a076','a077','a078'],
+    grammar_ids:[],
+    intro_vn:'Mỗi người đều khác nhau. Bạn của bạn trông như thế nào? Tính cách của họ ra sao?', intro_en:"Everyone is different. What does your friend look like? What's their personality like?",
+  },
+  {
+    id:'lesson21', order:21, title:'Vì... nên...', topic:'Connecting ideas', icon:'🔗', cost:860,
+    word_ids:['v010','v012','v016','v019','v021','v022','v024','v025','v066','v067','v068','v069','prep010','prep011','prep012','prep013','prep014','prep015','prep016','prep017','prep018','prep019','prep020'],
+    grammar_ids:['gr40','gr41','gr42','gr43','gr44'],
+    intro_vn:'Hãy học cách nối các câu lại với nhau: vì trời mưa nên tôi ở nhà.', intro_en:"Let's learn how to connect sentences together: because it's raining, I'm staying home.",
+  },
+  {
+    id:'lesson22', order:22, title:'Làm ơn, hãy, đừng', topic:'Polite requests & wrap-up', icon:'🙏', cost:900,
+    word_ids:['g006','g012','g013','g014','g017','g018','g019','g020','g023','g024','v014','v048','v051','v054','v055','v056','v057','v059','v060','v061','v065','v071','v072','v073'],
+    grammar_ids:['gr53','gr54','gr55'],
+    intro_vn:'Cuối cùng, hãy học cách yêu cầu một cách lịch sự. Chúc mừng, bạn đã hoàn thành khóa học A1!', intro_en:"Finally, let's learn how to make polite requests. Congratulations, you've completed the A1 course!",
+  },
+];
+
 const SHOP_ITEMS = [
   // ── Modes (flat unlock) ──────────────────────────────────────────────────
   {id:'mode_type',    type:'mode', name:'Write It Mode',   cost:500,  desc:'Type Vietnamese answers',           unlockKey:'type_answer', icon:'✍️'},
@@ -1429,83 +1570,6 @@ const SHOP_ITEMS = [
   {id:'mode_word_order', type:'mode', name:'Word Order',   cost:1200, desc:'Tap words to build sentences in order', unlockKey:'word_order',   icon:'🔧'},
   {id:'mode_grammar', type:'mode', name:'Grammar Drill',   cost:1800, desc:'Practice A1 sentence patterns',     unlockKey:'grammar_quiz', icon:'🧠'},
   {id:'mode_particles', type:'mode', name:'Particles',     cost:900,  desc:'Fill in the missing grammar word',  unlockKey:'particles',    icon:'🧩'},
-
-  // ── Greetings: tier1 free (8 words), tier2 unlocks rest (12 words) ──────
-  {id:'greetings_t2', type:'tier', name:'Greetings II',    cost:120,  desc:'+14 more greeting phrases (incl. we/they)', unlockKey:'greetings', tier:2, wordsInTier:14},
-  {id:'greetings_t3', type:'tier', name:'Greetings III',   cost:220,  desc:'+2 self-intro words (age, nationality, complete)', unlockKey:'greetings', tier:3, wordsInTier:2},
-
-  // ── Verbs: tier1 free (6), tiers 2-9 add 10/10/10/10/4/8/8/7 ────────────
-  {id:'verbs_t2', type:'tier', name:'Verbs II',   cost:150, desc:'+10 action words', unlockKey:'verbs', tier:2, wordsInTier:10},
-  {id:'verbs_t3', type:'tier', name:'Verbs III',  cost:280, desc:'+10 more verbs',   unlockKey:'verbs', tier:3, wordsInTier:10},
-  {id:'verbs_t4', type:'tier', name:'Verbs IV',   cost:450, desc:'+10 more verbs',   unlockKey:'verbs', tier:4, wordsInTier:10},
-  {id:'verbs_t5', type:'tier', name:'Verbs V',    cost:650, desc:'+10 more verbs',   unlockKey:'verbs', tier:5, wordsInTier:10},
-  {id:'verbs_t6', type:'tier', name:'Verbs VI',   cost:900, desc:'+4 more verbs', unlockKey:'verbs', tier:6, wordsInTier:4},
-  {id:'verbs_t7', type:'tier', name:'Verbs VII',  cost:1150, desc:'+8 more verbs (daily life & communication)', unlockKey:'verbs', tier:7, wordsInTier:8},
-  {id:'verbs_t8', type:'tier', name:'Verbs VIII', cost:1400, desc:'+8 more verbs (movement & senses)', unlockKey:'verbs', tier:8, wordsInTier:8},
-  {id:'verbs_t9', type:'tier', name:'Verbs IX',   cost:1650, desc:'+7 final verbs (household, complete)', unlockKey:'verbs', tier:9, wordsInTier:7},
-
-  // ── Adjectives: tier1 free (4), tiers 2-9 add 10/10/10/6/10/10/10/8 ─────
-  {id:'adjectives_t2', type:'tier', name:'Adjectives II',  cost:150, desc:'+10 describing words', unlockKey:'adjectives', tier:2, wordsInTier:10},
-  {id:'adjectives_t3', type:'tier', name:'Adjectives III', cost:280, desc:'+10 more adjectives',  unlockKey:'adjectives', tier:3, wordsInTier:10},
-  {id:'adjectives_t4', type:'tier', name:'Adjectives IV',  cost:450, desc:'+10 more adjectives',  unlockKey:'adjectives', tier:4, wordsInTier:10},
-  {id:'adjectives_t5', type:'tier', name:'Adjectives V',   cost:650, desc:'+6 more adjectives', unlockKey:'adjectives', tier:5, wordsInTier:6},
-  {id:'adjectives_t6', type:'tier', name:'Adjectives VI',  cost:900, desc:'+10 more adjectives (feelings, taste, money)', unlockKey:'adjectives', tier:6, wordsInTier:10},
-  {id:'adjectives_t7', type:'tier', name:'Adjectives VII', cost:1150, desc:'+10 more adjectives (taste & sound)', unlockKey:'adjectives', tier:7, wordsInTier:10},
-  {id:'adjectives_t8', type:'tier', name:'Adjectives VIII', cost:1400, desc:'+10 more adjectives (difficulty & personality)', unlockKey:'adjectives', tier:8, wordsInTier:10},
-  {id:'adjectives_t9', type:'tier', name:'Adjectives IX',  cost:1650, desc:'+8 final adjectives (complete)', unlockKey:'adjectives', tier:9, wordsInTier:8},
-
-  // ── Food: tier1 free (2: phở+cà phê), tiers 2-6 add 10/10/10/10/8 ──────
-  {id:'food_t2', type:'tier', name:'Food & Drink II',  cost:150, desc:'+10 food & drink words', unlockKey:'food', tier:2, wordsInTier:10},
-  {id:'food_t3', type:'tier', name:'Food & Drink III', cost:280, desc:'+10 more food words',    unlockKey:'food', tier:3, wordsInTier:10},
-  {id:'food_t4', type:'tier', name:'Food & Drink IV',  cost:450, desc:'+10 more food words',    unlockKey:'food', tier:4, wordsInTier:10},
-  {id:'food_t5', type:'tier', name:'Food & Drink V',   cost:650, desc:'+10 more food words',    unlockKey:'food', tier:5, wordsInTier:10},
-  {id:'food_t6', type:'tier', name:'Food & Drink VI',  cost:900, desc:'+8 final food words (complete)', unlockKey:'food', tier:6, wordsInTier:8},
-
-  // ── Numbers: tier1 free (2), tier2 +8, tier3 +10 ────────────────────────
-  {id:'numbers_t2', type:'tier', name:'Numbers II',  cost:100, desc:'+8 numbers (3–10)', unlockKey:'numbers', tier:2, wordsInTier:8},
-  {id:'numbers_t3', type:'tier', name:'Numbers III', cost:200, desc:'+10 numbers & quantities (complete)', unlockKey:'numbers', tier:3, wordsInTier:10},
-
-  // ── Nouns: fully locked, tier1 +10, tier2 +10, tier3 +10, tier4 +10, tier5 +8 ──
-  {id:'nouns_t2', type:'tier', name:'Objects I',   cost:200, desc:'First 10 everyday objects', unlockKey:'nouns', tier:1, wordsInTier:10},
-  {id:'nouns_t3', type:'tier', name:'Objects II',  cost:380, desc:'+10 more objects',           unlockKey:'nouns', tier:2, wordsInTier:10},
-  {id:'nouns_t4', type:'tier', name:'Objects III', cost:580, desc:'+10 more objects',    unlockKey:'nouns', tier:3, wordsInTier:10},
-  {id:'nouns_t5', type:'tier', name:'Objects IV',  cost:800, desc:'+10 more objects (nature, body parts)', unlockKey:'nouns', tier:4, wordsInTier:10},
-  {id:'nouns_t6', type:'tier', name:'Objects V',   cost:1000, desc:'+8 more objects (transportation, school & work)', unlockKey:'nouns', tier:5, wordsInTier:8},
-  {id:'nouns_t7', type:'tier', name:'Objects VI',  cost:1200, desc:'+10 final objects (occupations, weather, complete)', unlockKey:'nouns', tier:6, wordsInTier:10},
-
-  // ── Family: fully locked, unlocks all 20 at once (small category) ───────
-  {id:'family_t2', type:'tier', name:'Family',     cost:250, desc:'All 20 family terms', unlockKey:'family', tier:1, wordsInTier:20},
-
-  // ── Time: fully locked, tier2 +10, tier3 +15 ────────────────────────────
-  {id:'time_t2', type:'tier', name:'Time & Days I',  cost:200, desc:'First 10 time expressions', unlockKey:'time', tier:1, wordsInTier:10},
-  {id:'time_t3', type:'tier', name:'Time & Days II', cost:380, desc:'+15 more (days of week + complete)', unlockKey:'time', tier:2, wordsInTier:15},
-
-  // ── Colors: fully locked, unlocks all 12 at once (small category) ───────
-  {id:'colors_t2', type:'tier', name:'Colors',     cost:150, desc:'All 12 colors', unlockKey:'colors', tier:1, wordsInTier:12},
-
-  // ── Places: fully locked, tier1 all 15 at once, tier2 +2 more ────────────
-  {id:'places_t2', type:'tier', name:'Places',     cost:250, desc:'All 15 place words', unlockKey:'places', tier:1, wordsInTier:15},
-  {id:'places_t3', type:'tier', name:'Places II',  cost:400, desc:'+2 more places (company, hometown)', unlockKey:'places', tier:2, wordsInTier:2},
-  {id:'places_t4', type:'tier', name:'Places III', cost:600, desc:'+8 countries (complete)', unlockKey:'places', tier:3, wordsInTier:8},
-
-  // ── Prepositions: fully locked, tier1 +10, tier2 +10, tier3 +8 ──────────
-  {id:'prepositions_t2', type:'tier', name:'Prepositions I',  cost:300, desc:'First 10 prepositions & connectors', unlockKey:'prepositions', tier:1, wordsInTier:10},
-  {id:'prepositions_t3', type:'tier', name:'Prepositions II', cost:550, desc:'+10 more',                  unlockKey:'prepositions', tier:2, wordsInTier:10},
-  {id:'prepositions_t4', type:'tier', name:'Directions',      cost:750, desc:'+8 direction words (thẳng, quẹo trái/phải, complete)', unlockKey:'prepositions', tier:3, wordsInTier:8},
-
-  // ── Grammar categories (flat unlock per category) ────────────────────────
-  // identity & description: free (used from day 1 in grammar reference)
-  {id:'gram_negation',     type:'grammar', name:'Negation',      cost:200,  desc:'không / chưa / không phải là',    unlockKey:'negation',     icon:'🚫'},
-  {id:'gram_questions',    type:'grammar', name:'Questions',     cost:250,  desc:'gì / ai / ở đâu / khi nào / tại sao', unlockKey:'questions', icon:'❓'},
-  {id:'gram_tense',        type:'grammar', name:'Tense Markers', cost:350,  desc:'đã / đang / sẽ / vừa / sắp',      unlockKey:'tense',        icon:'⏳'},
-  {id:'gram_modal',        type:'grammar', name:'Modal Verbs',   cost:400,  desc:'muốn / cần / có thể / phải / nên', unlockKey:'modal',        icon:'💬'},
-  {id:'gram_comparisons',  type:'grammar', name:'Comparisons',   cost:500,  desc:'hơn / nhất / bằng',               unlockKey:'comparisons',  icon:'⚖️'},
-  {id:'gram_classifiers',  type:'grammar', name:'Classifiers',   cost:450,  desc:'con / cái / người / cuốn',         unlockKey:'classifiers',  icon:'🔢'},
-  {id:'gram_linking',      type:'grammar', name:'Linking',       cost:500,  desc:'vì…nên / nếu…thì / và / nhưng / cũng', unlockKey:'linking',  icon:'🔗'},
-  {id:'gram_possession',   type:'grammar', name:'Possession',    cost:150,  desc:'của',                              unlockKey:'possession',   icon:'🔖'},
-  {id:'gram_imperatives',  type:'grammar', name:'Imperatives',   cost:300,  desc:'làm ơn / hãy / đừng',              unlockKey:'imperatives',  icon:'👉'},
-  {id:'gram_directions',   type:'grammar', name:'Directions',    cost:400,  desc:'thẳng / quẹo trái / quẹo phải / đối diện', unlockKey:'directions', icon:'🧭'},
-  {id:'gram_numbers',      type:'grammar', name:'Number Formation', cost:250, desc:'mười lăm exception / hai mươi mốt', unlockKey:'numbers',   icon:'🔟'},
 ];
 
 const CATEGORY_META = {

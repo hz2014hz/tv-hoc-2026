@@ -59,13 +59,9 @@ Each word object:
 
 **Categories:** `greetings`, `verbs`, `adjectives`, `nouns`, `food`, `family`, `numbers`, `time`, `colors`, `places`, `prepositions`
 
-**Tier system:**
-- Categories with free starters (greetings, verbs, adjectives, food, numbers) begin at `category_tiers[cat] = 1` in default state
-- Fully locked categories (nouns, family, time, colors, places, prepositions) begin at `0`
-- Shop items for locked categories start at `tier:1`; for free-starter categories at `tier:2`
-- Tiers always increment by 1 — no skipping
+**Unlocking:** Words/grammar are no longer unlocked per-category-tier — see `LESSONS` below. `tier` is now unused (harmless leftover field; not read by any code). `category` is still used everywhere for quiz distractor-picking and the Progress tab's grouping.
 
-**Adding custom words:** Copy any existing line and change the fields. The comment block at the top of `data.js` explains the format. Words are automatically included in quizzes based on their `category` and `tier`.
+**Adding custom words:** Copy any existing line and change the fields, then add the new word's `id` to the `word_ids` array of whichever `LESSONS` entry it thematically belongs to (a word not referenced by any lesson is never unlockable). The comment block at the top of `data.js` explains the WORDS format.
 
 ### GRAMMAR array
 Each grammar pattern:
@@ -97,14 +93,22 @@ Each grammar pattern:
 **Grammar categories:** `identity` is free. Others (negation, questions, tense, modal, comparisons, classifiers, linking) must be purchased in the Shop.
 
 ### SHOP_ITEMS array
-Four types:
-- `type:'mode'` — flat unlock for a quiz mode
-- `type:'tier'` — unlocks next tier of words in a category
-- `type:'grammar'` — unlocks a grammar pattern category
-- (boost type exists but currently unused)
+Only one type now: `type:'mode'` — flat unlock for a quiz mode. Key fields: `id`, `type`, `name`, `cost`, `desc`, `unlockKey`, `icon`.
 
-Key fields: `id`, `type`, `name`, `cost`, `desc`, `unlockKey`, `icon`
-For tier items: also `tier` (which tier this unlocks) and `wordsInTier` (informational).
+Word/grammar unlocking used to live here as `type:'tier'`/`type:'grammar'` entries; that's been replaced entirely by `LESSONS` (see below) — `Store.unlockNextLesson()` reads `LESSONS[i].cost` directly instead of a shop item.
+
+### LESSONS array
+The A1 curriculum and the *only* unlock mechanism for words/grammar. An ordered array, unlocked strictly in sequence via `Store.unlockNextLesson()`:
+```js
+{
+  id: 'lesson01', order: 1, title: 'Xin chào!', topic: 'Greetings & basic manners',
+  icon: '👋', cost: 0,
+  word_ids: ['g001','g004', ...],   // WORDS ids, any category, curated by theme
+  grammar_ids: ['gr01','gr61'],     // GRAMMAR ids introduced in this lesson
+  intro_vn: '...', intro_en: '...', // short scene-setting blurb
+}
+```
+22 lessons cover every `WORDS` id and every `GRAMMAR` id exactly once. Word/grammar `category` fields are untouched by this and still drive the Progress tab and the Grammar tab's browse filter.
 
 ### ACHIEVEMENTS array
 ```js
@@ -130,37 +134,36 @@ Single `Store` object. Key state fields:
   streak: 0,
   best_streak: 0,
   last_activity: null,   // YYYY-MM-DD string
-  category_tiers: {      // how many tiers unlocked per category
-    greetings: 1, verbs: 1, adjectives: 1, food: 1, numbers: 1,
-    nouns: 0, family: 0, time: 0, colors: 0, places: 0, prepositions: 0,
-  },
+  unlocked_lesson: 1,    // how many LESSONS entries are unlocked (1-indexed; lesson 1 is free)
   unlocked_modes: ['flashcard', 'multiple_choice'],
-  unlocked_grammar: ['identity'],
   unlocked_boosts: [],
   achievements: [],
   consec_correct: 0,
   typed_correct: 0,
   total_correct: 0,
   total_attempts: 0,
-  last_category: 'greetings',
+  last_category: 'all',
   last_mode: 'multiple_choice',
+  tts_voice_uri: null,   // selected Web Speech API voice, or null for browser default
 }
 ```
 
-**localStorage key:** `viet_learn_v1`
+**localStorage key:** `viet_learn_v2` (bumped from `v1` when the lesson system replaced category tiers — no migration, old saves just reset)
 
 **Key methods:**
 - `recordAttempt(word_id, correct, mode)` — updates seen/correct, awards points, returns pts earned. Points only awarded on correct.
 - `recordGrammarAttempt(grammar_id, correct)` — same for grammar patterns
-- `getUnlockedWords(cat)` — filters WORDS by category and `tier <= category_tiers[cat]`
-- `getAllUnlockedWords()` — all accessible words across all categories
-- `checkAccuracyGate(cat)` — returns `{met, total, ready, notReady[]}` for word accuracy gate
-- `checkGrammarAccuracyGate()` — same for grammar patterns across all unlocked grammar categories
-- `getNextTierItem(cat)` — finds the shop item for `category_tiers[cat] + 1`
-- `unlockItem(item)` — returns `true` (success), `false` (can't), or `'gate'` (accuracy gate blocked)
+- `getUnlockedLessons()` / `getUnlockedWordIdSet()` / `getUnlockedGrammarIdSet()` — derived from `LESSONS.slice(0, state.unlocked_lesson)`
+- `getUnlockedWords(cat)` — WORDS in category `cat` whose id is in the unlocked-word-id set
+- `getAllUnlockedWords()` — all accessible words across every unlocked lesson
+- `getWordsForLesson(lessonId)` — the specific words taught in one lesson (used by the Learn tab's per-lesson practice)
+- `isGrammarUnlocked(grammarId)` — takes a `GRAMMAR` pattern **id**, not a category
+- `getCurrentLesson()` / `getNextLesson()` — `LESSONS[unlocked_lesson-1]` / `LESSONS[unlocked_lesson]`
+- `checkLessonAccuracyGate()` — returns `{met, total, ready, notReady[]}` across every word + grammar pattern in currently-unlocked lessons
+- `unlockNextLesson()` — returns `true` (success), `false` (can't afford / no next lesson), or `'gate'` (accuracy gate blocked)
 - `getGrammarPatternStats(id)` — `{seen_count, accuracy, mastered}`
 
-**Accuracy gate:** Before buying a higher tier (for both words and grammar), all currently-unlocked items in that category must be ≥60% accuracy. The first unlock of a fully-locked category (tier 0 → 1) is exempt since there are no words to check yet.
+**Accuracy gate:** Before unlocking the next lesson, every word and grammar pattern across *all* currently-unlocked lessons must be ≥60% accuracy. Unlocking lesson 2 (the first paid one) is exempt, since lesson 1 has nothing practiced yet by definition.
 
 ## quiz.js
 
@@ -168,8 +171,8 @@ Single `Quiz` object.
 
 **Question generation:**
 ```js
-Quiz.generateQuestion(mode, category, seenStats)
-// category can be 'all' to use all unlocked words
+Quiz.generateQuestion(mode, lessonOrAll, seenStats)
+// lessonOrAll is 'all' (every unlocked word) or a specific LESSONS id
 ```
 
 **Modes:**
@@ -181,7 +184,9 @@ Quiz.generateQuestion(mode, category, seenStats)
 - `grammar_quiz` — show pattern, pick correct example sentence from 4 options
 - `word_order` — show English prompt, tap Vietnamese word tiles into correct order
 
-**Grammar modes filter** by both `Store.isGrammarUnlocked(g.category)` AND `g.requires` (vocabulary prerequisites).
+**Grammar modes filter** by `Store.isGrammarUnlocked(g.id)` (per-pattern, since a `GRAMMAR.category` can now be partially unlocked across different lessons). `g.requires` still exists on some patterns but is no longer read — lesson curation is the prerequisite mechanism now.
+
+- `particles` — show a sentence with the pattern's marker word blanked out (`GRAMMAR[i].key`, matched against a random `examples[]` entry), pick from 4 choices
 
 **`generateQuestionForWord(mode, word, pool)`** — generates a question for a specific word (used for guaranteed struggling/unseen slots in session).
 
@@ -216,7 +221,7 @@ Single `UI` object. Key properties:
 - `currentView` — active tab name
 - `session` — `{questions, index, score, pts_earned, mode, category}`
 - `matchState` — state for match_pairs mode
-- `learnCategory`, `learnMode` — selections on Learn tab
+- `learnLesson`, `learnMode` — selections on Learn tab (`learnLesson` is `'all'` or a `LESSONS` id)
 - `_progressCat`, `_grammarCat` — active filter on Progress/Grammar tabs
 
 **Views:** home, learn, quiz, shop, progress, grammar, achievements
@@ -228,25 +233,30 @@ Single `UI` object. Key properties:
 - 🐛 boost accuracy — sets all unlocked words AND grammar patterns to 5 seen / 4 correct (80%), clearing all accuracy gates
 
 **Learn tab features:**
-- Grammar modes (grammar_quiz, word_order) auto-select "All Words" category and hide category picker
-- 🌐 All Words option at top of category list
-- Compatibility warnings for incompatible mode/category combos
+- Grammar modes (grammar_quiz, word_order, particles) auto-select "All Words" and hide the lesson picker
+- 🌐 All Words option at top of the lesson list (pools every word across every unlocked lesson)
+- Unlocked lessons listed most-recent-first for per-lesson practice
+- Compatibility warnings for incompatible mode/lesson combos
 - Session preview shows unseen/struggling/known word counts
 - Green badge when guarantee kicks in (≥2 unseen or ≥2 struggling exist)
 
 **Shop tab features:**
-- Grammar category cards show per-category pattern accuracy counts
-- Word category cards show accuracy gate status with list of failing words
-- Both gates disabled and show "🔒 Gate locked" when not met
+- Single "📚 Lessons" section, ordered list, unlocked strictly in sequence
+- Only the next lesson is buyable; shows accuracy-gate status with list of failing words/patterns when blocked
+- Already-completed lessons show "✓ Done"; future ones are dimmed and show their cost
 
 **Progress tab:**
 - Words sorted: unseen first, then by accuracy ascending (hardest first)
 - Accuracy bar colored coral/gold/jade by threshold
+- Still grouped by `WORDS.category` / `CATEGORY_META` — unaffected by the lesson system
 
 **Grammar tab:**
-- Pattern cards show accuracy bar + % top-right
-- Locked grammar categories grayed with cost shown
+- Pattern cards show accuracy bar + % top-right, plus a 🔊 speak button on the example sentence
+- Category pills are a pure browsing filter now (always enabled) — actual unlock status is per-pattern (`Store.isGrammarUnlocked(g.id)`), driven by which lessons are unlocked
 - `●live` badge removed — all examples are now curated fixed sentences
+- Static "🗣️ Southern Pronunciation Notes" card at the top (`PRONUNCIATION_NOTES` in `data.js`), not quizzed
+
+**Pronunciation:** 🔊 buttons (Web Speech API `speechSynthesis`) appear on flashcards, quiz feedback, and Grammar tab examples — see `UI.speak`/`UI.speakBtnHtml` in `ui.js`. Voice choice is a dropdown on the Home tab ("🔊 Pronunciation Voice"), persisted to `state.tts_voice_uri`; falls back to the browser default when no Vietnamese voice is installed.
 
 ## Known issues / things to watch
 
@@ -254,11 +264,11 @@ Single `UI` object. Key properties:
 
 2. **Match pairs with <6 words** — the quiz generates pairs up to `Math.min(6, pool.length)`. If a category has only 2-3 words, the round will be very short. The Learn tab warns about this.
 
-3. **Grammar word_order fallback** — if a grammar pattern has no `word_order_exercises`, the mode falls back to `grammar_quiz` for that pattern. All 45 current patterns have exercises.
+3. **Grammar word_order fallback** — if a grammar pattern has no `word_order_exercises`, the mode falls back to `grammar_quiz` for that pattern. All 63 current patterns have exercises.
 
-4. **localStorage key** is `viet_learn_v1`. If a breaking state change is made, bump to `v2` and add migration logic in `Store.load()`.
+4. **localStorage key** is `viet_learn_v2` (bumped from `v1` when tier-based unlocking was replaced by `LESSONS` — no migration was written, old saves just reset). If another breaking state change is made, bump to `v3` and add migration logic in `Store.load()`.
 
-5. **No audio** — the app is text-only. Adding audio would require hosting `.mp3` files and wiring them to word objects.
+5. **Audio** — no recorded `.mp3` files; pronunciation instead uses the browser's built-in Web Speech API (see "Pronunciation" above), which only works if the visitor's OS/browser has a Vietnamese voice installed (patchy outside Edge/Windows).
 
 6. **GitHub Pages hosting** — push all files to a public repo, enable Pages from the `main` branch root. Works with no server-side logic needed. `fetch()` is never used so CORS is not an issue.
 
@@ -273,9 +283,8 @@ Single `UI` object. Key properties:
 
 ## Content summary
 
-- **~300 vocabulary words** across 11 categories, with Southern dialect primary and Northern variants where different
-- **45 A1 grammar patterns** across 8 categories, each with 2–3 curated examples and 1–2 word-order exercises
+- **415 vocabulary words** across 11 categories, with Southern dialect primary and Northern variants where different
+- **63 A1 grammar patterns** across 14 categories, each with 2–3 curated examples and 1–2 word-order exercises
+- **22 lessons** (`LESSONS` in `data.js`), covering every word and every grammar pattern exactly once, unlocked strictly in sequence
 - **12 achievements**
-- **6 quiz modes** (2 free, 4 purchasable)
-- **7 grammar categories** (1 free, 6 purchasable)
-- **Variable word tiers** per category (2–6 tiers depending on category size)
+- **7 quiz modes** (2 free, 5 purchasable)

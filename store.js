@@ -6,63 +6,35 @@ const Store = {
       seen: {}, grammar_seen: {},
       points: 0, total_points_earned: 0,
       streak: 0, best_streak: 0, last_activity: null,
-      // category_tiers: how many tiers unlocked per category (0 = fully locked)
-      category_tiers: {
-        greetings: 1,   // 8 free words
-        verbs: 1,       // 6 free words
-        adjectives: 1,  // 4 free words
-        food: 1,        // 2 free words (phở, cà phê)
-        numbers: 1,     // 2 free words
-        nouns: 0,
-        family: 0,
-        time: 0,
-        colors: 0,
-        places: 0,
-        prepositions: 0,
-      },
+      unlocked_lesson: 1, // how many lessons are unlocked (1-indexed); lesson 1 is free
       unlocked_modes: ['flashcard', 'multiple_choice'],
       unlocked_boosts: [],
-      unlocked_grammar: ['identity', 'intensifiers', 'pronouns'], // free from day 1
       achievements: [],
       consec_correct: 0, typed_correct: 0,
       total_correct: 0, total_attempts: 0,
-      last_category: 'greetings', last_mode: 'multiple_choice',
+      last_category: 'all', last_mode: 'multiple_choice',
       tts_voice_uri: null, // null = browser default Vietnamese voice
     };
   },
 
   load() {
     try {
-      const raw = localStorage.getItem('viet_learn_v1');
+      const raw = localStorage.getItem('viet_learn_v2');
       if (raw) {
         const saved = JSON.parse(raw);
         // merge so new keys from defaultState appear if missing
         this.state = Object.assign(this.defaultState(), saved);
-        // also merge nested category_tiers
-        this.state.category_tiers = Object.assign(this.defaultState().category_tiers, saved.category_tiers || {});
-        if (!this.state.unlocked_grammar) this.state.unlocked_grammar = ['identity', 'intensifiers', 'pronouns'];
-        // free categories are always granted, even to saves created before they existed
-        ['identity', 'intensifiers', 'pronouns'].forEach(c => {
-          if (!this.state.unlocked_grammar.includes(c)) this.state.unlocked_grammar.push(c);
-        });
-        // migrate old flat unlocked_categories → category_tiers
-        if (saved.unlocked_categories && !saved.category_tiers) {
-          saved.unlocked_categories.forEach(cat => {
-            if (this.state.category_tiers[cat] === 0) this.state.category_tiers[cat] = 1;
-          });
-          this.save();
-        }
       } else {
         this.state = this.defaultState();
       }
     } catch(e) { this.state = this.defaultState(); }
   },
 
-  save() { localStorage.setItem('viet_learn_v1', JSON.stringify(this.state)); },
+  save() { localStorage.setItem('viet_learn_v2', JSON.stringify(this.state)); },
 
   reset() {
     if (!confirm('Reset ALL progress? This cannot be undone.')) return;
-    localStorage.removeItem('viet_learn_v1');
+    localStorage.removeItem('viet_learn_v2');
     location.reload();
   },
 
@@ -141,54 +113,90 @@ const Store = {
       : Math.round(this.state.total_correct / this.state.total_attempts * 100);
   },
 
+  // ── LESSONS ───────────────────────────────────────────────────────────────
+  getUnlockedLessons() {
+    return LESSONS.slice(0, this.state.unlocked_lesson);
+  },
+
+  getUnlockedWordIdSet() {
+    return new Set(this.getUnlockedLessons().flatMap(l => l.word_ids));
+  },
+
+  getUnlockedGrammarIdSet() {
+    return new Set(this.getUnlockedLessons().flatMap(l => l.grammar_ids));
+  },
+
+  getCurrentLesson() { return LESSONS[this.state.unlocked_lesson - 1] || null; },
+
+  getNextLesson() { return LESSONS[this.state.unlocked_lesson] || null; },
+
+  // Words taught in one specific lesson (for Learn-tab per-lesson practice)
+  getWordsForLesson(lessonId) {
+    const lesson = LESSONS.find(l => l.id === lessonId);
+    if (!lesson) return [];
+    const idSet = new Set(lesson.word_ids);
+    return WORDS.filter(w => idSet.has(w.id));
+  },
+
+  isLessonUnlocked(lessonId) {
+    const idx = LESSONS.findIndex(l => l.id === lessonId);
+    return idx > -1 && idx < this.state.unlocked_lesson;
+  },
+
   // Returns words accessible to the player right now in a given category
   getUnlockedWords(category) {
-    const tier = this.state.category_tiers[category] || 0;
-    return WORDS.filter(w => w.category === category && w.tier <= tier && tier > 0);
+    const idSet = this.getUnlockedWordIdSet();
+    return WORDS.filter(w => w.category === category && idSet.has(w.id));
   },
 
   // Returns all unlocked words across all categories
   getAllUnlockedWords() {
-    return Object.keys(this.state.category_tiers).flatMap(cat => this.getUnlockedWords(cat));
+    const idSet = this.getUnlockedWordIdSet();
+    return WORDS.filter(w => idSet.has(w.id));
   },
 
-  getCategoryTier(cat) { return this.state.category_tiers[cat] || 0; },
-
-  isCategoryAccessible(cat) { return (this.state.category_tiers[cat] || 0) > 0; },
+  isCategoryAccessible(cat) { return this.getUnlockedWords(cat).length > 0; },
 
   isModeUnlocked(mode) { return this.state.unlocked_modes.includes(mode); },
-  isGrammarUnlocked(gramCat) { return (this.state.unlocked_grammar || ['identity', 'intensifiers', 'pronouns']).includes(gramCat); },
+  isGrammarUnlocked(grammarId) { return this.getUnlockedGrammarIdSet().has(grammarId); },
 
-  // Get the next purchasable tier item for a category
-  getNextTierItem(cat) {
-    const current = this.getCategoryTier(cat);
-    const nextTier = current + 1;
-    return SHOP_ITEMS.find(i => i.type === 'tier' && i.unlockKey === cat && i.tier === nextTier) || null;
-  },
-
-  // Get max tier available for a category
-  getMaxTier(cat) {
-    const items = SHOP_ITEMS.filter(i => i.type === 'tier' && i.unlockKey === cat);
-    return items.length > 0 ? Math.max(...items.map(i => i.tier)) : 1;
-  },
-
-  // Check whether all currently-unlocked words in a category meet the 60% accuracy gate
-  // Returns {met: bool, total: n, ready: n, notReady: [{vn, accuracy}]}
-  checkAccuracyGate(cat) {
-    const words = this.getUnlockedWords(cat);
+  // Unified 60%-accuracy gate across every word + grammar pattern in currently-unlocked lessons.
+  // Exempt when only lesson 1 (free, unpracticed by definition) is unlocked.
+  checkLessonAccuracyGate() {
+    if (this.state.unlocked_lesson <= 1) return { met: true, ready: 0, total: 0, notReady: [] };
     const notReady = [];
     let ready = 0;
-    for (const w of words) {
+    for (const w of this.getAllUnlockedWords()) {
       const s = this.state.seen[w.id];
-      if (!s || s.seen === 0) {
-        notReady.push({vn: w.vn, accuracy: 0, unseen: true});
-      } else {
+      if (!s || s.seen === 0) notReady.push({ label: w.vn, accuracy: 0, unseen: true });
+      else {
         const acc = s.correct / s.seen;
         if (acc >= 0.6) ready++;
-        else notReady.push({vn: w.vn, accuracy: Math.round(acc * 100), unseen: false});
+        else notReady.push({ label: w.vn, accuracy: Math.round(acc * 100), unseen: false });
       }
     }
-    return { met: notReady.length === 0, total: words.length, ready, notReady };
+    for (const g of GRAMMAR) {
+      if (!this.isGrammarUnlocked(g.id)) continue;
+      const s = this.state.grammar_seen[g.id];
+      if (!s || s.seen === 0) notReady.push({ label: g.pattern, accuracy: 0, unseen: true });
+      else {
+        const acc = s.correct / s.seen;
+        if (acc >= 0.6) ready++;
+        else notReady.push({ label: g.pattern, accuracy: Math.round(acc * 100), unseen: false });
+      }
+    }
+    return { met: notReady.length === 0, ready, total: ready + notReady.length, notReady };
+  },
+
+  unlockNextLesson() {
+    const next = this.getNextLesson();
+    if (!next) return false;
+    const gate = this.checkLessonAccuracyGate();
+    if (!gate.met) return 'gate';
+    if (!this.spendPoints(next.cost)) return false;
+    this.state.unlocked_lesson++;
+    this.save();
+    return true;
   },
 
   unlockItem(item) {
@@ -198,48 +206,7 @@ const Store = {
       this.state.unlocked_modes.push(item.unlockKey);
       this.save(); return true;
     }
-    if (item.type === 'tier') {
-      const cat = item.unlockKey;
-      const current = this.getCategoryTier(cat);
-      if (item.tier !== current + 1) return false; // must unlock in order
-      if (current > 0) {
-        const gate = this.checkAccuracyGate(cat);
-        if (!gate.met) return 'gate';
-      }
-      if (!this.spendPoints(item.cost)) return false;
-      this.state.category_tiers[cat] = item.tier;
-      this.save(); return true;
-    }
-    if (item.type === 'grammar') {
-      if (!this.state.unlocked_grammar) this.state.unlocked_grammar = ['identity', 'intensifiers', 'pronouns'];
-      if (this.state.unlocked_grammar.includes(item.unlockKey)) return false;
-      // Accuracy gate: all patterns in already-unlocked grammar categories must be ≥60%
-      const gate = this.checkGrammarAccuracyGate();
-      if (!gate.met) return 'gate';
-      if (!this.spendPoints(item.cost)) return false;
-      this.state.unlocked_grammar.push(item.unlockKey);
-      this.save(); return true;
-    }
     return false;
-  },
-
-  // Grammar accuracy gate: all patterns in already-unlocked grammar categories must be ≥60%
-  checkGrammarAccuracyGate() {
-    const unlocked = this.state.unlocked_grammar || ['identity', 'intensifiers', 'pronouns'];
-    const notReady = [];
-    let ready = 0;
-    for (const g of GRAMMAR) {
-      if (!unlocked.includes(g.category)) continue;
-      const s = this.state.grammar_seen[g.id];
-      if (!s || s.seen === 0) {
-        notReady.push({pattern: g.pattern, accuracy: 0, unseen: true});
-      } else {
-        const acc = s.correct / s.seen;
-        if (acc >= 0.6) ready++;
-        else notReady.push({pattern: g.pattern, accuracy: Math.round(acc * 100), unseen: false});
-      }
-    }
-    return { met: notReady.length === 0, ready, total: ready + notReady.length, notReady };
   },
 
   getGrammarPatternStats(grammarId) {
@@ -253,8 +220,6 @@ const Store = {
 
   isItemOwned(item) {
     if (item.type === 'mode') return this.state.unlocked_modes.includes(item.unlockKey);
-    if (item.type === 'tier') return (this.state.category_tiers[item.unlockKey] || 0) >= item.tier;
-    if (item.type === 'grammar') return this.isGrammarUnlocked(item.unlockKey);
     return false;
   },
 
@@ -268,5 +233,28 @@ const Store = {
       if (s.mastered) mastered++;
     });
     return { seen, mastered, total: unlocked.length, total_all: all.length };
+  },
+
+  // Word + grammar progress for one specific lesson (Progress tab's "By Lesson" view)
+  getLessonProgress(lessonId) {
+    const words = this.getWordsForLesson(lessonId);
+    let seen = 0, mastered = 0;
+    words.forEach(w => {
+      const s = this.getWordStats(w.id);
+      if (s.seen_count > 0) seen++;
+      if (s.mastered) mastered++;
+    });
+    const lesson = LESSONS.find(l => l.id === lessonId);
+    const gramPatterns = lesson ? GRAMMAR.filter(g => lesson.grammar_ids.includes(g.id)) : [];
+    let gSeen = 0, gMastered = 0;
+    gramPatterns.forEach(g => {
+      const s = this.getGrammarPatternStats(g.id);
+      if (s.seen_count > 0) gSeen++;
+      if (s.mastered) gMastered++;
+    });
+    return {
+      seen, mastered, total: words.length, total_all: words.length,
+      gSeen, gMastered, gTotal: gramPatterns.length, gramPatterns,
+    };
   },
 };
