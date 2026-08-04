@@ -10,10 +10,10 @@ A gamified, web-based Vietnamese language learning app built as a **multi-file v
 viet-learn/
 ├── index.html      — HTML shell, loads all scripts
 ├── style.css       — Full CSS design system
-├── data.js         — All vocabulary, grammar, shop items, achievements, category metadata
+├── data.js         — All vocabulary, grammar, shop items, lessons, category metadata
 ├── store.js        — State management + localStorage persistence
 ├── quiz.js         — Question generation for all 6 quiz modes
-├── gamify.js       — Points, achievements, toasts, confetti, level system
+├── gamify.js       — Points, toasts, confetti, level system
 ├── ui.js           — All view rendering, event handling, routing
 └── CONTEXT.md      — This file
 ```
@@ -110,12 +110,6 @@ The A1 curriculum and the *only* unlock mechanism for words/grammar. An ordered 
 ```
 22 lessons cover every `WORDS` id and every `GRAMMAR` id exactly once. Word/grammar `category` fields are untouched by this and still drive the Progress tab and the Grammar tab's browse filter.
 
-### ACHIEVEMENTS array
-```js
-{id:'first_word', title:'First Steps', desc:'See your first word', icon:'👀'}
-```
-Conditions are evaluated in `gamify.js` `ACHIEVEMENT_CONDITIONS` map.
-
 ### CATEGORY_META
 ```js
 greetings: {label:'Greetings', icon:'👋', color:'#2D9B6F'}
@@ -137,7 +131,6 @@ Single `Store` object. Key state fields:
   unlocked_lesson: 1,    // how many LESSONS entries are unlocked (1-indexed; lesson 1 is free)
   unlocked_modes: ['flashcard', 'multiple_choice'],
   unlocked_boosts: [],
-  achievements: [],
   consec_correct: 0,
   typed_correct: 0,
   total_correct: 0,
@@ -145,6 +138,8 @@ Single `Store` object. Key state fields:
   last_category: 'all',
   last_mode: 'multiple_choice',
   tts_voice_uri: null,   // selected Web Speech API voice, or null for browser default
+  daily: {},             // {'YYYY-MM-DD': {attempts, correct, ms}} — backs the Stats tab's charts
+  streak_history: [],    // lengths of past streaks that have ended (broken by a gap)
 }
 ```
 
@@ -162,6 +157,11 @@ Single `Store` object. Key state fields:
 - `checkLessonAccuracyGate()` — returns `{met, total, ready, notReady[]}` across every word + grammar pattern in currently-unlocked lessons
 - `unlockNextLesson()` — returns `true` (success), `false` (can't afford / no next lesson), or `'gate'` (accuracy gate blocked)
 - `getGrammarPatternStats(id)` — `{seen_count, accuracy, mastered}`
+- `getCategoryProgress(cat)` / `getLessonProgress(lessonId)` — each returns `{seen, mastered, total, ..., accuracy}`; `accuracy` is `null` if nothing in that category/lesson has been attempted yet
+- `getStreakStats()` — `{current, longest, shortest}`; `shortest` is `null` with no completed-or-current streak data
+- `getDailyRange(n=14)` — last `n` calendar days (oldest→newest, zero-filled), each `{date, attempts, correct, accuracy, ms}`; backs both Stats-tab charts
+- `getAvgTimePerActiveDay()` — total tracked ms ÷ count of days with ≥1 attempt (days with zero activity don't pull the average down)
+- `_tickTime()` — internal; called from `recordAttempt`/`recordGrammarAttempt`, adds elapsed time since the last scored answer to today's `daily` bucket, capped at 120s per gap so an idle/backgrounded tab doesn't inflate the total
 
 **Accuracy gate:** Before unlocking the next lesson, every word and grammar pattern across *all* currently-unlocked lessons must be ≥60% accuracy. Unlocking lesson 2 (the first paid one) is exempt, since lesson 1 has nothing practiced yet by definition.
 
@@ -210,8 +210,7 @@ Quiz.generateQuestion(mode, lessonOrAll, seenStats)
 ## gamify.js
 
 - `getLevelInfo(totalPts)` — returns `{title, next, pct, in_level}`. Levels: Beginner(0) → Learner(100) → Student(300) → Speaker(600) → Conversant(1000) → Fluent(2000)
-- `checkAchievements()` — evaluates all 12 achievements against current Store state
-- `showToast(msg, type)` — types: `success`, `error`, `gold`, `achievement`
+- `showToast(msg, type)` — types: `success`, `error`, `gold`
 - `showPointsFloat(pts, el)` — floating "+N pts" animation
 - `triggerConfetti()` — 35 confetti pieces
 
@@ -224,13 +223,13 @@ Single `UI` object. Key properties:
 - `learnLesson`, `learnMode` — selections on Learn tab (`learnLesson` is `'all'` or a `LESSONS` id)
 - `_progressCat`, `_grammarCat` — active filter on Progress/Grammar tabs
 
-**Views:** home, learn, quiz, shop, progress, grammar, achievements
+**Views:** home, learn, quiz, shop, progress, grammar, stats
 
-**Tab navigation:** Bottom nav with 6 tabs: Home, Learn, Shop, Progress, Grammar, Awards
+**Tab navigation:** Bottom nav with 6 tabs: Home, Learn, Shop, Progress, Grammar, Stats
 
-**Debug buttons** (in Shop balance card, dashed borders):
-- 🐛 +300 stars — adds 300 pts directly
-- 🐛 boost accuracy — sets all unlocked words AND grammar patterns to 5 seen / 4 correct (80%), clearing all accuracy gates
+**Debug shortcuts** (tap targets in the sticky top header, not visually marked as debug controls):
+- Tap the ⭐ points pill — adds 300 pts directly (`UI.debugAddStars`)
+- Tap the level-title pill — sets all unlocked words AND grammar patterns to 5 seen / 4 correct (80%), clearing all accuracy gates (`UI.debugBoostAccuracy`)
 
 **Learn tab features:**
 - Grammar modes (grammar_quiz, word_order, particles) auto-select "All Words" and hide the lesson picker
@@ -256,6 +255,13 @@ Single `UI` object. Key properties:
 - `●live` badge removed — all examples are now curated fixed sentences
 - Static "🗣️ Southern Pronunciation Notes" card at the top (`PRONUNCIATION_NOTES` in `data.js`), not quizzed
 
+**Stats tab** (`UI.renderStats`, replaced the old achievements/Awards tab):
+- Streaks: current / longest / shortest, via `Store.getStreakStats()`
+- Overview stat cards: words seen, mastered, overall accuracy, points earned, avg time/active day, best category (min. 3 attempted words)
+- Accuracy by Category and Accuracy by Lesson lists (only entries with ≥1 attempt shown), same coral/gold/jade thresholds as the Progress tab
+- Two hand-rolled inline SVG charts (no chart library, same approach as the Home progress ring): a 14-day accuracy trend line (gaps in the line where a day has no data, not drawn as 0%) and a 14-day time-spent bar chart, both backed by `Store.getDailyRange(14)`
+- No achievement/badge system anymore — removed entirely (data, toast-on-unlock, confetti-on-unlock). `Gamify.triggerConfetti()` itself is still used elsewhere (match-pairs full match, ≥70% session score)
+
 **Pronunciation:** 🔊 buttons (Web Speech API `speechSynthesis`) appear on flashcards, quiz feedback, and Grammar tab examples — see `UI.speak`/`UI.speakBtnHtml` in `ui.js`. Voice choice is a dropdown on the Home tab ("🔊 Pronunciation Voice"), persisted to `state.tts_voice_uri`; falls back to the browser default when no Vietnamese voice is installed.
 
 ## Known issues / things to watch
@@ -279,12 +285,11 @@ Single `UI` object. Key properties:
 - **Book/notes import** — user wants to photograph pages from a Vietnamese textbook and handwritten class notes, and have them parsed into vocabulary + grammar entries. Would require adding words with a `source: 'book_ch1'` field and a new category type.
 - **Chapter-based categories** — related to above. Custom categories from a specific book chapter.
 - **PWA / GitHub Pages** — discussed but not yet set up. Would need `manifest.json` + service worker for installability.
-- **Removing debug buttons** — the two 🐛 debug buttons in the Shop are for testing only and should be removed before sharing with others.
+- **Debug shortcuts** — the ⭐/level-title tap targets in the header (`UI.debugAddStars`/`UI.debugBoostAccuracy`) are for testing only and should be removed before sharing with others.
 
 ## Content summary
 
 - **415 vocabulary words** across 11 categories, with Southern dialect primary and Northern variants where different
 - **63 A1 grammar patterns** across 14 categories, each with 2–3 curated examples and 1–2 word-order exercises
 - **22 lessons** (`LESSONS` in `data.js`), covering every word and every grammar pattern exactly once, unlocked strictly in sequence
-- **12 achievements**
-- **7 quiz modes** (2 free, 5 purchasable)
+- **8 quiz modes** (2 free, 6 purchasable)

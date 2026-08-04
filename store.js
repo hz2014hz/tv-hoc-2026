@@ -9,11 +9,12 @@ const Store = {
       unlocked_lesson: 1, // how many lessons are unlocked (1-indexed); lesson 1 is free
       unlocked_modes: ['flashcard', 'multiple_choice'],
       unlocked_boosts: [],
-      achievements: [],
       consec_correct: 0, typed_correct: 0,
       total_correct: 0, total_attempts: 0,
       last_category: 'all', last_mode: 'multiple_choice',
       tts_voice_uri: null, // null = browser default Vietnamese voice
+      daily: {},           // { 'YYYY-MM-DD': {attempts, correct, ms} }
+      streak_history: [],  // lengths of streaks that have ended (broken by a gap)
     };
   },
 
@@ -28,6 +29,26 @@ const Store = {
         this.state = this.defaultState();
       }
     } catch(e) { this.state = this.defaultState(); }
+  },
+
+  todayKey() { return new Date().toISOString().slice(0,10); },
+
+  _touchDaily() {
+    const key = this.todayKey();
+    if (!this.state.daily[key]) this.state.daily[key] = {attempts:0, correct:0, ms:0};
+    return this.state.daily[key];
+  },
+
+  // Adds elapsed time since the last scored answer to today's bucket, capped so an
+  // idle/backgrounded tab can't inflate the total. Not persisted itself — recordAttempt/
+  // recordGrammarAttempt call save() right after.
+  _tickTime() {
+    const now = Date.now();
+    if (this._lastTickTs) {
+      const delta = Math.min(now - this._lastTickTs, 120000);
+      this._touchDaily().ms += delta;
+    }
+    this._lastTickTs = now;
   },
 
   save() { localStorage.setItem('viet_learn_v2', JSON.stringify(this.state)); },
@@ -48,6 +69,8 @@ const Store = {
     if (correct) { this.state.total_correct++; this.state.consec_correct++; }
     else { this.state.consec_correct = 0; }
     if (correct && mode === 'type_answer') this.state.typed_correct++;
+    const d = this._touchDaily(); d.attempts++; if (correct) d.correct++;
+    this._tickTime();
     let pts = 0;
     if (correct) {
       pts = pts_map[mode] || 5;
@@ -66,6 +89,8 @@ const Store = {
     this.state.total_attempts++;
     if (correct) { this.state.total_correct++; this.state.consec_correct++; }
     else { this.state.consec_correct = 0; }
+    const d = this._touchDaily(); d.attempts++; if (correct) d.correct++;
+    this._tickTime();
     let pts = 0;
     if (correct) { pts = 30; if (e.seen === 1) pts += 5; }
     this.state.points += pts; this.state.total_points_earned += pts;
@@ -79,12 +104,16 @@ const Store = {
   },
 
   checkStreak() {
-    const today = new Date().toISOString().slice(0,10);
+    const today = this.todayKey();
     const last = this.state.last_activity;
     if (last === today) { /* same day */ }
     else if (last) {
       const diff = Math.round((new Date(today) - new Date(last)) / 86400000);
-      this.state.streak = diff === 1 ? this.state.streak + 1 : 1;
+      if (diff === 1) { this.state.streak++; }
+      else {
+        if (this.state.streak > 0) this.state.streak_history.push(this.state.streak);
+        this.state.streak = 1;
+      }
     } else { this.state.streak = 1; }
     if (this.state.streak > this.state.best_streak) this.state.best_streak = this.state.streak;
     this.state.last_activity = today;
@@ -111,6 +140,39 @@ const Store = {
   getOverallAccuracy() {
     return this.state.total_attempts === 0 ? 0
       : Math.round(this.state.total_correct / this.state.total_attempts * 100);
+  },
+
+  getStreakStats() {
+    const current = this.state.streak;
+    const longest = this.state.best_streak;
+    const candidates = [...this.state.streak_history, ...(current > 0 ? [current] : [])];
+    const shortest = candidates.length ? Math.min(...candidates) : null;
+    return { current, longest, shortest };
+  },
+
+  // Last n calendar days (including today), oldest→newest, zero-filled for days with no activity.
+  getDailyRange(n = 14) {
+    const out = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const date = d.toISOString().slice(0,10);
+      const bucket = this.state.daily[date] || {attempts:0, correct:0, ms:0};
+      out.push({
+        date,
+        attempts: bucket.attempts,
+        correct: bucket.correct,
+        accuracy: bucket.attempts > 0 ? Math.round(bucket.correct / bucket.attempts * 100) : null,
+        ms: bucket.ms,
+      });
+    }
+    return out;
+  },
+
+  getAvgTimePerActiveDay() {
+    const days = Object.values(this.state.daily).filter(d => d.attempts > 0);
+    if (days.length === 0) return 0;
+    return days.reduce((sum, d) => sum + d.ms, 0) / days.length;
   },
 
   // ── LESSONS ───────────────────────────────────────────────────────────────
@@ -226,23 +288,28 @@ const Store = {
   getCategoryProgress(cat) {
     const unlocked = this.getUnlockedWords(cat);
     const all = WORDS.filter(w => w.category === cat);
-    let seen = 0, mastered = 0;
+    let seen = 0, mastered = 0, correctSum = 0, seenSum = 0;
     unlocked.forEach(w => {
       const s = this.getWordStats(w.id);
       if (s.seen_count > 0) seen++;
       if (s.mastered) mastered++;
+      const raw = this.state.seen[w.id];
+      if (raw) { correctSum += raw.correct; seenSum += raw.seen; }
     });
-    return { seen, mastered, total: unlocked.length, total_all: all.length };
+    const accuracy = seenSum > 0 ? Math.round(correctSum / seenSum * 100) : null;
+    return { seen, mastered, total: unlocked.length, total_all: all.length, accuracy };
   },
 
   // Word + grammar progress for one specific lesson (Progress tab's "By Lesson" view)
   getLessonProgress(lessonId) {
     const words = this.getWordsForLesson(lessonId);
-    let seen = 0, mastered = 0;
+    let seen = 0, mastered = 0, correctSum = 0, seenSum = 0;
     words.forEach(w => {
       const s = this.getWordStats(w.id);
       if (s.seen_count > 0) seen++;
       if (s.mastered) mastered++;
+      const raw = this.state.seen[w.id];
+      if (raw) { correctSum += raw.correct; seenSum += raw.seen; }
     });
     const lesson = LESSONS.find(l => l.id === lessonId);
     const gramPatterns = lesson ? GRAMMAR.filter(g => lesson.grammar_ids.includes(g.id)) : [];
@@ -251,10 +318,13 @@ const Store = {
       const s = this.getGrammarPatternStats(g.id);
       if (s.seen_count > 0) gSeen++;
       if (s.mastered) gMastered++;
+      const raw = this.state.grammar_seen[g.id];
+      if (raw) { correctSum += raw.correct; seenSum += raw.seen; }
     });
+    const accuracy = seenSum > 0 ? Math.round(correctSum / seenSum * 100) : null;
     return {
       seen, mastered, total: words.length, total_all: words.length,
-      gSeen, gMastered, gTotal: gramPatterns.length, gramPatterns,
+      gSeen, gMastered, gTotal: gramPatterns.length, gramPatterns, accuracy,
     };
   },
 };

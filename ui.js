@@ -49,7 +49,7 @@ const UI = {
     else if (name === 'shop') this.renderShop();
     else if (name === 'progress') this.renderProgress();
     else if (name === 'grammar') this.renderGrammar();
-    else if (name === 'achievements') this.renderAchievements();
+    else if (name === 'stats') this.renderStats();
   },
 
   updateHeader() {
@@ -66,7 +66,7 @@ const UI = {
     else if (name === 'shop') this.renderShop();
     else if (name === 'progress') this.renderProgress();
     else if (name === 'grammar') this.renderGrammar();
-    else if (name === 'achievements') this.renderAchievements();
+    else if (name === 'stats') this.renderStats();
   },
 
   // ── DEBUG (tap the ⭐ or level label in the top bar) ────────────────────────
@@ -106,11 +106,6 @@ const UI = {
         <div class="progress-bar"><div class="progress-bar__fill" style="width:${pPct}%;background:${meta.color}"></div></div>
       </div>`;
     }).join('');
-
-    const earnedAchs = ACHIEVEMENTS.filter(a => Store.state.achievements.includes(a.id));
-    const achHtml = earnedAchs.length
-      ? earnedAchs.slice(-4).map(a => `<div class="achievement-badge"><span class="achievement-badge__icon">${a.icon}</span><div><div class="achievement-badge__title">${a.title}</div><div class="achievement-badge__desc">${a.desc}</div></div></div>`).join('')
-      : `<p style="color:var(--muted);font-size:14px">Complete quizzes to earn achievements!</p>`;
 
     document.getElementById('view-home').innerHTML = `
       <div style="padding:16px;max-width:100%">
@@ -159,9 +154,6 @@ const UI = {
 
         <div class="section-eyebrow" style="margin-bottom:12px">Category Progress</div>
         <div style="display:grid;gap:8px;margin-bottom:20px">${catBars}</div>
-
-        <div class="section-eyebrow" style="margin-bottom:12px">Achievements</div>
-        <div style="display:grid;gap:8px;margin-bottom:24px">${achHtml}</div>
 
         <div class="section-eyebrow" style="margin-bottom:12px">🔊 Pronunciation Voice</div>
         <div style="background:var(--surface);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.06);margin-bottom:24px">
@@ -544,7 +536,6 @@ const UI = {
     }
     this.updateHeader();
     if (pts > 0) Gamify.showPointsFloat(pts, document.querySelector(`.fc-rating-btn[data-rating="${rating}"]`));
-    Gamify.checkAchievements();
     if (this.session) { this.session.index++; this.renderQuizView(); }
   },
 
@@ -580,7 +571,6 @@ const UI = {
     if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
     this.updateHeader();
     Gamify.showPointsFloat(pts, btn);
-    Gamify.checkAchievements();
 
     const fb = document.getElementById('mc-feedback');
     if (fb) {
@@ -626,7 +616,6 @@ const UI = {
     if (result.correct) { this.session.score++; this.session.pts_earned += pts; }
     this.updateHeader();
     Gamify.showPointsFloat(pts, input);
-    Gamify.checkAchievements();
 
     const fb = document.getElementById('type-feedback');
     if (result.correct) {
@@ -686,7 +675,6 @@ const UI = {
     if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
     this.updateHeader();
     Gamify.showPointsFloat(pts, btn);
-    Gamify.checkAchievements();
 
     const fb = document.getElementById('fill-feedback');
     if (fb) {
@@ -727,7 +715,6 @@ const UI = {
     if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
     this.updateHeader();
     Gamify.showPointsFloat(pts, btn);
-    Gamify.checkAchievements();
 
     const fb = document.getElementById('particle-feedback');
     if (fb) {
@@ -794,7 +781,6 @@ const UI = {
       if (ms.matched.size === ms.q.left_items.length) {
         Gamify.triggerConfetti();
         Gamify.showToast('All matched! 🎉', 'gold');
-        Gamify.checkAchievements();
         if (prog) prog.innerHTML = this.continueButtonHtml();
       } else if (prog) {
         prog.textContent = `${ms.matched.size} / ${ms.q.left_items.length} matched`;
@@ -844,7 +830,6 @@ const UI = {
     if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
     this.updateHeader();
     Gamify.showPointsFloat(pts, btn);
-    Gamify.checkAchievements();
 
     const fb = document.getElementById('gram-feedback');
     if (fb) {
@@ -964,7 +949,6 @@ const UI = {
       if (isCorrect) { this.session.score++; this.session.pts_earned += pts; }
       this.updateHeader();
       Gamify.showPointsFloat(pts, el.querySelector('.btn-primary'));
-      Gamify.checkAchievements();
     };
 
     render();
@@ -974,7 +958,6 @@ const UI = {
     const pts = Store.recordAttempt(q.word.id, correct, mode);
     if (correct) { this.session.score++; this.session.pts_earned += pts; }
     this.updateHeader();
-    Gamify.checkAchievements();
     this.session.index++;
     this.renderQuizView();
   },
@@ -1099,7 +1082,6 @@ const UI = {
     const result = Store.unlockItem(item);
     if (result) {
       Gamify.showToast(`Unlocked: ${item.name}!`, 'gold');
-      Gamify.checkAchievements();
       this.updateHeader();
       this.renderShop();
     }
@@ -1117,7 +1099,6 @@ const UI = {
     }
     if (result) {
       Gamify.showToast(`Unlocked: ${next.title}!`, 'gold');
-      Gamify.checkAchievements();
       this.updateHeader();
       this.renderShop();
     }
@@ -1329,67 +1310,151 @@ const UI = {
     this.refreshCurrentView();
   },
 
-  // ── ACHIEVEMENTS ──────────────────────────────────────────────────────────
-  renderAchievements() {
-    const earned = Store.state.achievements;
-    const lvl = Gamify.getLevelInfo(Store.state.total_points_earned);
+  // ── STATS ─────────────────────────────────────────────────────────────────
+  formatDuration(ms) {
+    if (ms < 60000) return `${Math.round(ms / 1000)}s`;
+    return `${Math.round(ms / 60000)}m`;
+  },
 
-    const levelHtml = `
-      <div style="background:var(--surface);border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,0.06);margin-bottom:20px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div>
-            <div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--gold)">${lvl.title}</div>
-            <div style="font-size:13px;color:var(--muted);margin-top:2px">${Store.state.total_points_earned} pts earned total</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;color:var(--muted)">${lvl.next === Infinity ? 'Max level reached!' : 'Next level: ' + lvl.next + ' pts'}</div>
-            <div style="font-size:12px;color:var(--jade);margin-top:2px">${lvl.next === Infinity ? '' : (lvl.next - Store.state.total_points_earned) + ' pts to go'}</div>
-          </div>
-        </div>
-        <div class="progress-bar progress-bar--lg"><div class="progress-bar__fill" style="width:${lvl.pct}%;background:var(--gold)"></div></div>
-        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted);letter-spacing:0.02em">
-          <span>Beginner</span><span>Learner</span><span>Student</span><span>Speaker</span><span>Fluent</span>
-        </div>
-      </div>`;
+  accColor(acc) {
+    if (acc === null) return 'var(--muted)';
+    return acc >= 80 ? 'var(--jade)' : acc >= 60 ? 'var(--gold)' : 'var(--coral)';
+  },
 
-    const statsHtml = `
-      <div class="stats-grid" style="margin-bottom:20px">
-        <div class="stat-card"><div class="stat-card__number">${earned.length}</div><div class="stat-card__label">Earned</div></div>
-        <div class="stat-card"><div class="stat-card__number">${ACHIEVEMENTS.length - earned.length}</div><div class="stat-card__label">Remaining</div></div>
-        <div class="stat-card"><div class="stat-card__number">${Store.state.streak}</div><div class="stat-card__label">Streak 🔥</div></div>
-        <div class="stat-card"><div class="stat-card__number">${Store.state.consec_correct}</div><div class="stat-card__label">In a Row ✅</div></div>
-      </div>`;
+  renderAccuracyChart(days) {
+    const W = 320, H = 120, padL = 8, padR = 8, padT = 10, padB = 24;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const n = days.length;
+    const x = i => padL + (n === 1 ? 0 : i * (plotW / (n - 1)));
+    const y = acc => padT + (100 - acc) / 100 * plotH;
 
-    const sorted = [...ACHIEVEMENTS].sort((a, b) => {
-      const ae = earned.includes(a.id), be = earned.includes(b.id);
-      if (ae && !be) return -1;
-      if (!ae && be) return 1;
-      return 0;
+    const gridLines = [0, 50, 100].map(v => `
+      <line x1="${padL}" y1="${y(v).toFixed(1)}" x2="${W - padR}" y2="${y(v).toFixed(1)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <text x="${padL}" y="${(y(v) - 3).toFixed(1)}" font-size="8" fill="var(--muted)">${v}%</text>`).join('');
+
+    // Group into contiguous runs of days that have data, so gaps don't draw a misleading line through 0%
+    const segments = [];
+    let current = [];
+    days.forEach((d, i) => {
+      if (d.accuracy === null) { if (current.length) segments.push(current); current = []; }
+      else current.push({x: x(i), y: y(d.accuracy)});
     });
+    if (current.length) segments.push(current);
 
-    const achCards = sorted.map(a => {
-      const isEarned = earned.includes(a.id);
-      return `
-        <div style="display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:14px;padding:14px 16px;
-          border:1px solid ${isEarned ? 'rgba(45,155,111,0.35)' : 'rgba(255,255,255,0.05)'};
-          opacity:${isEarned ? '1' : '0.4'};
-          ${isEarned ? 'box-shadow:0 2px 12px rgba(45,155,111,0.08)' : 'filter:grayscale(0.5)'}">
-          <div style="font-size:32px;line-height:1;flex-shrink:0">${a.icon}</div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:14px;font-weight:700;color:${isEarned ? 'var(--cream)' : 'var(--muted)'}">${a.title}</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">${a.desc}</div>
-          </div>
-          <div style="flex-shrink:0">${isEarned ? '<span class="badge badge-jade">✓</span>' : '<span class="badge badge-muted">🔒</span>'}</div>
-        </div>`;
+    const linesHtml = segments.filter(s => s.length > 1).map(s =>
+      `<polyline points="${s.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+    ).join('');
+
+    const dotsHtml = days.map((d, i) => d.accuracy === null ? '' :
+      `<circle cx="${x(i).toFixed(1)}" cy="${y(d.accuracy).toFixed(1)}" r="3" fill="${this.accColor(d.accuracy)}"><title>${d.date}: ${d.accuracy}% (${d.correct}/${d.attempts})</title></circle>`
+    ).join('');
+
+    const noData = days.every(d => d.accuracy === null);
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">
+      ${gridLines}${linesHtml}${dotsHtml}
+      <text x="${padL}" y="${H-4}" font-size="9" fill="var(--muted)">${days[0].date.slice(5).replace('-','/')}</text>
+      <text x="${W-padR}" y="${H-4}" font-size="9" fill="var(--muted)" text-anchor="end">${days[n-1].date.slice(5).replace('-','/')}</text>
+    </svg>${noData ? '<div style="text-align:center;color:var(--muted);font-size:12px;margin-top:4px">No activity yet</div>' : ''}`;
+  },
+
+  renderTimeChart(days) {
+    const W = 320, H = 110, padL = 8, padR = 8, padT = 10, padB = 24;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const n = days.length;
+    const minutes = days.map(d => d.ms / 60000);
+    const maxMin = Math.max(...minutes, 1);
+    const slot = plotW / n;
+    const barW = slot * 0.6;
+
+    const barsHtml = days.map((d, i) => {
+      const m = minutes[i];
+      const h = (m / maxMin) * plotH;
+      const bx = padL + i * slot + (slot - barW) / 2;
+      const by = padT + plotH - h;
+      return `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(h,1).toFixed(1)}" rx="2" fill="var(--gold)"><title>${d.date}: ${Math.round(m)}m</title></rect>`;
     }).join('');
 
-    document.getElementById('view-achievements').innerHTML = `
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">
+      <line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      ${barsHtml}
+      <text x="${padL}" y="${H-4}" font-size="9" fill="var(--muted)">${days[0].date.slice(5).replace('-','/')}</text>
+      <text x="${W-padR}" y="${H-4}" font-size="9" fill="var(--muted)" text-anchor="end">${days[n-1].date.slice(5).replace('-','/')}</text>
+    </svg>`;
+  },
+
+  renderStats() {
+    const lvl = Gamify.getLevelInfo(Store.state.total_points_earned);
+    const streaks = Store.getStreakStats();
+    const days = Store.getDailyRange(14);
+
+    const streakHtml = `
+      <div class="stats-grid" style="margin-bottom:20px">
+        <div class="stat-card"><div class="stat-card__number">${streaks.current}</div><div class="stat-card__label">Current Streak 🔥</div></div>
+        <div class="stat-card"><div class="stat-card__number">${streaks.longest}</div><div class="stat-card__label">Longest Streak</div></div>
+        <div class="stat-card"><div class="stat-card__number">${streaks.shortest ?? '—'}</div><div class="stat-card__label">Shortest Streak</div></div>
+      </div>`;
+
+    // Categories/lessons with at least one attempted word, for the "best category" stat and the two breakdown lists
+    const catStats = Object.keys(CATEGORY_META)
+      .map(cat => ({ cat, meta: CATEGORY_META[cat], p: Store.getCategoryProgress(cat) }))
+      .filter(x => x.p.accuracy !== null);
+    const bestCat = catStats.filter(x => x.p.seen >= 3)
+      .sort((a, b) => b.p.accuracy - a.p.accuracy)[0];
+
+    const overviewHtml = `
+      <div class="stats-grid" style="margin-bottom:20px">
+        <div class="stat-card"><div class="stat-card__number">${Store.getSeenCount()}</div><div class="stat-card__label">Words Seen</div></div>
+        <div class="stat-card"><div class="stat-card__number">${Store.getMasteredCount()}</div><div class="stat-card__label">Mastered</div></div>
+        <div class="stat-card"><div class="stat-card__number">${Store.getOverallAccuracy()}%</div><div class="stat-card__label">Overall Accuracy</div></div>
+        <div class="stat-card"><div class="stat-card__number">${Store.state.total_points_earned}</div><div class="stat-card__label">Points Earned</div></div>
+        <div class="stat-card"><div class="stat-card__number">${this.formatDuration(Store.getAvgTimePerActiveDay())}</div><div class="stat-card__label">Avg / Active Day</div></div>
+        <div class="stat-card"><div class="stat-card__number" style="font-size:17px">${bestCat ? bestCat.meta.icon + ' ' + bestCat.meta.label : '—'}</div><div class="stat-card__label">Best Category</div></div>
+      </div>`;
+
+    const catRows = catStats
+      .sort((a, b) => b.p.accuracy - a.p.accuracy)
+      .map(({meta, p}) => `
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:12px;padding:10px 14px;border:1px solid rgba(255,255,255,0.06)">
+          <span style="flex:1;font-size:13px;font-weight:600">${meta.icon} ${meta.label}</span>
+          <div style="width:60px"><div class="progress-bar progress-bar--sm"><div class="progress-bar__fill" style="width:${p.accuracy}%;background:${this.accColor(p.accuracy)}"></div></div></div>
+          <span style="font-size:12px;font-weight:600;color:${this.accColor(p.accuracy)};min-width:32px;text-align:right">${p.accuracy}%</span>
+        </div>`).join('');
+
+    const lessonRows = Store.getUnlockedLessons()
+      .map(l => ({ l, p: Store.getLessonProgress(l.id) }))
+      .filter(x => x.p.accuracy !== null)
+      .sort((a, b) => b.p.accuracy - a.p.accuracy)
+      .map(({l, p}) => `
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:12px;padding:10px 14px;border:1px solid rgba(255,255,255,0.06)">
+          <span style="flex:1;font-size:13px;font-weight:600">${l.order}. ${l.icon} ${l.title}</span>
+          <div style="width:60px"><div class="progress-bar progress-bar--sm"><div class="progress-bar__fill" style="width:${p.accuracy}%;background:${this.accColor(p.accuracy)}"></div></div></div>
+          <span style="font-size:12px;font-weight:600;color:${this.accColor(p.accuracy)};min-width:32px;text-align:right">${p.accuracy}%</span>
+        </div>`).join('');
+
+    document.getElementById('view-stats').innerHTML = `
       <div style="padding:16px">
-        <div class="section-title">🏆 Achievements</div>
-        ${levelHtml}
-        ${statsHtml}
-        <div class="section-eyebrow" style="margin-bottom:12px">${earned.length} / ${ACHIEVEMENTS.length} unlocked</div>
-        <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:8px">${achCards}</div>
+        <div class="section-title">📈 Stats</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px">${lvl.title} · ${Store.state.total_points_earned} pts earned total</div>
+
+        <div class="section-eyebrow" style="margin-bottom:10px">Streaks</div>
+        ${streakHtml}
+
+        <div class="section-eyebrow" style="margin-bottom:10px">Overview</div>
+        ${overviewHtml}
+
+        ${catRows ? `
+        <div class="section-eyebrow" style="margin-bottom:10px">Accuracy by Category</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">${catRows}</div>` : ''}
+
+        ${lessonRows ? `
+        <div class="section-eyebrow" style="margin-bottom:10px">Accuracy by Lesson</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">${lessonRows}</div>` : ''}
+
+        <div class="section-eyebrow" style="margin-bottom:10px">Accuracy Trend (last 14 days)</div>
+        <div style="background:var(--surface);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.06);margin-bottom:20px">${this.renderAccuracyChart(days)}</div>
+
+        <div class="section-eyebrow" style="margin-bottom:10px">Time Spent per Day (last 14 days)</div>
+        <div style="background:var(--surface);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.06);margin-bottom:8px">${this.renderTimeChart(days)}</div>
       </div>`;
   },
 };

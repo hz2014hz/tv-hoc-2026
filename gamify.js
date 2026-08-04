@@ -1,34 +1,4 @@
 const Gamify = {
-  ACHIEVEMENT_CONDITIONS: {
-    first_word: s => Object.values(s.seen).some(x=>x.seen>0),
-    words_10:   s => Object.values(s.seen).filter(x=>x.seen>0).length >= 10,
-    words_50:   s => Object.values(s.seen).filter(x=>x.seen>0).length >= 50,
-    words_100:  s => Object.values(s.seen).filter(x=>x.seen>0).length >= 100,
-    mastered_1: s => Object.values(s.seen).some(x=>x.seen>=5&&x.correct/x.seen>=0.8),
-    mastered_10:s => Object.values(s.seen).filter(x=>x.seen>=5&&x.correct/x.seen>=0.8).length >= 10,
-    streak_3:   s => s.streak >= 3,
-    streak_7:   s => s.streak >= 7,
-    consec_10:  s => s.consec_correct >= 10,
-    food_5:     s => WORDS.filter(w=>w.category==='food').filter(w=>s.seen[w.id]&&s.seen[w.id].seen>=5&&s.seen[w.id].correct/s.seen[w.id].seen>=0.8).length >= 5,
-    categories_3: s => Object.keys(CATEGORY_META).filter(c => Store.isCategoryAccessible(c)).length >= 3,
-    typist:     s => s.typed_correct >= 50,
-  },
-
-  checkAchievements() {
-    const newly = [];
-    for (const ach of ACHIEVEMENTS) {
-      if (Store.state.achievements.includes(ach.id)) continue;
-      const fn = this.ACHIEVEMENT_CONDITIONS[ach.id];
-      if (fn && fn(Store.state)) {
-        Store.state.achievements.push(ach.id);
-        Store.save();
-        this.showAchievement(ach);
-        newly.push(ach);
-      }
-    }
-    return newly;
-  },
-
   showToast(msg, type='success') {
     const icons = {success:'✅',error:'❌',gold:'⭐',achievement:'🏆'};
     const borders = {success:'var(--jade)',error:'var(--coral)',gold:'var(--gold)',achievement:'#9b59b6'};
@@ -61,16 +31,6 @@ const Gamify = {
       container.appendChild(p); pieces.push(p);
     }
     setTimeout(()=>pieces.forEach(p=>p.remove()),4000);
-  },
-
-  showAchievement(ach) {
-    const el = document.createElement('div');
-    el.className = 'toast toast--achievement';
-    el.style.cssText='min-width:260px;background:rgba(155,89,182,0.95);border-left:3px solid #9b59b6;padding:14px 16px;gap:12px;flex-direction:row';
-    el.innerHTML=`<span style="font-size:28px">${ach.icon}</span><div><div style="font-weight:700;font-size:14px">🏆 ${ach.title}</div><div style="font-size:12px;opacity:0.85">${ach.desc}</div></div>`;
-    document.getElementById('toast-container').appendChild(el);
-    this.triggerConfetti();
-    setTimeout(()=>{ el.style.opacity='0'; el.style.transition='0.3s'; setTimeout(()=>el.remove(),300); }, 4000);
   },
 
   getLevelInfo(totalPts) {

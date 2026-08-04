@@ -1405,21 +1405,6 @@ const GRAMMAR = [
   },
 ];
 
-const ACHIEVEMENTS = [
-  {id:'first_word',title:'First Steps',desc:'See your first word',icon:'👀'},
-  {id:'words_10',title:'Getting Started',desc:'Learn 10 words',icon:'📖'},
-  {id:'words_50',title:'Dedicated Learner',desc:'Learn 50 words',icon:'📚'},
-  {id:'words_100',title:'Century',desc:'Learn 100 words',icon:'💯'},
-  {id:'mastered_1',title:'First Mastery',desc:'Master your first word',icon:'⭐'},
-  {id:'mastered_10',title:'Word Master',desc:'Master 10 words',icon:'🌟'},
-  {id:'streak_3',title:'On a Roll',desc:'3-day streak',icon:'🔥'},
-  {id:'streak_7',title:'Week Warrior',desc:'7-day streak',icon:'🗓️'},
-  {id:'consec_10',title:'Perfect Ten',desc:'10 correct in a row',icon:'🎯'},
-  {id:'food_5',title:'Foodie',desc:'Master 5 food words',icon:'🍜'},
-  {id:'categories_3',title:'Explorer',desc:'Unlock 3 categories',icon:'🗺️'},
-  {id:'typist',title:'Typist',desc:'Type 50 correct answers',icon:'⌨️'},
-];
-
 // =============================================================================
 // LESSONS — the A1 curriculum. Each lesson bundles specific WORDS ids (any
 // category) with the specific GRAMMAR ids that make that theme useful, in
