@@ -617,7 +617,8 @@ const UI = {
     if (!val.trim()) return;
 
     const result = Quiz.checkTypeAnswer(q, val);
-    input.classList.add(result.correct ? 'correct' : 'wrong');
+    const cls = result.tier === 'accent' ? 'almost' : (result.correct ? 'correct' : 'wrong');
+    input.classList.add(cls);
     input.disabled = true;
     document.getElementById('type-submit').disabled = true;
 
@@ -630,11 +631,27 @@ const UI = {
     const fb = document.getElementById('type-feedback');
     if (result.correct) {
       fb.innerHTML = `<span style="color:var(--jade);font-weight:600">✓ ${result.variant ? 'Accepted ('+result.variant+')' : 'Correct!'}</span>`;
+    } else if (result.tier === 'accent') {
+      fb.innerHTML = `<span style="color:var(--gold);font-weight:600">≈ Almost — right word, check your accents</span>
+        <div style="margin-top:6px;font-size:17px;letter-spacing:0.02em">${this.diffHighlight(result.target, val)}</div>`;
     } else {
       fb.innerHTML = `<span style="color:var(--coral);font-weight:600">✗ Answer: <strong style="color:var(--cream)">${q.answer}</strong>${q.word.north?' (N: '+q.word.north+')':''}</span>`;
     }
     fb.innerHTML += `<div style="margin-top:8px;font-size:13px;color:var(--muted);font-style:italic">${q.word.example_vn} ${this.speakBtnHtml(q.word.example_vn)} — ${q.word.example_en}</div>`;
     fb.innerHTML += this.continueButtonHtml();
+  },
+
+  // Renders `correct` with each character that differs (case-insensitively) from the
+  // same position in `typed` highlighted — isolates exactly which accents were off.
+  diffHighlight(correct, typed) {
+    const t = typed.trim();
+    let out = '';
+    for (let i = 0; i < correct.length; i++) {
+      const c = correct[i];
+      const same = t[i] !== undefined && t[i].toLowerCase() === c.toLowerCase();
+      out += same ? c : `<span style="color:var(--gold);font-weight:700;text-decoration:underline">${c}</span>`;
+    }
+    return out;
   },
 
   renderFillSentence(q, el) {

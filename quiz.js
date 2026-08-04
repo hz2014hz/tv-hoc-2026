@@ -198,11 +198,21 @@ const Quiz = {
       choices, correct_index:choices.indexOf(word.en), asking:'en', dialect_note };
   },
 
+  // tiers: 'exact' (accents correct) > 'variant' (matches north spelling exactly) >
+  // 'accent' (right letters, wrong/missing accents — not counted correct) > 'wrong'
   checkTypeAnswer(question, input) {
-    const ni = this.normalize(input), na = this.normalize(question.answer);
-    if (input.trim()===question.answer || ni===na) return {correct:true,exact:input.trim()===question.answer,variant:null};
-    if (question.word&&question.word.north && ni===this.normalize(question.word.north))
-      return {correct:true,exact:false,variant:question.word.north};
-    return {correct:false,exact:false,variant:null};
+    const typed = input.trim();
+    const answer = question.answer;
+    const northAnswer = question.word && question.word.north;
+    const sameLoose = (a, b) => a.toLowerCase() === b.toLowerCase();
+
+    if (sameLoose(typed, answer)) return {correct:true, tier:'exact', variant:null, target:answer};
+    if (northAnswer && sameLoose(typed, northAnswer)) return {correct:true, tier:'variant', variant:northAnswer, target:northAnswer};
+
+    const ni = this.normalize(typed);
+    if (ni === this.normalize(answer)) return {correct:false, tier:'accent', variant:null, target:answer};
+    if (northAnswer && ni === this.normalize(northAnswer)) return {correct:false, tier:'accent', variant:northAnswer, target:northAnswer};
+
+    return {correct:false, tier:'wrong', variant:null, target:answer};
   },
 };

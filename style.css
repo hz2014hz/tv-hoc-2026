@@ -146,6 +146,7 @@ table{border-collapse:collapse;width:100%}
 .type-input{width:100%;background:var(--surface-2);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--r12);padding:16px 18px;font-size:18px;color:var(--cream);outline:none;font-family:var(--font-body);transition:border-color var(--t-base)}
 .type-input:focus{border-color:var(--jade)}
 .type-input.correct{border-color:var(--jade);background:rgba(45,155,111,0.08)}
+.type-input.almost{border-color:var(--gold);background:var(--gold-dim)}
 .type-input.wrong{border-color:var(--coral);background:rgba(217,107,72,0.08)}
 
 .select-input{background:var(--surface-2);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--r12);padding:10px 12px;font-size:13px;color:var(--cream);outline:none;font-family:var(--font-body)}
