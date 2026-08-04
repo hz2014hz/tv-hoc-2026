@@ -12,7 +12,7 @@ viet-learn/
 ├── style.css       — Full CSS design system
 ├── data.js         — All vocabulary, grammar, shop items, lessons, category metadata
 ├── store.js        — State management + localStorage persistence
-├── quiz.js         — Question generation for all 6 quiz modes
+├── quiz.js         — Question generation for all 8 quiz modes
 ├── gamify.js       — Points, toasts, confetti, level system
 ├── ui.js           — All view rendering, event handling, routing
 └── CONTEXT.md      — This file
@@ -59,7 +59,7 @@ Each word object:
 
 **Categories:** `greetings`, `verbs`, `adjectives`, `nouns`, `food`, `family`, `numbers`, `time`, `colors`, `places`, `prepositions`
 
-**Unlocking:** Words/grammar are no longer unlocked per-category-tier — see `LESSONS` below. `tier` is now unused (harmless leftover field; not read by any code). `category` is still used everywhere for quiz distractor-picking and the Progress tab's grouping.
+**Unlocking:** Words/grammar are no longer unlocked per-category-tier — see `LESSONS` below. `tier` is now unused (harmless leftover field; not read by any code). `category` is still used everywhere for quiz distractor-picking and the Vocabulary tab's grouping.
 
 **Adding custom words:** Copy any existing line and change the fields, then add the new word's `id` to the `word_ids` array of whichever `LESSONS` entry it thematically belongs to (a word not referenced by any lesson is never unlockable). The comment block at the top of `data.js` explains the WORDS format.
 
@@ -90,10 +90,10 @@ Each grammar pattern:
 }
 ```
 
-**Grammar categories:** `identity` is free. Others (negation, questions, tense, modal, comparisons, classifiers, linking) must be purchased in the Shop.
+**Grammar categories:** all unlocking is per-pattern via whichever lesson introduces it (`LESSONS[i].grammar_ids`) — there is no separate per-category purchase anymore.
 
 ### SHOP_ITEMS array
-Only one type now: `type:'mode'` — flat unlock for a quiz mode. Key fields: `id`, `type`, `name`, `cost`, `desc`, `unlockKey`, `icon`.
+Only one type now: `type:'mode'` — flat unlock for a quiz mode, purchased from the Learn tab (see below). Key fields: `id`, `type`, `name`, `cost`, `desc`, `unlockKey`, `icon`.
 
 Word/grammar unlocking used to live here as `type:'tier'`/`type:'grammar'` entries; that's been replaced entirely by `LESSONS` (see below) — `Store.unlockNextLesson()` reads `LESSONS[i].cost` directly instead of a shop item.
 
@@ -105,10 +105,10 @@ The A1 curriculum and the *only* unlock mechanism for words/grammar. An ordered 
   icon: '👋', cost: 0,
   word_ids: ['g001','g004', ...],   // WORDS ids, any category, curated by theme
   grammar_ids: ['gr01','gr61'],     // GRAMMAR ids introduced in this lesson
-  intro_vn: '...', intro_en: '...', // short scene-setting blurb
+  intro_vn: '...', intro_en: '...', // short scene-setting blurb, rendered on the Lessons tab
 }
 ```
-22 lessons cover every `WORDS` id and every `GRAMMAR` id exactly once. Word/grammar `category` fields are untouched by this and still drive the Progress tab and the Grammar tab's browse filter.
+22 lessons cover every `WORDS` id and every `GRAMMAR` id exactly once. Word/grammar `category` fields are untouched by this and still drive the Vocabulary tab's grouping and the Grammar tab's browse filter.
 
 ### CATEGORY_META
 ```js
@@ -221,15 +221,18 @@ Single `UI` object. Key properties:
 - `session` — `{questions, index, score, pts_earned, mode, category}`
 - `matchState` — state for match_pairs mode
 - `learnLesson`, `learnMode` — selections on Learn tab (`learnLesson` is `'all'` or a `LESSONS` id)
-- `_progressCat`, `_grammarCat` — active filter on Progress/Grammar tabs
+- `_vocabCat`, `_grammarCat` — active filter on Vocabulary/Grammar tabs
+- `MODES` — the 8 quiz-mode definitions (`key, label, icon, worksWith, desc`), shared by the Learn tab's mode picker and `startSession`'s `'mixed'` mode (see Home tab below)
 
-**Views:** home, learn, quiz, shop, progress, grammar, stats
+**Views:** home, learn, quiz, lessons, vocabulary, grammar, stats
 
-**Tab navigation:** Bottom nav with 6 tabs: Home, Learn, Shop, Progress, Grammar, Stats
+**Tab navigation:** Bottom nav with 6 tabs: Home, Learn, Lessons, Vocabulary, Grammar, Stats
 
 **Debug shortcuts** (tap targets in the sticky top header, not visually marked as debug controls):
 - Tap the ⭐ points pill — adds 300 pts directly (`UI.debugAddStars`)
 - Tap the level-title pill — sets all unlocked words AND grammar patterns to 5 seen / 4 correct (80%), clearing all accuracy gates (`UI.debugBoostAccuracy`)
+
+**Home tab:** the "▶ Continue — Mixed Practice" button always starts a `mode:'mixed'` session (`UI.startSession('all','mixed')`) — every one of the 10 questions independently picks a random mode from whichever the player has unlocked (`UI.MODES` filtered by `Store.isModeUnlocked`), so question types vary within one session. This bypasses the guaranteed-2-unseen/2-struggling slot mechanic (it doesn't generalize across heterogeneous question types like match_pairs), though each word-mode's own `selectWord()` weighting still favors unseen/struggling words. Mixed mode is Home-only — the Learn tab's picker is unaffected and still launches single-mode sessions.
 
 **Learn tab features:**
 - Grammar modes (grammar_quiz, word_order, particles) auto-select "All Words" and hide the lesson picker
@@ -238,19 +241,19 @@ Single `UI` object. Key properties:
 - Compatibility warnings for incompatible mode/lesson combos
 - Session preview shows unseen/struggling/known word counts
 - Green badge when guarantee kicks in (≥2 unseen or ≥2 struggling exist)
+- Locked mode pills are buyable directly here (`UI.buyItem`, reading `SHOP_ITEMS`) — quiz-mode purchases used to live on the Shop tab, which no longer exists
 
-**Shop tab features:**
-- Single "📚 Lessons" section, ordered list, unlocked strictly in sequence
-- Only the next lesson is buyable; shows accuracy-gate status with list of failing words/patterns when blocked
-- Already-completed lessons show "✓ Done"; future ones are dimmed and show their cost
+**Lessons tab** (`UI.renderLessons`, replaced the old Shop tab):
+- Single ordered list of all 22 `LESSONS`, unlocked strictly in sequence; only the next lesson is buyable (`UI.buyLesson`), shows accuracy-gate status with list of failing words/patterns when blocked; completed lessons show "✓ Done", future ones are dimmed and show their cost
+- Every card (regardless of lock state) also shows the lesson's `intro_vn`/`intro_en` blurb with a 🔊 button, plus a summary line of its words (first 8, "+N more") and grammar pattern names — this is the lesson "storyline"/goal-highlight the achievement/tier redesign originally intended but never surfaced in the UI until now
 
-**Progress tab:**
+**Vocabulary tab** (`UI.renderVocabulary`, renamed from "Progress" to pair with the Grammar tab):
 - Words sorted: unseen first, then by accuracy ascending (hardest first)
 - Accuracy bar colored coral/gold/jade by threshold
 - Still grouped by `WORDS.category` / `CATEGORY_META` — unaffected by the lesson system
 
 **Grammar tab:**
-- Pattern cards show accuracy bar + % top-right, plus a 🔊 speak button on the example sentence
+- Pattern cards show **all** curated examples for that pattern (previously picked one at random per page visit) — each with its own 🔊 button
 - Category pills are a pure browsing filter now (always enabled) — actual unlock status is per-pattern (`Store.isGrammarUnlocked(g.id)`), driven by which lessons are unlocked
 - `●live` badge removed — all examples are now curated fixed sentences
 - Static "🗣️ Southern Pronunciation Notes" card at the top (`PRONUNCIATION_NOTES` in `data.js`), not quizzed
@@ -258,7 +261,7 @@ Single `UI` object. Key properties:
 **Stats tab** (`UI.renderStats`, replaced the old achievements/Awards tab):
 - Streaks: current / longest / shortest, via `Store.getStreakStats()`
 - Overview stat cards: words seen, mastered, overall accuracy, points earned, avg time/active day, best category (min. 3 attempted words)
-- Accuracy by Category and Accuracy by Lesson lists (only entries with ≥1 attempt shown), same coral/gold/jade thresholds as the Progress tab
+- Accuracy by Category and Accuracy by Lesson lists (only entries with ≥1 attempt shown), same coral/gold/jade thresholds as the Vocabulary tab
 - Two hand-rolled inline SVG charts (no chart library, same approach as the Home progress ring): a 14-day accuracy trend line (gaps in the line where a day has no data, not drawn as 0%) and a 14-day time-spent bar chart, both backed by `Store.getDailyRange(14)`
 - No achievement/badge system anymore — removed entirely (data, toast-on-unlock, confetti-on-unlock). `Gamify.triggerConfetti()` itself is still used elsewhere (match-pairs full match, ≥70% session score)
 

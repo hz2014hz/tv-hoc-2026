@@ -1,7 +1,7 @@
 // =============================================================================
 // WORDS — Vietnamese vocabulary
 // Format: {id, tier, vn, north, en, category, example_vn, example_en}
-//   tier:   1 = free starter | 2+ = unlocked via shop
+//   tier:   legacy field, no longer read by any unlock logic — LESSONS[i].word_ids is the source of truth now
 //   north:  Northern variant if different from Southern (vn field), else null
 //   category: greetings | verbs | adjectives | nouns | food | family |
 //             numbers | time | colors | places | prepositions
