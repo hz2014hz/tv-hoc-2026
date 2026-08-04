@@ -11,6 +11,10 @@ const UI = {
     this.bindNav();
     this.updateHeader();
     this.showView('home');
+    if ('speechSynthesis' in window) {
+      // Chrome loads voices asynchronously; re-render Home once they arrive so the picker populates
+      window.speechSynthesis.onvoiceschanged = () => { if (this.currentView === 'home') this.renderHome(); };
+    }
   },
 
   bindNav() {
@@ -123,6 +127,11 @@ const UI = {
 
         <div class="section-eyebrow" style="margin-bottom:12px">Achievements</div>
         <div style="display:grid;gap:8px;margin-bottom:24px">${achHtml}</div>
+
+        <div class="section-eyebrow" style="margin-bottom:12px">🔊 Pronunciation Voice</div>
+        <div style="background:var(--surface);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.06);margin-bottom:24px">
+          ${this.renderVoiceSettingsHtml()}
+        </div>
 
         <div style="text-align:center">
           <button class="btn-danger" style="font-size:13px;padding:8px 20px" onclick="Store.reset()">🔄 Reset Progress</button>
@@ -385,9 +394,45 @@ const UI = {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'vi-VN';
+    const uri = Store.state.tts_voice_uri;
+    const chosen = uri && window.speechSynthesis.getVoices().find(v => v.voiceURI === uri);
+    if (chosen) { u.voice = chosen; u.lang = chosen.lang; }
+    else { u.lang = 'vi-VN'; }
     u.rate = 0.9;
     window.speechSynthesis.speak(u);
+  },
+
+  getViVoices() {
+    if (!('speechSynthesis' in window)) return [];
+    return window.speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith('vi'));
+  },
+
+  setVoice(uri) {
+    Store.state.tts_voice_uri = uri || null;
+    Store.save();
+  },
+
+  testVoice() {
+    this.speak('Xin chào! Tôi là người Việt Nam.');
+  },
+
+  renderVoiceSettingsHtml() {
+    if (!('speechSynthesis' in window)) {
+      return `<div style="font-size:12px;color:var(--muted)">Your browser doesn't support text-to-speech.</div>`;
+    }
+    const voices = this.getViVoices();
+    if (voices.length === 0) {
+      return `<div style="font-size:12px;color:var(--muted)">No Vietnamese voice detected in your browser — 🔊 buttons will fall back to your browser's default voice, which may not sound correct. Try Microsoft Edge on Windows, which usually ships Northern and Southern Vietnamese voices.</div>`;
+    }
+    const current = Store.state.tts_voice_uri;
+    const options = voices.map(v =>
+      `<option value="${this.escAttr(v.voiceURI)}" ${v.voiceURI===current?'selected':''}>${this.escAttr(v.name)} (${v.lang})</option>`
+    ).join('');
+    return `
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select class="select-input" style="flex:1;min-width:160px" onchange="UI.setVoice(this.value)">${options}</select>
+        <button class="btn-ghost" style="padding:10px 14px;font-size:13px" onclick="UI.testVoice()">🔊 Test</button>
+      </div>`;
   },
 
   escAttr(s) {

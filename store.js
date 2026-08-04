@@ -27,6 +27,7 @@ const Store = {
       consec_correct: 0, typed_correct: 0,
       total_correct: 0, total_attempts: 0,
       last_category: 'greetings', last_mode: 'multiple_choice',
+      tts_voice_uri: null, // null = browser default Vietnamese voice
     };
   },
 
