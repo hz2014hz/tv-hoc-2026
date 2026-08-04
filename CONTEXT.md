@@ -15,6 +15,7 @@ viet-learn/
 ├── quiz.js         — Question generation for all 8 quiz modes
 ├── gamify.js       — Points, toasts, confetti, level system
 ├── ui.js           — All view rendering, event handling, routing
+├── grammar-cheatsheet.html — Standalone printable A1 grammar reference (see below)
 └── CONTEXT.md      — This file
 ```
 
@@ -266,6 +267,17 @@ Single `UI` object. Key properties:
 - No achievement/badge system anymore — removed entirely (data, toast-on-unlock, confetti-on-unlock). `Gamify.triggerConfetti()` itself is still used elsewhere (match-pairs full match, ≥70% session score)
 
 **Pronunciation:** 🔊 buttons (Web Speech API `speechSynthesis`) appear on flashcards, quiz feedback, and Grammar tab examples — see `UI.speak`/`UI.speakBtnHtml` in `ui.js`. Voice choice is a dropdown on the Home tab ("🔊 Pronunciation Voice"), persisted to `state.tts_voice_uri`; falls back to the browser default when no Vietnamese voice is installed.
+
+## grammar-cheatsheet.html
+
+A standalone, self-contained printable A1 grammar reference — **not part of the app's script bundle**, not loaded by `index.html`, has its own `<style>`/`<script>` and no dependency on `data.js`/`store.js`/etc. Linked from a card on the Home tab ("📄 Grammar Cheat Sheet", opens in a new tab via a plain `<a href="grammar-cheatsheet.html" target="_blank">`).
+
+- **15 topics** in a fixed pedagogical order (greetings/address terms → word order → questions → negation → modal verbs → intensifiers → comparisons → numbers → classifiers → time markers → possession → directions → requests/commands → linking words → Southern accent notes), each with an anchor id and a jump-link chip in the on-screen table of contents.
+- All patterns/examples are transcribed from `GRAMMAR`/`WORDS`/`PRONUNCIATION_NOTES` in `data.js` — not independently authored — so wording stays consistent with what the app actually teaches. Kept in sync manually; if `GRAMMAR` patterns are edited, this file does not auto-update.
+- North/South dialect variants are shown **inline in the word list itself** (e.g. `Dạ / Vâng (N)`, `quẹo / rẽ (N)`, via `<span class="north">`), not as a trailing footnote only.
+- Fonts: **Be Vietnam Pro** (a Vietnamese-designed typeface) embedded as base64 `@font-face` data URIs for the Vietnamese display text — fully self-contained, works offline, no CDN dependency (deliberately different from `index.html`'s Google Fonts `<link>` approach, since this file needs to survive being opened standalone/offline/printed). English body text and pattern-formula text use system font stacks.
+- Supports light/dark theme (toggle button top-right, `toggleTheme()`/`effectiveTheme()` in an inline `<script>`) and is tuned for `Ctrl+P` printing (`@media print` forces light colors, `break-inside:avoid` on cards, A4 page size).
+- To add more topics or edit content: find the relevant `GRAMMAR`/`WORDS` entries in `data.js` first (don't invent examples), then add a `<section class="card card--{color}" id="...">` following the existing pattern, and add its anchor to the `.toc` nav list.
 
 ## Known issues / things to watch
 

@@ -172,6 +172,17 @@ const UI = {
           ${this.renderVoiceSettingsHtml()}
         </div>
 
+        <a href="grammar-cheatsheet.html" target="_blank" rel="noopener" style="text-decoration:none;display:block;background:var(--surface);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.06);margin-bottom:24px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:24px;flex-shrink:0">📄</span>
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:14px;color:var(--cream)">Grammar Cheat Sheet</div>
+              <div style="font-size:12px;color:var(--muted)">15-topic printable A1 reference — opens in a new tab</div>
+            </div>
+            <span style="color:var(--muted)">↗</span>
+          </div>
+        </a>
+
         <div style="text-align:center">
           <button class="btn-danger" style="font-size:13px;padding:8px 20px" onclick="Store.reset()">🔄 Reset Progress</button>
         </div>
