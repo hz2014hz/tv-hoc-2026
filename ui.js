@@ -1191,7 +1191,7 @@ const UI = {
            </div>`
         : `<span style="color:var(--muted);font-size:12px">—</span>`;
       return `<tr>
-        <td><strong>${w.vn}</strong>${dialectStr}</td>
+        <td><strong>${w.vn}</strong> ${this.speakBtnHtml(w.vn, 14)}${dialectStr}</td>
         <td style="color:var(--muted)">${w.en}</td>
         <td style="text-align:center">${s.seen_count || '—'}</td>
         <td>${accBar}</td>
