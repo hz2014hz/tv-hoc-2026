@@ -32,15 +32,22 @@ function highlight(text, foldedQuery) {
   return out + escapeHtml(chars.slice(i).join(''));
 }
 
-// Lower is better: accented match, then exact, prefix, word-prefix, anywhere (all accent-free).
+// Lower is better: whole-word match beats prefix beats anywhere; at each level the
+// accents-as-typed match ranks just above the accent-free one.
 function score(word, query, foldedQuery) {
   const fields = [word.vn, word.en, word.de];
-  if (fields.some(f => f.toLowerCase().includes(query))) return 0;
+  const lower = fields.map(f => f.toLowerCase());
   const folded = fields.map(fold);
-  if (folded.some(f => f === foldedQuery)) return 1;
-  if (folded.some(f => f.startsWith(foldedQuery))) return 2;
-  if (folded.some(f => f.split(/[\s,;()]+/).some(w => w.startsWith(foldedQuery)))) return 3;
-  if (folded.some(f => f.includes(foldedQuery))) return 4;
+  const words = s => s.split(/[\s,;()]+/);
+  const tests = [
+    (f, q) => f === q || words(f).includes(q),
+    (f, q) => words(f).some(w => w.startsWith(q)),
+    (f, q) => f.includes(q),
+  ];
+  for (let i = 0; i < tests.length; i++) {
+    if (lower.some(f => tests[i](f, query))) return i * 2;
+    if (folded.some(f => tests[i](f, foldedQuery))) return i * 2 + 1;
+  }
   return -1;
 }
 
