@@ -1,0 +1,8 @@
+# Textbook scans and handwritten notes — personal/copyrighted source material, never commit
+scans/
+book/
+notes/
+*.pdf
+
+# Local tool settings
+.claude/
