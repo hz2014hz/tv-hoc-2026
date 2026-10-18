@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tiếng Việt học</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --surface: #ffffff;
+      --text: #1f1d1a;
+      --muted: #6b665e;
+      --accent: #c8372d;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #171614;
+        --surface: #22201d;
+        --text: #f2eee8;
+        --muted: #a39d93;
+        --accent: #e8665b;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Be Vietnam Pro", system-ui, sans-serif;
+    }
+    main {
+      width: 100%;
+      max-width: 560px;
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 32px 24px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    }
+    h1 { margin: 0 0 24px; font-size: 28px; color: var(--accent); }
+    p { margin: 0 0 16px; font-size: 18px; line-height: 1.5; }
+    .lang {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Tiếng Việt học</h1>
+    <p lang="vi"><span class="lang">Tiếng Việt</span>Xin chào! Hôm nay chúng ta bắt đầu học tiếng Việt.</p>
+    <p lang="de"><span class="lang">Deutsch</span>Hallo! Heute fangen wir an, Vietnamesisch zu lernen.</p>
+    <p lang="en"><span class="lang">English</span>Hello! Today we start learning Vietnamese.</p>
+  </main>
+</body>
+</html>

@@ -1,8 +1,13 @@
-# Textbook scans and handwritten notes — personal/copyrighted source material, never commit
-scans/
-book/
-notes/
+# Private source material (textbook scans, photos, notes) — never commit
+private/
+
+# Scan and photo formats, wherever they end up
 *.pdf
+*.jpg
+*.jpeg
+*.heic
+*.tif
+*.tiff
 
 # Local tool settings
 .claude/
