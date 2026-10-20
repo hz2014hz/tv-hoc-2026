@@ -54,6 +54,25 @@ const LESSONS = [
       { vn: 'bao nhiêu', en: 'how much, how many',           de: 'wie viel' },
       { vn: 'đắt',       en: 'expensive',                    de: 'teuer' },
       { vn: 'rẻ',        en: 'cheap',                        de: 'billig' },
+      { vn: 'muốn',      en: 'to want',                      de: 'wollen, möchten' },
+      { vn: 'thích',     en: 'to like',                      de: 'mögen, gern haben' },
+      { vn: 'và',        en: 'and',                          de: 'und' },
+      { vn: 'ở',         en: 'at, in; to be (somewhere)',    de: 'in, bei; sich befinden' },
     ],
+  },
+];
+
+// Reading texts — every word should exist in LESSONS so it can be tapped for a translation.
+const TEXTS = [
+  {
+    id: 1,
+    title_vn: 'Ăn ở nhà hàng',
+    title_en: 'Eating at a restaurant',
+    title_de: 'Essen im Restaurant',
+    vn: 'Xin chào! Gia đình tôi đói. Bố, mẹ, chị và tôi ăn ở nhà hàng. ' +
+        'Bố tôi muốn ăn phở. Mẹ tôi muốn ăn cơm, cá và rau. ' +
+        'Chị tôi khát, chị uống nước. Tôi thích bánh mì thịt gà. ' +
+        'Bánh mì rất ngon và rẻ. Bố uống cà phê, mẹ uống trà. ' +
+        '“Bao nhiêu tiền?” “Không đắt!” Cảm ơn! Tạm biệt!',
   },
 ];

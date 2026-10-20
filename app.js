@@ -140,7 +140,122 @@ function render() {
   document.getElementById('count').textContent = `${total} word${total === 1 ? '' : 's'}`;
 }
 
+// ---- Reading ----
+
+// Lower-cased Vietnamese entry → { word, lesson }, for looking up words in a text.
+const DICT = new Map();
+for (const lesson of LESSONS) {
+  for (const word of lesson.words) DICT.set(word.vn.toLowerCase().normalize('NFC'), { word, lesson });
+}
+const MAX_SYLLABLES = Math.max(...[...DICT.keys()].map(k => k.split(' ').length));
+
+// Splits a text into dictionary words and plain text. Vietnamese words can span several
+// space-separated syllables (cà phê, bánh mì), so the longest dictionary match wins.
+function tokenize(text) {
+  const parts = text.normalize('NFC').match(/[\p{L}\p{M}]+|[^\p{L}\p{M}]+/gu) || [];
+  const out = [];
+  let i = 0;
+  while (i < parts.length) {
+    if (!/\p{L}/u.test(parts[i])) { out.push({ text: parts[i] }); i++; continue; }
+    let match = null;
+    for (let n = MAX_SYLLABLES; n >= 1 && !match; n--) {
+      const span = parts.slice(i, i + 2 * n - 1);
+      if (span.length !== 2 * n - 1) continue;
+      // odd positions are the gaps between syllables: only a single space joins a word
+      if (span.some((p, k) => k % 2 === 1 && p !== ' ')) continue;
+      const entry = DICT.get(span.join('').toLowerCase());
+      if (entry) match = { text: span.join(''), entry, len: span.length };
+    }
+    if (match) { out.push(match); i += match.len; }
+    else { out.push({ text: parts[i], unknown: true }); i++; }
+  }
+  return out;
+}
+
+const tokenEntries = [];
+
+function renderTexts() {
+  document.getElementById('texts').innerHTML = TEXTS.map(t => {
+    const body = tokenize(t.vn).map(tok => {
+      if (tok.entry) {
+        tokenEntries.push(tok.entry);
+        return `<button class="tok" data-i="${tokenEntries.length - 1}">${escapeHtml(tok.text)}</button>`;
+      }
+      return tok.unknown ? `<span class="tok-unknown">${escapeHtml(tok.text)}</span>` : escapeHtml(tok.text);
+    }).join('');
+    return `<article class="text">
+      <h2>${escapeHtml(t.title_vn)}<span class="lesson-sub">${escapeHtml(t.title_en)} · ${escapeHtml(t.title_de)}</span></h2>
+      <p class="text-body" lang="vi">${body}</p>
+    </article>`;
+  }).join('');
+}
+
+let activeTok = null;
+
+function hideTip() {
+  document.getElementById('tip').hidden = true;
+  if (activeTok) activeTok.classList.remove('active');
+  activeTok = null;
+}
+
+function showTip(btn) {
+  const { word, lesson } = tokenEntries[btn.dataset.i];
+  const tip = document.getElementById('tip');
+  tip.innerHTML = `<div class="tip-vn" lang="vi">${escapeHtml(word.vn)}</div>
+    <div lang="en">🇬🇧 ${escapeHtml(word.en)}</div>
+    <div lang="de">🇩🇪 ${escapeHtml(word.de)}</div>
+    <div class="tip-lesson">Lesson ${lesson.id} · ${escapeHtml(lesson.title_vn)}</div>`;
+  tip.hidden = false;
+
+  // Below the word, or above it if there's no room; kept inside the viewport horizontally.
+  const r = btn.getBoundingClientRect();
+  const w = tip.offsetWidth;
+  const h = tip.offsetHeight;
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+  const below = r.bottom + 8 + h <= window.innerHeight;
+  tip.style.left = `${left + window.scrollX}px`;
+  tip.style.top = `${(below ? r.bottom + 8 : r.top - 8 - h) + window.scrollY}px`;
+
+  if (activeTok) activeTok.classList.remove('active');
+  activeTok = btn;
+  btn.classList.add('active');
+}
+
+function initReading() {
+  renderTexts();
+  document.getElementById('texts').addEventListener('click', e => {
+    const btn = e.target.closest('.tok');
+    if (!btn) return;
+    e.stopPropagation();
+    if (btn === activeTok) hideTip(); else showTip(btn);
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('#tip')) hideTip(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') hideTip(); });
+  window.addEventListener('resize', hideTip);
+}
+
+// ---- Tabs ----
+
+function showView() {
+  const view = location.hash === '#reading' ? 'reading' : 'words';
+  document.getElementById('view-words').hidden = view !== 'words';
+  document.getElementById('view-reading').hidden = view !== 'reading';
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  hideTip();
+}
+
+function initTabs() {
+  document.getElementById('tabs').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (btn) location.hash = btn.dataset.view;
+  });
+  window.addEventListener('hashchange', showView);
+  showView();
+}
+
 function init() {
+  initTabs();
+  initReading();
   const filter = document.getElementById('lesson-filter');
   filter.innerHTML = '<button data-lesson="all" class="active">All</button>' +
     LESSONS.map(l => `<button data-lesson="${l.id}">Lesson ${l.id}</button>`).join('');

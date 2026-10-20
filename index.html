@@ -16,6 +16,12 @@
       <p class="tagline">Word catalog · Wörterverzeichnis</p>
     </header>
 
+    <nav id="tabs" class="tabs">
+      <button data-view="words">Words</button>
+      <button data-view="reading">Reading</button>
+    </nav>
+
+    <section id="view-words">
     <div class="controls">
       <input id="search" type="search" placeholder="Search Vietnamese, English or Deutsch…" autocomplete="off" spellcheck="false">
       <div class="filter-row">
@@ -26,7 +32,15 @@
     </div>
 
     <div id="results"></div>
+    </section>
+
+    <section id="view-reading" hidden>
+      <p class="hint">Tap any word to see its translation.</p>
+      <div id="texts"></div>
+    </section>
   </main>
+
+  <div id="tip" class="tip" role="tooltip" hidden></div>
 
   <script src="data.js?v=dev"></script>
   <script src="app.js?v=dev"></script>
